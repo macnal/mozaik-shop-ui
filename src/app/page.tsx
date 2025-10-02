@@ -9,8 +9,8 @@ export default async function HomePage() {
     page: 0,
     size: 10,
   });
-  const items = r.then(({items}) => items);
-  const page = r.then(({page}) => page);
+  const items = await r.then(({items}) => items);
+  const page = await r.then(({page}) => page);
 
   return (
     <PageContainer>

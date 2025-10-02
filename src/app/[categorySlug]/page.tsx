@@ -22,8 +22,8 @@ export default async function CategoryPage({params, searchParams}: CategoryPageP
     page: isNaN(+page) ? 0 : +page,
     size: isNaN(+size) ? 10 : +size,
   });
-  const items = r.then(({items}) => items);
-  const pagination = r.then(({page}) => page);
+  const items = await r.then(({items}) => items);
+  const pagination = await r.then(({page}) => page);
 
   const {items: childCategories} = await dataSource.fetchCategories({
     parentIds: [id],
