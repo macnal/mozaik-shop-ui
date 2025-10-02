@@ -1,0 +1,94 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "slug": "wsiasc-do-pociagu-europa",
+      "title": "Wsiąść do pociągu - Europa",
+      "subtitle": "Bezkonkurencyjna gra o pociągach w Europie",
+      "rating": 4.6,
+      "price": 9000,
+      "prev_price": 12000,
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer varius consequat tortor ac gravida. Donec purus felis, aliquet sed faucibus rhoncus, ornare ac est. Sed fermentum libero non tempor accumsan. Sed auctor scelerisque magna, ac lacinia nulla scelerisque non. Donec nec lectus vulputate, posuere sapien nec, elementum lacus. Etiam lorem nulla, viverra lobortis erat sed, sodales vehicula justo. Sed eu dolor tincidunt, dapibus mi non, vehicula nisi. Praesent vel consectetur odio, id efficitur felis. Nam sed odio ut nulla lobortis imperdiet.\n\nMaecenas sagittis vel velit sit amet iaculis. Integer quis erat rhoncus, sagittis felis at, mattis erat. Ut facilisis tellus et fermentum rhoncus. Duis mauris metus, iaculis a urna vitae, varius convallis risus. In ut accumsan nunc. Pellentesque neque erat, semper a orci vitae, pharetra consectetur est. Nunc convallis nibh id felis fermentum bibendum. \nPraesent justo odio, fermentum nec efficitur sit amet, posuere at nisl. Fusce sit amet vestibulum elit. Phasellus est quam, mattis sed blandit a, luctus nec nisi.",
+      "main_image": {
+        "src": "/mocks/pudelko.jpg",
+        "alt": "Zdjęcie pudełak",
+        "height": 800,
+        "width": 800
+      },
+      "main_category": {
+        "slug": "gry-planszowe",
+        "title": "Gry planszowe"
+      },
+      "images": [
+        {
+          "src": "/mocks/gra1.jpg",
+          "alt": "Zdjęcie gry 1",
+          "height": 1412,
+          "width": 2501
+        },
+        {
+          "src": "/mocks/gra2.jpg",
+          "alt": "Zdjęcie gry 2",
+          "height": 1412,
+          "width": 2501
+        }
+      ],
+      "badges": [
+        {
+          "label": "Darmowa dostawa",
+          "color": "purple"
+        },
+        {
+          "label": "-5%",
+          "color": "red"
+        }
+      ],
+      "attrs": [
+        {
+          "name": "people",
+          "value": "2 - 5"
+        },
+        {
+          "name": "duration",
+          "value": "40 - 90 minut"
+        },
+        {
+          "name": "age",
+          "value": "od 8 lat"
+        },
+        {
+          "name": "language",
+          "value": "pl"
+        }
+      ],
+      "categories": [
+        {
+          "label": "budowanie tras",
+          "value": "budowanie-tras"
+        },
+        {
+          "label": "Familijne",
+          "value": "familijne"
+        },
+        {
+          "label": "Pociągi",
+          "value": "pociagi"
+        },
+        {
+          "label": "Podróże",
+          "value": "podroze"
+        }
+      ],
+      "description_attrs": [
+        {
+          "label": "Autor",
+          "value": "Alan R. Moon"
+        },
+        {
+          "label": "Wydawca",
+          "value": "Rebel"
+        }
+      ]
+    }
+  ]
+}
