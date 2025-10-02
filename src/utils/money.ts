@@ -1,12 +1,12 @@
 import {pipe} from "pipe-ts";
 
-const defaultTransform = (value: any) => {
+const defaultTransform = (value: string | number) => {
   if (!value || typeof value === 'number') {
-    return value;
-  } else if (typeof value === 'string' && !isNaN(value as any)) {
-    return +value;
+    return value as number;
+  } else if (typeof value === 'string' && !isNaN(value as unknown as number)) {
+    return +value as number;
   } else {
-    return value;
+    return value as unknown as number;
   }
 };
 
