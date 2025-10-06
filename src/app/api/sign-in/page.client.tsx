@@ -10,7 +10,7 @@ export default function RedirectToDefaultProviderPage({}) {
   const searchParams = useSearchParams();
 
   useLayoutEffect(() => {
-    void signIn("keycloak", {redirectTo: searchParams.get("callbackUrl")});
+    void signIn("keycloak", {redirectTo: searchParams.get("callbackUrl") ?? '/auth'});
   }, [])
 
 
