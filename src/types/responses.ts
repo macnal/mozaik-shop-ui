@@ -26,7 +26,6 @@ export interface GameExtended {
 }
 
 
-
 export interface Category {
   id: number;
   name: string;
@@ -69,4 +68,30 @@ export interface ApiResponse<T> {
   subject: string | null;
   time: string | null;
   items: T[];
+}
+
+export interface ApiCartResponseItem {
+  productId: number;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+interface AddToCartPOSTItem {
+  productId: number;
+  quantity: number;
+}
+
+export interface AddToCartPOST {
+  items: AddToCartPOSTItem[]
+}
+
+export interface RemoveFromCartPOST {
+  items: AddToCartPOSTItem[]
+}
+
+export interface ApiCartResponse {
+  uuid: string;
+  items: ApiCartResponseItem[];
+  total: number;
 }

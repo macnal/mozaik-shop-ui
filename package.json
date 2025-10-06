@@ -12,11 +12,15 @@
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@jsonforms/core": "^3.6.0",
+    "@jsonforms/material-renderers": "^3.6.0",
+    "@jsonforms/react": "^3.6.0",
     "@mui/icons-material": "^7.3.2",
     "@mui/material": "^7.3.2",
     "@mui/material-nextjs": "^7.3.2",
     "@notionhq/client": "^5.1.0",
     "@splidejs/react-splide": "^0.7.12",
+    "material-ui-popup-state": "^5.3.6",
     "next": "15.5.4",
     "next-auth": "^4.24.11",
     "notion-to-md": "^3.1.9",
@@ -25,7 +29,8 @@
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
     "server-only": "^0.0.1",
-    "slugify": "^1.6.6"
+    "slugify": "^1.6.6",
+    "usehooks-ts": "^3.1.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -35,5 +40,11 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@jsonforms/material-renderers": {
+      "@mui/icons-material": "$@mui/icons-material",
+      "@mui/material": "$@mui/material"
+    }
   }
 }

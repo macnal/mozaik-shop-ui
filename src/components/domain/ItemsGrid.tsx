@@ -47,3 +47,12 @@ export const ItemsGrid = ({items, pagination}: ItemsGridProps) => {
     {/*</Suspense>*/}
   </Grid>
 }
+
+export const ItemsGridSkeleton = () => {
+  return <Grid container spacing={2} columns={10}>
+    {[1, 2, 3, 4, 5, 6, 7].map(x => <Grid key={x} size={size} sx={{display: "flex", flexDirection: "column"}}>
+      <Skeleton variant={'rectangular'} width={"100%"} height={339}/>
+    </Grid>)}
+  </Grid>
+
+}

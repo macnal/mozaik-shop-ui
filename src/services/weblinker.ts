@@ -20,8 +20,20 @@ interface FetchCategoriesParams {
 const x = {
   baseUrl: process.env.API_BASE,
 
+  async fetchCategoryFormSchema(categoryId: number) {
+    const [formSchema, layoutSchema] = await Promise.all([
+      fetch(`${this.baseUrl}/jsonforms/schema/${categoryId}`).then(async (x) => await x.json()),
+      fetch(`${this.baseUrl}/jsonforms/uischema/${categoryId}`).then(async (x) => await x.json()),
+    ]);
+
+    return {
+      formSchema,
+      layoutSchema,
+    }
+  },
+
   async fetchProduct(id: number): Promise<ApiSingleItemResponse<GameExtended>> {
-    const res = await fetch(`${this.baseUrl}/products/${id}`, {});
+    const res = await fetch(`${this.baseUrl}/weblinker/products/${id}`, {});
 
     return await res.json()
   },
@@ -29,7 +41,7 @@ const x = {
   async fetchProducts(params: FetchProductsParams): Promise<ApiResponsePaginated<Game>> {
     // await new Promise(r => setTimeout(r, 5000));
 
-    const url = new URL(this.baseUrl + '/products');
+    const url = new URL(`${this.baseUrl}/weblinker/products`);
     url.search = new URLSearchParams({
       ...params,
       page: `${params.page - 1}`,
@@ -44,7 +56,7 @@ const x = {
   },
 
   async fetchCategory(id: number): Promise<ApiSingleItemResponse<Category>> {
-    const url = new URL(this.baseUrl + '/categories');
+    const url = new URL(`${this.baseUrl}/weblinker/categories`);
     url.search = new URLSearchParams({
       id: String(id),
     }).toString();
@@ -58,7 +70,7 @@ const x = {
   },
 
   async fetchCategories(params: FetchCategoriesParams) {
-    const url = new URL(this.baseUrl + '/categories');
+    const url = new URL(`${this.baseUrl}/weblinker/categories`);
     url.search = new URLSearchParams({
       ...params,
       parentIds: `${params.parentIds.join(',')}`,
@@ -75,8 +87,6 @@ const x = {
     }
 
     return mock
-
-
   }
 }
 

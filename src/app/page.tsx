@@ -5,9 +5,12 @@ import {ItemsGrid} from "@/components/domain/ItemsGrid";
 export default async function HomePage() {
   const dataSource = WebLinkerService();
 
+  const res = await fetch(`${process.env.PUBLIC_URL}/config.json`);
+  const config = await res.json();
+
   const r = dataSource.fetchProducts({
     page: 0,
-    size: 10,
+    size: config?.interface?.itemsPerPage || 10,
   });
   const items = await r.then(({items}) => items);
   const page = await r.then(({page}) => page);

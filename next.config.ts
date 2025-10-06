@@ -13,6 +13,15 @@ const nextConfig: NextConfig = {
       }
     ],
   },
+  async rewrites() {
+
+    return [
+      {
+        source: '/api/cart/:path*',
+        destination: `${process.env.API_BASE}/weblinker/cart/:path*` // Proxy to Backend
+      }
+    ]
+  }
 };
 
 export default nextConfig;

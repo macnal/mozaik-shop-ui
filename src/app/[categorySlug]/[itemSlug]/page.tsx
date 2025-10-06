@@ -1,13 +1,13 @@
-import {Button, Grid, Stack, Typography} from "@mui/material";
+import {Grid, Stack, Typography} from "@mui/material";
 import {PageContainer} from "@/components/PageContainer";
 import {Breadcrumb} from "@/types/client";
 import {formatMoney} from "@/utils/money";
-import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
 import {Gallery} from "@/components/domain/Gallery";
 import {WebLinkerService} from "@/services/weblinker";
 import {getSlug, splitSlug} from "@/utils/slug";
 import ReactMarkdown from "react-markdown";
 import {notFound} from "next/navigation";
+import {AddToCartButton} from "./AddToCartButton";
 
 interface ItemPageProps {
   params: Promise<{ itemSlug: string, categorySlug: string }>
@@ -83,10 +83,7 @@ export default async function ItemPage({params}: ItemPageProps) {
           </Stack>
 
           <Stack>
-            <Button variant={'contained'} size={'large'} startIcon={<ShoppingCartTwoToneIcon/>}
-                    disabled={item.stock === 0}>
-              Dodaj do koszyka
-            </Button>
+            <AddToCartButton item={item}/>
           </Stack>
 
           <Stack>

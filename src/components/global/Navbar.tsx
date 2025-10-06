@@ -1,5 +1,4 @@
-import {Mail, Notifications} from "@mui/icons-material"
-import {AppBar, Badge, Box, Button, Container, IconButton, Stack, Toolbar} from "@mui/material"
+import {AppBar, Box, Button, Container, IconButton, Stack, Toolbar, Typography} from "@mui/material"
 import NextLink from "next/link";
 import {Breadcrumb} from "@/types/client";
 import {getSlug} from "@/utils/slug";
@@ -7,8 +6,7 @@ import {WebLinkerService} from "@/services/weblinker";
 import {NavbarClient} from "./Navbar.client";
 import {getServerSession} from "next-auth/next";
 import {authConfig} from "@/auth.config";
-import Link from "next/link";
-
+import {NavbarCartButton} from './NavbarCartButton';
 
 export const Navbar = async () => {
   const session = await getServerSession(authConfig);
@@ -41,33 +39,16 @@ export const Navbar = async () => {
         Logo
       </IconButton>
 
-      <p>
-        {JSON.stringify(session, null, 2)}
-      </p>
-
       <Box sx={{flexGrow: 1}}/>
 
-      <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit" component={Link} href={'/auth'} >
-          <Badge badgeContent={4} color="error">
-            <Mail />
-          </Badge>
-        </IconButton>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <Notifications/>
-          </Badge>
-        </IconButton>
+      <Stack direction={'row'} spacing={1} sx={{display: {xs: 'none', md: 'flex'}, alignItems: 'center'}}>
+        <NavbarCartButton/>
 
-        <NavbarClient isAuthenticated={!!session}/>
+        <NavbarClient isAuthenticated={!!session} name={session?.user?.name} />
+      </Stack>
 
-      </Box>
       <Box sx={{display: {xs: 'flex', md: 'none'}}}>
-        <NavbarClient isAuthenticated={!!session}/>
+        <NavbarClient isAuthenticated={!!session} name={session?.user?.name} />
       </Box>
     </Container>
 

@@ -1,0 +1,13 @@
+{
+  "type": "HorizontalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/nationality"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/name"
+    }
+  ]
+}

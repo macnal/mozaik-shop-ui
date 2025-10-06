@@ -1,0 +1,28 @@
+{
+  "interface": {
+    "itemsPerPage": 50
+  },
+  "mui": {
+    "typography": {
+      "fontFamily": "var(--font-roboto)",
+      "h1": {
+        "fontSize": "2rem",
+        "fontWeight": 800
+      },
+      "h3": {
+        "fontSize": "1.4rem",
+        "fontWeight": 600
+      },
+      "subtitle1": {
+        "fontWeight": 600
+      }
+    },
+    "components": {
+      "MuiCard": {
+        "defaultProps": {
+          "variant": "outlined"
+        }
+      }
+    }
+  }
+}
