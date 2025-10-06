@@ -9,7 +9,7 @@ const size = {xs: 12, md: 3, lg: 2};
 
 interface ItemsGridProps {
   items: Game[], //Promise<Game[]> |
-  pagination: ApiPageResponsePage, //Promise<ApiPageResponsePage> |
+  pagination: ApiPageResponsePage | null, //Promise<ApiPageResponsePage> |
 }
 
 type ItemsGridInnerProps = Awaited<ItemsGridProps>
@@ -25,9 +25,9 @@ const ItemsGridInner = ({items, pagination: promisePagination}: ItemsGridInnerPr
   })}
 
     <Grid size={{xs: 12}} sx={{display: 'flex', justifyContent: 'center', mt: 6}}>
-      <Suspense>
+      {pagination && <Suspense>
         <ItemGridPagination pagination={pagination}/>
-      </Suspense>
+      </Suspense>}
 
     </Grid>
   </>

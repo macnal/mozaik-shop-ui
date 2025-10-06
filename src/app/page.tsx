@@ -14,7 +14,7 @@ export default async function HomePage() {
 
   return (
     <PageContainer>
-      <ItemsGrid items={items} pagination={page}/>
+      <ItemsGrid items={items} pagination={null}/>
 
     </PageContainer>
   );

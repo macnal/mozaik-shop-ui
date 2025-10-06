@@ -7,6 +7,7 @@ import {Gallery} from "@/components/domain/Gallery";
 import {WebLinkerService} from "@/services/weblinker";
 import {getSlug, splitSlug} from "@/utils/slug";
 import ReactMarkdown from "react-markdown";
+import {notFound} from "next/navigation";
 
 interface ItemPageProps {
   params: Promise<{ itemSlug: string, categorySlug: string }>
@@ -19,8 +20,15 @@ export default async function ItemPage({params}: ItemPageProps) {
   const dataSource = WebLinkerService();
   const {item} = await dataSource.fetchProduct(id);
 
-  const {items: categories} = await dataSource.fetchCategories({parentIds: [5052433]});
+  if (!item) {
+    throw notFound();
+  }
+  // const {items: categories} = await dataSource.fetchCategories({parentIds: [5052433]});
   const {item: category} = await dataSource.fetchCategory(5052433);
+
+  if (!category) {
+    throw notFound();
+  }
 
   const breadcrumbs: Breadcrumb[] = [
     {

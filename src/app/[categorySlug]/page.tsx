@@ -4,6 +4,7 @@ import {WebLinkerService} from "@/services/weblinker";
 import {splitSlug} from "@/utils/slug";
 import {CategoriesChips} from "@/components/domain/CategoriesChips";
 import {ItemsGrid} from "@/components/domain/ItemsGrid";
+import {notFound} from "next/navigation";
 
 interface CategoryPageProps {
   params: Promise<{ categorySlug: string }>,
@@ -17,6 +18,10 @@ export default async function CategoryPage({params, searchParams}: CategoryPageP
 
   const dataSource = WebLinkerService();
   const {item: category} = await dataSource.fetchCategory(id);
+
+  if (!category) {
+    throw notFound();
+  }
 
   const r = dataSource.fetchProducts({
     page: isNaN(+page) ? 0 : +page,

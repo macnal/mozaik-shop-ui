@@ -7,7 +7,6 @@ import {
   Game,
   GameExtended
 } from "@/types/responses";
-import {notFound} from "next/navigation";
 
 interface FetchProductsParams {
   page: number;
@@ -23,10 +22,6 @@ const x = {
 
   async fetchProduct(id: number): Promise<ApiSingleItemResponse<GameExtended>> {
     const res = await fetch(`${this.baseUrl}/products/${id}`, {});
-
-    if (res.status === 404) {
-      throw notFound();
-    }
 
     return await res.json()
   },
