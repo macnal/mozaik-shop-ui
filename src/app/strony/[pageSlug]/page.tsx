@@ -27,7 +27,7 @@ export default async function GenericPage({params}: GenericPageProps) {
   const n2m = new NotionToMarkdown({notionClient: notion});
 
   const {results} = (await notion.dataSources.query({
-    data_source_id: process.env.NOTION_PAGES_DATA_SOURCE_ID
+    data_source_id: process.env.NOTION_PAGES_DATA_SOURCE_ID!
   })) as { results: DataSourceObjectResponse[] };
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
