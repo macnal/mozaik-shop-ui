@@ -6,7 +6,7 @@ import {CategoriesChips} from "@/components/domain/CategoriesChips";
 import {ItemsGrid} from "@/components/domain/ItemsGrid";
 import {notFound} from "next/navigation";
 import {PageFilter} from "@/components/common/PageFilter";
-
+import config from "@/../public/config.json";
 
 interface CategoryPageProps {
   params: Promise<{ categorySlug: string }>,
@@ -21,8 +21,9 @@ export default async function CategoryPage({params, searchParams}: CategoryPageP
   const dataSource = WebLinkerService();
   const {item: category} = await dataSource.fetchCategory(id);
 
-  const res = await fetch(`${process.env.PUBLIC_URL}/config.json`);
-  const config = await res.json();
+  //const res = await fetch(`${process.env.PUBLIC_URL}/config.json`);
+  //const config = await res.json();
+
 
   if (!category) {
     throw notFound();

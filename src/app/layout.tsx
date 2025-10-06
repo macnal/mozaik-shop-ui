@@ -6,9 +6,8 @@ import {AppRouterCacheProvider} from '@mui/material-nextjs/v15-appRouter';
 import {CssBaseline, Stack} from "@mui/material";
 import {Navbar} from "@/components/global/Navbar";
 import {Footer} from "@/components/global/Footer";
-import {ThemeProvider} from "@mui/material/styles";
 import {ThemeContext} from "@/context/theme";
-
+import config from "@/../public/config.json";
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '600', '700', '800'],
@@ -27,8 +26,8 @@ export default async function RootLayout({
                                          }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const res = await fetch(`${process.env.PUBLIC_URL}/config.json`);
-  const config = await res.json();
+  // const res = await fetch(`${process.env.PUBLIC_URL}/config.json`);
+  // const config = await res.json();
   const ui = config.mui;
 
   return (

@@ -1,12 +1,12 @@
 import {PageContainer} from "@/components/PageContainer";
 import {WebLinkerService} from "@/services/weblinker";
 import {ItemsGrid} from "@/components/domain/ItemsGrid";
+import config from "@/../public/config.json";
 
 export default async function HomePage() {
   const dataSource = WebLinkerService();
-
-  const res = await fetch(`${process.env.PUBLIC_URL}/config.json`);
-  const config = await res.json();
+  // const res = await fetch(`${process.env.PUBLIC_URL}/config.json`);
+  // const config = await res.json();
 
   const r = dataSource.fetchProducts({
     page: 0,

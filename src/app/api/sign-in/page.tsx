@@ -1,8 +1,7 @@
 import {getServerSession} from "next-auth/next"
 import RedirectToDefaultProviderPage from "./page.client";
 import {authConfig} from "@/auth.config";
-import {PageContainer} from "@/components/PageContainer";
-import { redirect } from "next/navigation";
+import {redirect} from "next/navigation";
 
 interface PageProps {
   searchParams: Promise<{ callbackUrl?: string }>

@@ -2,7 +2,7 @@ import type {NextAuthOptions} from 'next-auth';
 import KeycloakProvider from "next-auth/providers/keycloak";
 
 export const authConfig = {
-  debug: true,
+  debug: false,
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/api/sign-in",
