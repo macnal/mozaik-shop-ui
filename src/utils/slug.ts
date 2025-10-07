@@ -1,14 +1,9 @@
-import slugify from "slugify";
-
-
 interface Slugable {
-  name: string;
-  id: number;
+  slug: string;
 }
 
-
 export const getSlug = (item: Slugable) => {
-  return `${slugify(item.name)}-${item.id}`;
+  return item.slug
 }
 
 export const splitSlug = (slug: string) => {

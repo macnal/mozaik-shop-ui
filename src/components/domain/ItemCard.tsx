@@ -19,10 +19,11 @@ export const ItemCard = async ({
                                  image,
                                  name,
                                  shortDescription,
-                                 id,
+                                 slug,
+                                 categoryId,
                                  rating = 4,
                                  tag,
-  stock,
+                                 stock,
                                  // categories = [],
 
                                }: Game & {
@@ -30,17 +31,10 @@ export const ItemCard = async ({
   //tags?: { color: keyof typeof colors, label: string, }[],
   rating?: number
 }) => {
-
-
-  const slug = getSlug({name, id});
-
-
   const mainImage = image;
-
   const dataSource = WebLinkerService();
-  const {items: categories} = await dataSource.fetchCategories({parentIds: [5052433]});
-  const category = categories[0];
-  const url = `/${getSlug(category)}/${slug}`;
+  const category = await dataSource.fetchCategoryById(categoryId);
+  const url = `/${category.slug}/${slug}`;
 
   return <Card component={'article'}>
     <CardActionArea component={Link} href={url} sx={{position: 'relative'}}>

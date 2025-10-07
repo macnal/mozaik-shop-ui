@@ -14,7 +14,7 @@ interface ItemPageProps {
 }
 
 export default async function ItemPage({params}: ItemPageProps) {
-  const {itemSlug} = await params;
+  const {categorySlug, itemSlug} = await params;
   const [id] = splitSlug(itemSlug);
 
   const dataSource = WebLinkerService();
@@ -23,8 +23,8 @@ export default async function ItemPage({params}: ItemPageProps) {
   if (!item) {
     throw notFound();
   }
-  // const {items: categories} = await dataSource.fetchCategories({parentIds: [5052433]});
-  const {item: category} = await dataSource.fetchCategory(5052433);
+
+  const category = await dataSource.fetchCategoryById(item.categoryId);
 
   if (!category) {
     throw notFound();

@@ -1,8 +1,10 @@
 export interface Game {
+  categoryId: number;
   id: number;
   ean: string;
   sku: string;
   name: string;
+  slug: string;
   stock: number;
   price: number;
   description: string;
@@ -12,9 +14,11 @@ export interface Game {
 }
 
 export interface GameExtended {
+  categoryId: number;
   id: number;
   ean: string;
   sku: string;
+  slug: string;
   name: string;
   stock: number;
   price: number;
@@ -28,6 +32,7 @@ export interface GameExtended {
 
 export interface Category {
   id: number;
+  slug: string;
   name: string;
   parent: number;
 }

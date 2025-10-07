@@ -14,7 +14,7 @@ interface FetchProductsParams {
 }
 
 interface FetchCategoriesParams {
-  parentIds: number[];
+  parentId: number;
 }
 
 const x = {
@@ -55,38 +55,30 @@ const x = {
     return data
   },
 
-  async fetchCategory(id: number): Promise<ApiSingleItemResponse<Category>> {
+  async fetchCategory(slug: string): Promise<Category> {
     const url = new URL(`${this.baseUrl}/weblinker/categories`);
-    url.search = new URLSearchParams({
-      id: String(id),
-    }).toString();
-
     const res = await fetch(url);
-    const mock = await res.json();
-    return {
-      ...mock,
-      item: mock.items.find((x: Category) => x.id === id),
-    };
+    const {items} = (await res.json()) as ApiResponse<Category>;
+
+    return items.find(x => x.slug === slug)! || items[0];
+  },
+
+  async fetchCategoryById(id: number): Promise<Category> {
+    const url = new URL(`${this.baseUrl}/weblinker/categories`);
+    const res = await fetch(url);
+    const {items} = (await res.json()) as ApiResponse<Category>;
+
+    return items.find(x => x.id === id)! || items[0];
   },
 
   async fetchCategories(params: FetchCategoriesParams) {
     const url = new URL(`${this.baseUrl}/weblinker/categories`);
-    url.search = new URLSearchParams({
-      ...params,
-      parentIds: `${params.parentIds.join(',')}`,
-    }).toString();
-
     const res = await fetch(url);
-    const mock = (await res.json()) as ApiResponse<Category>;
+    const {items} = (await res.json()) as ApiResponse<Category>;
 
-    if (params.parentIds[0] === 0) {
-      return {
-        ...mock,
-        items: mock.items.filter(x => x.parent === 0)
-      }
-    }
-
-    return mock
+    return {
+      items: items.filter(x => x.parent === (params.parentId || 0))
+    };
   }
 }
 
