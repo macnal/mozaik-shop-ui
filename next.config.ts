@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/cart/:path*',
-        destination: `${process.env.API_BASE}/weblinker/cart/:path*` // Proxy to Backend
+        destination: `${process.env.API_BASE}/cart/:path*` // Proxy to Backend
       }
     ]
   }
