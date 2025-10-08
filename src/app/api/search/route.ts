@@ -1,6 +1,5 @@
 import {WebLinkerService} from "@/services/weblinker";
-import type {NextApiRequest, NextApiResponse} from 'next'
-import { NextRequest } from "next/server";
+import {NextRequest} from "next/server";
 
 
 export const GET = async (

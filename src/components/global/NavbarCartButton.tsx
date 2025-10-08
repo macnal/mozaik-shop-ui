@@ -16,14 +16,16 @@ import {
 } from "@mui/material";
 import PopupState, {bindPopover, bindTrigger} from "material-ui-popup-state";
 import {useEffect, useLayoutEffect, useState} from "react";
-import {AddToCartPOST, ApiCartResponse, RemoveFromCartPOST} from "@/types/responses";
-import {AddItemToCartEvent, CartEvents} from './Navbar.types';
-import {useLocalStorage} from "usehooks-ts";
+import {AddToCartPUT, ApiCartResponse, RemoveFromCartDELETE} from "@/types/responses";
+import {AddItemToCartEvent, CART_ID_COOKIE_NAME, CartEvents} from './Navbar.types';
 import {Delete} from '@mui/icons-material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Cookies from 'js-cookie';
+import Link from "next/link";
 
-export const NavbarCartButton = () => {
-  const [cartId, setCartId] = useLocalStorage<string | null>('CART_ID', null);
+
+export const NavbarCartButton = ({}) => {
+  const [cartId, setCartId] = useState<string | null>(Cookies.get(CART_ID_COOKIE_NAME) || null);
   const [cart, setCart] = useState<ApiCartResponse | null>(null);
 
   useEffect(() => {
@@ -36,8 +38,8 @@ export const NavbarCartButton = () => {
     }
   }, [])
 
-  const handleAddItem = async (items: AddToCartPOST["items"]) => {
-    await fetch('/api/cart', {
+  const handleAddItem = async (items: AddToCartPUT["items"]) => {
+    await fetch(`/api/cart/${cartId}`, {
       method: 'PUT',
       body: JSON.stringify({
         ...(cartId && {uuid: cartId}),
@@ -53,26 +55,30 @@ export const NavbarCartButton = () => {
 
         if (!cartId) {
           setCartId(data.uuid);
+          Cookies.set(CART_ID_COOKIE_NAME, data.uuid, {expires: 365});
         }
       });
   }
 
-  const handleRemoveFromCart = async (items: RemoveFromCartPOST["items"]) => {
-    await Promise.all(items.map(async (item) => {
-      await fetch(`/api/cart/${cartId}?p=${item.productId}&q=${item.quantity}`, {
-        method: 'DELETE',
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setCart(data);
+  const handleRemoveFromCart = async (items: RemoveFromCartDELETE["items"]) => {
+    await fetch(`/api/cart/${cartId}`, {
+      method: 'DELETE',
+      body: JSON.stringify({
+        items
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCart(data);
 
-          if (!cartId) {
-            setCartId(data.uuid);
-          }
-        });
-    }));
-
-
+        if (!cartId) {
+          setCartId(data.uuid);
+          Cookies.set(CART_ID_COOKIE_NAME, data.uuid, {expires: 365});
+        }
+      });
   }
 
 
@@ -164,6 +170,9 @@ export const NavbarCartButton = () => {
 
                 <Stack sx={{p: 2}}>
                   <Button
+                    component={Link}
+                    href={'/koszyk'}
+
                     variant={'contained'}
                     endIcon={<ArrowForwardIcon/>}
                   >Przejdź do koszyka</Button>

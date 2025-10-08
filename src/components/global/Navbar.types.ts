@@ -1,4 +1,4 @@
-import {AddToCartPOST, ApiCartResponseItem} from "@/types/responses";
+import {AddToCartPUT, ApiCartResponseItem} from "@/types/responses";
 
 export enum CartEvents {
   init = "cart:init",
@@ -6,6 +6,8 @@ export enum CartEvents {
   removeItem = "cart:removeItem",
 }
 
-export type AddItemToCartEvent = CustomEvent<AddToCartPOST>
+export type AddItemToCartEvent = CustomEvent<AddToCartPUT>
 
 export type RemoveItemToCartEvent = CustomEvent<{ items: ApiCartResponseItem[] }>
+
+export const CART_ID_COOKIE_NAME = 'CART_ID';

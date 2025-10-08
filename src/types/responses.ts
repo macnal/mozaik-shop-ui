@@ -82,17 +82,17 @@ export interface ApiCartResponseItem {
   quantity: number;
 }
 
-interface AddToCartPOSTItem {
+export interface AddToCartPUTItem {
   productId: number;
   quantity: number;
 }
 
-export interface AddToCartPOST {
-  items: AddToCartPOSTItem[]
+export interface AddToCartPUT {
+  items: AddToCartPUTItem[]
 }
 
-export interface RemoveFromCartPOST {
-  items: AddToCartPOSTItem[]
+export interface RemoveFromCartDELETE {
+  items: AddToCartPUTItem[]
 }
 
 export interface ApiCartResponse {

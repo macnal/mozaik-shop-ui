@@ -1,6 +1,6 @@
 {
   "interface": {
-    "itemsPerPage": 2
+    "itemsPerPage": 48
   },
   "mui": {
     "typography": {
@@ -8,6 +8,10 @@
       "h1": {
         "fontSize": "2rem",
         "fontWeight": 800
+      },
+      "h2": {
+        "fontSize": "1.6rem",
+        "fontWeight": 600
       },
       "h3": {
         "fontSize": "1.4rem",
