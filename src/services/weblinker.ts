@@ -30,13 +30,13 @@ const x = {
 
   async createOrder(cart: ApiCartResponse) {
     const res = await fetch(`${this.baseUrl}/weblinker/order`, {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         uuid: cart.uuid,
-        items: [{}],// cart.items,
+        items: cart.items,
         address: {
           name: '',
           street: '',
