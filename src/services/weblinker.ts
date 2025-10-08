@@ -66,11 +66,10 @@ const x = {
           companyName: ''
         }
       })
-    })
-    console.log(await res.text());
+    });
 
-    const paymentUrl = await res.json();
-
+    const paymentUrl = await res.text();
+    console.log(paymentUrl);
     return paymentUrl;
   },
 
