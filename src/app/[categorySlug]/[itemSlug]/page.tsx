@@ -14,7 +14,7 @@ interface ItemPageProps {
 }
 
 export default async function ItemPage({params}: ItemPageProps) {
-  const {categorySlug, itemSlug} = await params;
+  const {itemSlug} = await params;
   const [id] = splitSlug(itemSlug);
 
   const dataSource = WebLinkerService();

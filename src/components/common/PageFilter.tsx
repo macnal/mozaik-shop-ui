@@ -7,20 +7,20 @@ import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {deepmerge} from '@mui/utils';
 import {ThemeOptions} from "@mui/system";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import { useMemo, useState } from 'react';
-import { useDebounceCallback } from 'usehooks-ts';
-import { Button } from '@mui/material';
+import {useState} from 'react';
+import {Button, Stack, SxProps} from '@mui/material';
 
 
-export const PageFilter = ({schema, uiSchema, initialData}: {
-  schema: JsonSchema;
-  uiSchema: UISchemaElement;
+export const PageFilter = ({layoutSchema, formSchema, initialData, sx}: {
+  formSchema: JsonSchema;
+  layoutSchema: UISchemaElement;
   initialData: unknown;
+  sx?: SxProps;
 }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [form, setForm] = useState<Record<string, any>>({});
+  const [form, setForm] = useState<Record<string, string>>({});
   // const debounced = useDebounceCallback(setValue, 500);
 
   const handleSubmit = () => {
@@ -31,34 +31,35 @@ export const PageFilter = ({schema, uiSchema, initialData}: {
 
   // const data = useMemo(() => ({...searchParams}), [searchParams]);
 
-  return (
-    <ErrorBoundary fallback={<p>Upss... Niewłaściwe filtry</p>}>
-      <ThemeProvider theme={theme => createTheme(deepmerge(theme, {
-        components: {
-          MuiFormControl: {
-            defaultProps: {
-              size: "small",
+  return (<Stack sx={sx} direction={'row'}>
+      <ErrorBoundary fallback={<p>Upss... Niewłaściwe filtry</p>}>
+        <ThemeProvider theme={theme => createTheme(deepmerge(theme, {
+          components: {
+            MuiFormControl: {
+              defaultProps: {
+                size: "small",
+              }
             }
           }
-        }
 
-      } as Omit<Partial<ThemeOptions>, "shadows">))}>
-        <JsonForms
-          schema={schema}
-          uischema={uiSchema}
-          data={form}
-          renderers={materialRenderers}
-          cells={materialCells}
-          onChange={({data, errors}) => {
-            setForm(data);
-          }}
-        />
+        } as Omit<Partial<ThemeOptions>, "shadows">))}>
 
-        <Button onClick={handleSubmit}>
-          Szuakj
-        </Button>
-      </ThemeProvider>
-    </ErrorBoundary>
+          <JsonForms
+            schema={formSchema}
+            uischema={layoutSchema}
+            data={form}
+            renderers={materialRenderers}
+            cells={materialCells}
+            onChange={({data, errors}) => {
+              setForm(data);
+            }}
+          />
 
+          <Button onClick={handleSubmit}>
+            Szukaj
+          </Button>
+        </ThemeProvider>
+      </ErrorBoundary>
+    </Stack>
   );
 }

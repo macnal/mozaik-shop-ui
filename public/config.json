@@ -1,6 +1,6 @@
 {
   "interface": {
-    "itemsPerPage": 50
+    "itemsPerPage": 2
   },
   "mui": {
     "typography": {

@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@bprogress/next": "^3.2.12",
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
@@ -30,7 +31,9 @@
     "react-markdown": "^10.1.0",
     "server-only": "^0.0.1",
     "slugify": "^1.6.6",
-    "usehooks-ts": "^3.1.1"
+    "usehooks-ts": "^3.1.1",
+    "zod": "^4.1.12",
+    "zod-from-json-schema": "^0.5.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

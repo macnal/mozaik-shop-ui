@@ -4,7 +4,6 @@ import {Search} from "@mui/icons-material";
 import {
   Autocomplete,
   Avatar,
-  Box,
   debounce,
   IconButton,
   InputAdornment,
@@ -14,37 +13,44 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {useEffect, useMemo, useRef, useState,} from "react";
-import {Game} from "@/types/responses";
+import {useRouter, useSearchParams} from "next/navigation";
+import NextLink from 'next/link';
 
-const handleFetch = async (searchParams: any = null) => {
+const handleFetch = async (searchParams: { query: string } | null = null) => {
 
   return await fetch(`/api/search${searchParams ? `?${
     new URLSearchParams({
       ...searchParams,
-      page: 0,
-      size: 10
     })
   }` : ``}`)
     .then((res) => res.json())
     .then((data) => {
-      return data.items as Game[];
+      return data.items as Option[];
     });
 };
 
-type Option = Game;
+interface Option {
+  id: number,
+  name: string,
+  categoryName: string,
+  url: string,
+}
 
 export const NavbarSearch = ({defaultValue}: {
   defaultValue?: string;
 }) => {
   const router = useRouter();
-
+  const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState<readonly Game[]>([]);
+  const [options, setOptions] = useState<readonly Option[]>([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState(defaultValue || '');
-  const [value, setValue] = useState<Game | string | null>(null);
+  const [value, setValue] = useState<Option | string | null>(null);
   const lastSearchTimestampRef = useRef<number | null>(null);
 
+  useEffect(() => {
+    setInputValue(() => searchParams.get("query") || '');
+  }, [searchParams]);
 
   const handleFetchDebounced = useMemo(() => {
 
@@ -111,9 +117,13 @@ export const NavbarSearch = ({defaultValue}: {
           lastSearchTimestampRef.current = timestamp;
         }
 
-        void handleFetchDebounced({
-          query: inputValue,
-        });
+        if ((inputValue?.length || 0) >= 3) {
+          void handleFetchDebounced({
+            query: inputValue,
+          });
+        }
+
+
         // console.log('nextOptions fetchStrategyFn', nextOptions);
         // if (timestamp === lastSearchTimestampRef.current) {
         //     setOptions(() => nextOptions);
@@ -131,6 +141,11 @@ export const NavbarSearch = ({defaultValue}: {
     }
   }, [open]);
 
+  const goToSearchPage = () => {
+    console.log('value', value);
+    router.push(`/szukaj?query=${inputValue}`);
+  }
+
   return <Autocomplete
     open={open && !!options?.length}
     onOpen={() => {
@@ -140,7 +155,7 @@ export const NavbarSearch = ({defaultValue}: {
       setOpen(false);
     }}
     inputValue={inputValue}
-    onInputChange={(event: any, newValue: string, reason) => {
+    onInputChange={(event, newValue: string, reason) => {
       handleInputChange(newValue);
     }}
 
@@ -153,53 +168,67 @@ export const NavbarSearch = ({defaultValue}: {
       if (typeof value === 'string' || (typeof option === 'string')) {
         return false;
       } else {
-        return option?.label === value.label;
+        return option?.name === value.name;
       }
 
 
     }}
-    getOptionLabel={(option) => typeof option === 'string' ? option : option.label}
+    getOptionLabel={(option) => typeof option === 'string' ? option : option.name}
     options={options}
     loading={loading}
     value={value}
-    onChange={(event: any, newValue: Option | string | null) => {
+    onChange={(event, newValue) => {
       if (typeof newValue === 'string') {
 
       } else if (newValue) {
         setValue(newValue.name);
-        router.push(`/`);
+        // router.push(`/`);
       } else {
         setValue(newValue);
       }
-
-
+    }}
+    onKeyDown={(event) => {
+      if (event.key === "Enter") {
+        goToSearchPage();
+      }
     }}
     freeSolo
-    renderOption={(props: any, option: any) => {
+    renderOption={(props, option) => {
       const {key, ...optionProps} = props;
       return (
-        <Stack
-          direction={'row'}
-          key={key}
-          component="li"
-          spacing={2}
-          {...optionProps}
-        >
-          <Avatar variant={"rounded"} >
-            AD
-          </Avatar>
+        <Stack component={'li'}
+               key={key}
 
-          <Stack>
-            <Typography variant={'subtitle1'} whiteSpace={'nowrap'}>
-              {option.name}
-            </Typography>
+               {...optionProps}>
+          <Stack
+            component={NextLink}
+            href={option.url}
+            direction={'row'}
+
+            // component="li"
+            spacing={2}
+            sx={{width: '100%', textDecoration: 'none', color: 'text.primary'}}
+
+          >
+            <Avatar variant={"rounded"}>
+              AD
+            </Avatar>
+
+            <Stack sx={{overflow: 'hidden'}}>
+              <Typography variant={'subtitle1'} whiteSpace={'nowrap'} sx={{textOverflow: 'hidden', overflow: 'hidden'}}>
+                {option.name}
+              </Typography>
+              <Typography variant={'body2'} whiteSpace={'nowrap'} color={"textSecondary"}>
+                {option.categoryName}
+              </Typography>
+            </Stack>
           </Stack>
         </Stack>
       );
     }}
     filterOptions={(x) => x}
     sx={{flexBasis: 400,}}
-    renderInput={({InputProps, ...params}) => (
+    renderInput={({InputProps, InputLabelProps, ...params}) => (
       <OutlinedInput
         {...InputProps}
         {...params}
@@ -213,9 +242,6 @@ export const NavbarSearch = ({defaultValue}: {
           },
 
           '&:hover, &:focus, &:active, &.Mui-focused': {
-            // "& fieldset": {
-            //
-            // },
             '.MuiInputAdornment-positionEnd': {
               opacity: 1,
               transition: 'opacity .3s'
@@ -227,7 +253,7 @@ export const NavbarSearch = ({defaultValue}: {
           <Search/>
         </InputAdornment>}
         endAdornment={<InputAdornment position="end">
-          <IconButton edge={'end'} color={'primary'}>
+          <IconButton edge={'end'} color={'primary'} onClick={goToSearchPage}>
             <ArrowForwardIcon/>
           </IconButton>
         </InputAdornment>}

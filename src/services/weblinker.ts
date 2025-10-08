@@ -11,6 +11,8 @@ import {
 interface FetchProductsParams {
   page: number;
   size: number;
+  query?: string;
+  category?: number | number[];
 }
 
 interface FetchCategoriesParams {
@@ -42,11 +44,21 @@ const x = {
     // await new Promise(r => setTimeout(r, 5000));
 
     const url = new URL(`${this.baseUrl}/weblinker/products`);
-    url.search = new URLSearchParams({
-      ...params,
+    const nextSearchParams = new URLSearchParams({
       page: `${params.page - 1}`,
       size: `${params.size}`,
-    }).toString();
+      q: `${params.query || ''}`,
+    });
+
+    if (params.category) {
+      const arr = Array.isArray(params.category) ? params.category : [params.category];
+      arr.forEach((categoryId) => {
+        nextSearchParams.append('c', `${categoryId}`)
+      });
+    }
+
+    url.search = nextSearchParams.toString();
+
 
     const res = await fetch(url);
 

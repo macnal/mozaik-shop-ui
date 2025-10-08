@@ -19,10 +19,6 @@ const nextConfig: NextConfig = {
       {
         source: '/api/cart/:path*',
         destination: `${process.env.API_BASE}/weblinker/cart/:path*`
-      },
-      {
-        source: '/api/search/:path*',
-        destination: `${process.env.API_BASE}/weblinker/products/:path*`
       }
     ]
   }
