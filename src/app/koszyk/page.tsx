@@ -7,18 +7,14 @@ import {redirect} from "next/navigation";
 import {KoszykPageClient} from "@/app/koszyk/page.client";
 import layoutSchema from '../../../public/order/uischema.json';
 import formSchema from '../../../public/order/schema.json';
-import {convertJsonSchemaToZod, jsonSchemaObjectToZodRawShape} from "zod-from-json-schema";
+import {jsonSchemaObjectToZodRawShape} from "zod-from-json-schema";
 import z from "zod";
 import type {JSONSchema} from "zod/v4/core";
-import type {Schema} from "zod/v4";
 import {CreateOrderRequest} from "@/types/responses";
 
 async function createOrder(formData: Record<string, unknown>) {
   'use server';
   const dataSource = WebLinkerService();
-
-  console.log('asdfasdfdfsaasdf');
-  console.log(formData);
 
   const cookieStore = await cookies();
   const cartId = (await cookieStore.get(CART_ID_COOKIE_NAME))?.value || null;
@@ -44,6 +40,10 @@ async function createOrder(formData: Record<string, unknown>) {
           ...data,
         } as CreateOrderRequest);
         redirect(paymentUrl);
+      }
+
+      if (error) {
+        console.error(error);
       }
     }
   }
