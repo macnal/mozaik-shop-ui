@@ -1,24 +1,23 @@
 'use client'
 
 import {Add, Delete, Remove} from "@mui/icons-material"
-import {Button, ButtonGroup, IconButton, Stack} from "@mui/material"
+import {Button, ButtonGroup, IconButton, Stack, Typography} from "@mui/material"
 import {RemoveFromCartDELETE} from "@/types/responses";
-import Cookies from "js-cookie";
-import {CART_ID_COOKIE_NAME} from "@/components/global/Navbar.types";
 import {useRouter} from "next/navigation";
 
 
 interface ItemCardActionsProps {
   productId: number;
   quantity: number;
+  price: number;
 }
 
-export function ItemCardActions({productId, quantity}: ItemCardActionsProps) {
+export function ItemCardActions({productId, quantity, price}: ItemCardActionsProps) {
   const router = useRouter();
-  const cartId = Cookies.get(CART_ID_COOKIE_NAME) || null;
+  //const cartId = Cookies.get(CART_ID_COOKIE_NAME) || null;
 
   const handleRemoveFromCart = async (items: RemoveFromCartDELETE["items"]) => {
-    await fetch(`/api/cart/${cartId}`, {
+    await fetch(`/api/cart`, {
       method: 'DELETE',
       body: JSON.stringify({
         items
@@ -36,10 +35,25 @@ export function ItemCardActions({productId, quantity}: ItemCardActionsProps) {
       });
   }
 
-  return <Stack direction={'row'} spacing={3}>
+  return <Stack direction={'row'} spacing={3} sx={{alignItems: 'center'}}>
     <ButtonGroup variant="outlined" aria-label="Loading button group">
+      <Button loading={false} loadingPosition="center"
+
+              onClick={() => {
+                void handleRemoveFromCart([
+                  {productId, quantity: 1}
+                ])
+              }}
+      >
+        <Remove/>
+      </Button>
+
+      <Button color={'primary'} disableRipple sx={{width: 56}} >
+        {quantity}
+      </Button>
+
       <Button onClick={() => {
-        void fetch(`/api/cart/${cartId}`, {
+        void fetch(`/api/cart`, {
           method: 'PUT',
           body: JSON.stringify({
             items: [
@@ -58,22 +72,13 @@ export function ItemCardActions({productId, quantity}: ItemCardActionsProps) {
         <Add/>
 
       </Button>
-      <Button color={'primary'} disableRipple>
-        {quantity}
-      </Button>
-      <Button loading={false} loadingPosition="center"
-
-              onClick={() => {
-                void handleRemoveFromCart([
-                  {productId, quantity: 1}
-                ])
-              }}
-      >
-        <Remove/>
-      </Button>
     </ButtonGroup>
 
-    <IconButton edge="end" aria-label="delete">
+    <Typography variant={'h6'} fontWeight={800} sx={{minWidth: 90, textAlign: 'right'}}>
+      {(price * quantity).toFixed(2)} zł
+    </Typography>
+
+    <IconButton edge="end" aria-label="Usuń">
       <Delete
         onClick={() => {
           void handleRemoveFromCart([{

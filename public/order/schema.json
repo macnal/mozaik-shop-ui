@@ -1,0 +1,112 @@
+{
+  "type": "object",
+  "properties": {
+    "wantInvoice": {
+      "type": "boolean"
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "zip": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "homeNumber": {
+          "type": "string"
+        },
+        "flatNumber": {
+          "type": "string"
+        },
+        "info": {
+          "type": "string"
+        },
+        "nip": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        }
+      },
+      "required":[
+        "street",
+        "city",
+        "zip",
+        "phone",
+        "email",
+        "homeNumber"
+      ]
+    },
+    "invoice": {
+      "type": "object",
+      "required":[
+        "street",
+        "city",
+        "zip",
+        "homeNumber",
+        "nip",
+        "companyName"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "zip": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "homeNumber": {
+          "type": "string"
+        },
+        "flatNumber": {
+          "type": "string"
+        },
+        "info": {
+          "type": "string"
+        },
+        "nip": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -13,9 +13,9 @@
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@jsonforms/core": "^3.6.0",
-    "@jsonforms/material-renderers": "^3.6.0",
-    "@jsonforms/react": "^3.6.0",
+    "@jsonforms/core": "^3.7.0-alpha.1",
+    "@jsonforms/material-renderers": "^3.7.0-alpha.1",
+    "@jsonforms/react": "^3.7.0-alpha.1",
     "@mui/icons-material": "^7.3.2",
     "@mui/material": "^7.3.2",
     "@mui/material-nextjs": "^7.3.2",
@@ -45,11 +45,5 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "typescript": "^5"
-  },
-  "overrides": {
-    "@jsonforms/material-renderers": {
-      "@mui/icons-material": "$@mui/icons-material",
-      "@mui/material": "$@mui/material"
-    }
   }
 }

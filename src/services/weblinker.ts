@@ -1,15 +1,16 @@
 import 'server-only'
 import {
-  AddToCartPUT,
   AddToCartPUTItem,
+  AddToCartPUTResponse,
   ApiCartResponse,
   ApiResponse,
   ApiResponsePaginated,
   ApiSingleItemResponse,
   Category,
+  CreateOrderRequest,
   Game,
   GameExtended,
-  RemoveFromCartDELETE
+  RemoveFromCartDELETEResponse
 } from "@/types/responses";
 
 interface FetchProductsParams {
@@ -28,47 +29,16 @@ interface FetchCategoriesParams {
 const x = {
   baseUrl: process.env.API_BASE,
 
-  async createOrder(cart: ApiCartResponse) {
+  async createOrder(data: CreateOrderRequest): Promise<string> {
     const res = await fetch(`${this.baseUrl}/weblinker/order`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        uuid: cart.uuid,
-        items: cart.items,
-        address: {
-          name: '',
-          street: '',
-          city: '',
-          state: '',
-          zip: '',
-          country: '',
-          phone: '',
-          email: '',
-          homeNumber: '',
-          flatNumber: '',
-          info: ''
-        },
-        invoice: {
-          name: '',
-          street: '',
-          city: '',
-          state: '',
-          zip: '',
-          country: '',
-          phone: '',
-          email: '',
-          homeNumber: '',
-          flatNumber: '',
-          info: '',
-          nip: '',
-          companyName: ''
-        }
-      })
+      body: JSON.stringify(data)
     });
 
-    const paymentUrl = await res.text();
+    const {url: paymentUrl} = await res.json();
     console.log(paymentUrl);
     return paymentUrl;
   },
@@ -85,7 +55,7 @@ const x = {
     return data;
   },
 
-  async addToCart(id: string | null = null, items: AddToCartPUTItem[]): Promise<AddToCartPUT> {
+  async addToCart(id: string | null = null, items: AddToCartPUTItem[]): Promise<AddToCartPUTResponse> {
     const data: {
       uuid?: string;
       items: AddToCartPUTItem[];
@@ -106,7 +76,7 @@ const x = {
     return await res.json();
   },
 
-  async removeFromCart(id: string, items: AddToCartPUTItem[]): Promise<RemoveFromCartDELETE> {
+  async removeFromCart(id: string, items: AddToCartPUTItem[]): Promise<RemoveFromCartDELETEResponse> {
     const item = items[0];
 
     const res = await fetch(`${this.baseUrl}/weblinker/cart/${id}?p=${item.productId}&q=${item.quantity}`, {

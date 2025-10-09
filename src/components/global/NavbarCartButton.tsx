@@ -14,7 +14,7 @@ import {
   Stack,
   Typography
 } from "@mui/material";
-import PopupState, {bindPopover, bindTrigger} from "material-ui-popup-state";
+import PopupState, {bindPopover, bindTrigger, bindToggle} from "material-ui-popup-state";
 import {useEffect, useLayoutEffect, useState} from "react";
 import {AddToCartPUT, ApiCartResponse, RemoveFromCartDELETE} from "@/types/responses";
 import {AddItemToCartEvent, CART_ID_COOKIE_NAME, CartEvents} from './Navbar.types';
@@ -25,24 +25,23 @@ import Link from "next/link";
 
 
 export const NavbarCartButton = ({}) => {
-  const [cartId, setCartId] = useState<string | null>(Cookies.get(CART_ID_COOKIE_NAME) || null);
   const [cart, setCart] = useState<ApiCartResponse | null>(null);
 
   useEffect(() => {
-    if (cartId) {
-      void fetch(`/api/cart/${cartId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setCart(data)
-        });
-    }
+
+    void fetch(`/api/cart`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCart(data)
+      });
+
   }, [])
 
   const handleAddItem = async (items: AddToCartPUT["items"]) => {
-    await fetch(`/api/cart/${cartId}`, {
+    await fetch(`/api/cart`, {
       method: 'PUT',
       body: JSON.stringify({
-        ...(cartId && {uuid: cartId}),
+        // ...(cartId && {uuid: cartId}),
         items
       }),
       headers: {
@@ -53,15 +52,15 @@ export const NavbarCartButton = ({}) => {
       .then((data) => {
         setCart(data);
 
-        if (!cartId) {
-          setCartId(data.uuid);
-          Cookies.set(CART_ID_COOKIE_NAME, data.uuid, {expires: 365});
-        }
+        // if (!cartId) {
+        //   setCartId(data.uuid);
+        //   Cookies.set(CART_ID_COOKIE_NAME, data.uuid, {expires: 365});
+        // }
       });
   }
 
   const handleRemoveFromCart = async (items: RemoveFromCartDELETE["items"]) => {
-    await fetch(`/api/cart/${cartId}`, {
+    await fetch(`/api/cart`, {
       method: 'DELETE',
       body: JSON.stringify({
         items
@@ -74,10 +73,10 @@ export const NavbarCartButton = ({}) => {
       .then((data) => {
         setCart(data);
 
-        if (!cartId) {
-          setCartId(data.uuid);
-          Cookies.set(CART_ID_COOKIE_NAME, data.uuid, {expires: 365});
-        }
+        //if (!cartId) {
+        //  setCartId(data.uuid);
+        //  Cookies.set(CART_ID_COOKIE_NAME, data.uuid, {expires: 365});
+        //}
       });
   }
 
@@ -170,6 +169,7 @@ export const NavbarCartButton = ({}) => {
 
                 <Stack sx={{p: 2}}>
                   <Button
+                    {...bindToggle(popupState)}
                     component={Link}
                     href={'/koszyk'}
 

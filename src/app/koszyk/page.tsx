@@ -2,145 +2,85 @@ import {PageContainer} from "@/components/PageContainer";
 import {cookies} from "next/headers";
 import {CART_ID_COOKIE_NAME} from "@/components/global/Navbar.types";
 import {WebLinkerService} from "@/services/weblinker";
-import {
-  Avatar,
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography
-} from "@mui/material";
-import {ItemCardActions} from "./ItemCardActions";
+import {Typography} from "@mui/material";
+import {redirect} from "next/navigation";
+import {KoszykPageClient} from "@/app/koszyk/page.client";
+import layoutSchema from '../../../public/order/uischema.json';
+import formSchema from '../../../public/order/schema.json';
+import {convertJsonSchemaToZod, jsonSchemaObjectToZodRawShape} from "zod-from-json-schema";
+import z from "zod";
+import type {JSONSchema} from "zod/v4/core";
+import type {Schema} from "zod/v4";
+import {CreateOrderRequest} from "@/types/responses";
 
-async function createOrder() {
+async function createOrder(formData: Record<string, unknown>) {
   'use server';
-
   const dataSource = WebLinkerService();
+
+  console.log('asdfasdfdfsaasdf');
+  console.log(formData);
+
   const cookieStore = await cookies();
-  const cartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
-  console.log(cartId);
+  const cartId = (await cookieStore.get(CART_ID_COOKIE_NAME))?.value || null;
+
   let cart;
-
   if (cartId) {
-    cart = await dataSource.fetchCart(cartId)
+    cart = await dataSource.fetchCart(cartId);
+    if (cart) {
+      const FromJsonSchema = jsonSchemaObjectToZodRawShape(formSchema as JSONSchema.Schema);
+      const RequestSchema = z.object({
+        items: z.array(z.object({
+          productId: z.number(),
+          quantity: z.number(),
+        })),
+        ...FromJsonSchema
+      });
 
-    if (cart){
-      const dataSource = WebLinkerService();
-      const nextUrl = await dataSource.createOrder(cart);
-      console.log(cart)
-      console.log(nextUrl);
-      return Response.redirect(nextUrl);
+      const {data, error} = RequestSchema.safeParse(formData);
+
+      if (data) {
+        const paymentUrl = await dataSource.createOrder({
+          uuid: cartId,
+          ...data,
+        } as CreateOrderRequest);
+        redirect(paymentUrl);
+      }
     }
   }
 
-  return Response.redirect('/koszyk')
+  redirect('/koszyk');
 }
 
 export default async function KoszykPage() {
   const dataSource = WebLinkerService();
   const cookieStore = await cookies();
   const cartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
-  console.log(cartId);
+
   let cart;
 
   if (cartId) {
-    cart = await dataSource.fetchCart(cartId)
-  }
+    cart = await dataSource.fetchCart(cartId);
 
+    if (cart) {
+      return <PageContainer>
+        <KoszykPageClient
+          cart={cart}
+          createOrder={createOrder}
+          layoutSchema={layoutSchema}
+          formSchema={formSchema}
+          initialData={{}}
+        />
+      </PageContainer>
+    }
+  }
 
   return <PageContainer>
     <Typography variant={'h1'} sx={{mb: 6}}>
       Koszyk
     </Typography>
 
-    <Grid container spacing={6}>
-      <Grid size={{xs: 12, lg: 8}}>
-        {cart?.uuid || 'brak'}
-
-        {cart && <List>
-          {cart.items.map(({name, productId, quantity}) => {
-            return <ListItem
-              key={productId}
-              secondaryAction={
-                <ItemCardActions {...{productId, quantity}} />
-              }
-            >
-              <ListItemAvatar>
-                <Avatar variant={"rounded"}>
-                  AD
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                slotProps={{primary: {variant: 'subtitle1'}}}
-                secondary={'Tu tez trzeba slug zeby był link do produktu'}
-                primary={<>
-                  <Typography color={'textSecondary'} component={'span'}>{quantity} x </Typography>
-                  {name}
-                </>}/>
-            </ListItem>
-          })}
-        </List>
-        }
-
-      </Grid>
-      <Grid size={{xs: 12, lg: 4}}>
-        <Card variant={'elevation'}>
-          <CardContent>
-            <Typography variant={'h2'}>
-              Podsumowanie
-            </Typography>
-
-            <List>
-              <ListItem secondaryAction={<Typography variant={'body1'}>
-                {cart?.total || ' - '}
-              </Typography>}>
-                <ListItemText
-                  slotProps={{primary: {variant: 'subtitle1'}}}
-                  primary={<>
-                    Wartość produktów
-                  </>}/>
-              </ListItem>
-
-              <ListItem secondaryAction={<Typography variant={'body1'}>
-                12 zł
-              </Typography>}>
-                <ListItemText
-                  slotProps={{primary: {variant: 'subtitle1'}}}
-                  primary={<>
-                    Dostawa
-                  </>}/>
-              </ListItem>
-
-              <Divider/>
-
-              <ListItem secondaryAction={<Typography variant={'h6'}>
-                {cart?.total || ' - '}
-              </Typography>}>
-                <ListItemText
-                  slotProps={{primary: {variant: 'h6'}}}
-                  primary={<>
-                    Całość
-                  </>}/>
-              </ListItem>
-            </List>
-
-            <Button variant={'contained'} size={'large'} fullWidth onClick={createOrder}>
-              Dostawa i płatność
-            </Button>
-
-          </CardContent>
-        </Card>
-
-      </Grid>
-
-
-    </Grid>
-
-
+    <Typography>
+      Koszyk jest pusty
+    </Typography>
   </PageContainer>
 }

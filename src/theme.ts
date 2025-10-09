@@ -6,6 +6,11 @@ import {deepmerge} from "@mui/utils";
 const themeFactory = (options: Omit<Partial<ThemeOptions>, "shadows">) => createTheme(
   deepmerge({
     components: {
+      MuiTextField: {
+        defaultProps: {
+          fullWidth: true,
+        }
+      },
       MuiFormControl: {
         defaultProps: {
           fullWidth: true

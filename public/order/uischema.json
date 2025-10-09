@@ -1,0 +1,149 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Group",
+      "label": "Twoje dane",
+      "elements": [
+        {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/address/properties/name"
+                }
+              ]
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/address/properties/city"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/address/properties/zip"
+                }
+              ]
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/address/properties/street"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/address/properties/homeNumber"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/address/properties/flatNumber"
+                }
+              ]
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/address/properties/phone"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/address/properties/email"
+                }
+              ]
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/wantInvoice",
+                  "label": "Chcę otrzymać fakturę"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Group",
+      "label": "Dane do faktury",
+      "rule": {
+        "effect": "SHOW",
+        "condition": {
+          "type": "LEAF",
+          "scope": "#/properties/wantInvoice",
+          "expectedValue": true
+        }
+      },
+      "elements": [
+        {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/invoice/properties/name"
+                }
+              ]
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/invoice/properties/city"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/invoice/properties/zip"
+                }
+              ]
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/invoice/properties/street"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/invoice/properties/homeNumber"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/invoice/properties/flatNumber"
+                }
+              ]
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/invoice/properties/nip"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/invoice/properties/companyName"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
