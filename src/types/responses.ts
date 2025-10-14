@@ -80,9 +80,17 @@ export interface ApiCartResponseItem {
   name: string;
   price: number;
   quantity: number;
+  slug: string;
+  image: string;
+  categoryId: number;
 }
 
 export interface AddToCartPUTItem {
+  productId: number;
+  quantity: number;
+}
+
+export interface RemoveFromCartDELETEItem {
   productId: number;
   quantity: number;
 }
@@ -97,11 +105,11 @@ export interface AddToCartPUTResponse {
 }
 
 export interface RemoveFromCartDELETE {
-  items: AddToCartPUTItem[]
+  items: RemoveFromCartDELETEItem[]
 }
 
 export interface RemoveFromCartDELETEResponse {
-  items: AddToCartPUTItem[];
+  items: RemoveFromCartDELETEItem[];
   uuid: string;
 }
 
@@ -109,6 +117,27 @@ export interface ApiCartResponse {
   uuid: string;
   items: ApiCartResponseItem[];
   total: number;
+  shippingFees: number;
+}
+
+export interface AppCartResponseItem {
+  productId: number;
+  name: string;
+  price: number;
+  quantity: number;
+  slug: string;
+  categoryId: number;
+  categoryName: string;
+  categorySlug: string;
+  image: string;
+  url: string;
+}
+
+export interface AppCartResponse {
+  uuid: string;
+  items: AppCartResponseItem[];
+  total: number;
+  shippingFees: number;
 }
 
 interface Address {
@@ -127,7 +156,7 @@ interface Address {
 
 export interface CreateOrderRequest {
   uuid: string;
-  items: ApiCartResponseItem[];
+  items: AddToCartPUTItem[];
   address: Address;
   invoice?: Address;
 }

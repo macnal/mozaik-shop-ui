@@ -6,7 +6,7 @@ import {
   Avatar,
   debounce,
   IconButton,
-  InputAdornment,
+  InputAdornment, ListItemAvatar,
   OutlinedInput,
   Stack,
   Typography
@@ -15,7 +15,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {useEffect, useMemo, useRef, useState,} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
 import NextLink from 'next/link';
-
+import Link from "next/link";
+import ImageTwoToneIcon from '@mui/icons-material/ImageTwoTone';
 const handleFetch = async (searchParams: { query: string } | null = null) => {
 
   return await fetch(`/api/search${searchParams ? `?${
@@ -34,6 +35,7 @@ interface Option {
   name: string,
   categoryName: string,
   url: string,
+  image: string
 }
 
 export const NavbarSearch = ({defaultValue}: {
@@ -207,11 +209,11 @@ export const NavbarSearch = ({defaultValue}: {
 
             // component="li"
             spacing={2}
-            sx={{width: '100%', textDecoration: 'none', color: 'text.primary'}}
+            sx={{width: '100%', textDecoration: 'none', color: 'text.primary', alignItems: 'center'}}
 
           >
-            <Avatar variant={"rounded"}>
-              AD
+            <Avatar variant={"square"} src={option.image}>
+              <ImageTwoToneIcon />
             </Avatar>
 
             <Stack sx={{overflow: 'hidden'}}>

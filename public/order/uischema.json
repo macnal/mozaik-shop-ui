@@ -13,7 +13,8 @@
               "elements": [
                 {
                   "type": "Control",
-                  "scope": "#/properties/address/properties/name"
+                  "scope": "#/properties/address/properties/name",
+                  "label": "Imię i nazwisko"
                 }
               ]
             },
@@ -22,11 +23,13 @@
               "elements": [
                 {
                   "type": "Control",
-                  "scope": "#/properties/address/properties/city"
+                  "scope": "#/properties/address/properties/city",
+                  "label": "Miejscowość"
                 },
                 {
                   "type": "Control",
-                  "scope": "#/properties/address/properties/zip"
+                  "scope": "#/properties/address/properties/zip",
+                  "label": "Kod pocztowy"
                 }
               ]
             },
@@ -35,15 +38,18 @@
               "elements": [
                 {
                   "type": "Control",
-                  "scope": "#/properties/address/properties/street"
+                  "scope": "#/properties/address/properties/street",
+                  "label": "Ulica"
                 },
                 {
                   "type": "Control",
-                  "scope": "#/properties/address/properties/homeNumber"
+                  "scope": "#/properties/address/properties/homeNumber",
+                  "label": "Numer budynku"
                 },
                 {
                   "type": "Control",
-                  "scope": "#/properties/address/properties/flatNumber"
+                  "scope": "#/properties/address/properties/flatNumber",
+                  "label": "Numer mieszkania"
                 }
               ]
             },
@@ -52,11 +58,13 @@
               "elements": [
                 {
                   "type": "Control",
-                  "scope": "#/properties/address/properties/phone"
+                  "scope": "#/properties/address/properties/phone",
+                  "label": "Numer telefonu"
                 },
                 {
                   "type": "Control",
-                  "scope": "#/properties/address/properties/email"
+                  "scope": "#/properties/address/properties/email",
+                  "label": "Adres e-mail"
                 }
               ]
             },
@@ -94,7 +102,8 @@
               "elements": [
                 {
                   "type": "Control",
-                  "scope": "#/properties/invoice/properties/name"
+                  "scope": "#/properties/invoice/properties/name",
+                  "label": "Imię i nazwisko"
                 }
               ]
             },
@@ -103,11 +112,13 @@
               "elements": [
                 {
                   "type": "Control",
-                  "scope": "#/properties/invoice/properties/city"
+                  "scope": "#/properties/invoice/properties/city",
+                  "label": "Miejscowość"
                 },
                 {
                   "type": "Control",
-                  "scope": "#/properties/invoice/properties/zip"
+                  "scope": "#/properties/invoice/properties/zip",
+                  "label": "Kod pocztowy"
                 }
               ]
             },
@@ -116,15 +127,18 @@
               "elements": [
                 {
                   "type": "Control",
-                  "scope": "#/properties/invoice/properties/street"
+                  "scope": "#/properties/invoice/properties/street",
+                  "label": "Ulica"
                 },
                 {
                   "type": "Control",
-                  "scope": "#/properties/invoice/properties/homeNumber"
+                  "scope": "#/properties/invoice/properties/homeNumber",
+                  "label": "Numer budynku"
                 },
                 {
                   "type": "Control",
-                  "scope": "#/properties/invoice/properties/flatNumber"
+                  "scope": "#/properties/invoice/properties/flatNumber",
+                  "label": "Numer mieszkania"
                 }
               ]
             },
@@ -133,11 +147,13 @@
               "elements": [
                 {
                   "type": "Control",
-                  "scope": "#/properties/invoice/properties/nip"
+                  "scope": "#/properties/invoice/properties/nip",
+                  "label": "nip"
                 },
                 {
                   "type": "Control",
-                  "scope": "#/properties/invoice/properties/companyName"
+                  "scope": "#/properties/invoice/properties/companyName",
+                  "label": "Nazwa firmy"
                 }
               ]
             }

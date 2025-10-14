@@ -1,4 +1,9 @@
-import {AddItemToCartEvent, CartEvents} from "@/components/global/Navbar.types";
+import {
+  AddItemToCartEvent,
+  CartChangeEvent,
+  CartEvents,
+  RemoveItemFromCartEvent
+} from "@/app/@navbar/_components/Navbar.types";
 
 declare global {
   namespace NodeJS {
@@ -18,6 +23,8 @@ declare global {
 
   interface DocumentEventMap {
     [CartEvents.addItem]: AddItemToCartEvent;
+    [CartEvents.removeItem]: RemoveItemFromCartEvent;
+    [CartEvents.change]: CartChangeEvent;
   }
 }
 

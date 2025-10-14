@@ -1,8 +1,7 @@
 'use client';
-
-
 import {
   Avatar,
+  Box,
   Button,
   Card,
   CardContent,
@@ -16,24 +15,26 @@ import {
   Typography
 } from "@mui/material";
 import {ListSelectProvider, useListSelect} from "@/components/common/ListSelect/ListSelectProvider";
-import {ItemCardActions} from "@/app/koszyk/ItemCardActions";
+import {KoszykPageItemActions} from "@/app/koszyk/KoszykPageItemActions";
 import {KoszykPageCheckbox} from "@/app/koszyk/KoszykPageCheckbox";
-import {ApiCartResponse} from "@/types/responses";
-import {useState} from "react";
+import {JSX, useEffect, useRef, useState} from "react";
 import {JsonSchema, UISchemaElement} from "@jsonforms/core";
-import {materialCells, materialRenderers} from "@jsonforms/material-renderers";
-import {JsonForms} from "@jsonforms/react";
-import {useRouter} from "next/navigation";
+import {CheckboxElement, FormContainer, TextFieldElement, useFormContext} from 'react-hook-form-mui'
+import {zodResolver} from '@hookform/resolvers/zod';
+import {CustomerDataZodSchema} from "@/app/koszyk/_schema";
+import Link from "next/link";
+import {AppCartResponse} from "@/types/responses";
+import {ImageTwoTone} from "@mui/icons-material";
 
 interface KoszykPageClientProps {
-  cart: ApiCartResponse,
+  cart: AppCartResponse;
   createOrder: (arg: Record<string, unknown>) => void,
   initialData: Record<string, unknown>,
   formSchema: JsonSchema,
   layoutSchema: UISchemaElement,
 }
 
-const TotalStr = ({cart}: { cart: ApiCartResponse }) => {
+const TotalStr = ({cart}: { cart: AppCartResponse }) => {
   const [isChecked] = useListSelect();
 
   const amount = cart.items
@@ -44,7 +45,79 @@ const TotalStr = ({cart}: { cart: ApiCartResponse }) => {
       return acc
     }, 0);
 
-  return amount.toFixed(2);
+  return `${amount.toFixed(2)} zł`;
+}
+
+function WatchField<FieldType>({watch: fieldsToWatch, render}: {
+  watch: string,
+  render: (x: FieldType) => JSX.Element | null
+}) {
+  const {watch} = useFormContext();
+  const value = watch(fieldsToWatch)
+
+  return render(value)
+}
+
+const SubmitButton = () => {
+  const {trigger, formState: {errors, isSubmitted, isValid, isSubmitting}, watch,} = useFormContext()
+  const wantInvoice = watch('wantInvoice');
+  const init = useRef(true);
+
+  useEffect(() => {
+    if (!init.current) {
+      void trigger();
+      init.current = false;
+    }
+
+  }, [wantInvoice]);
+
+  return <Button
+    loading={isSubmitting}
+    disabled={isSubmitting || (isSubmitted && !isValid)}
+    type={"submit"}
+    variant={'contained'}
+    size={'large'}
+    fullWidth
+  >
+    Płacę
+  </Button>
+}
+
+
+const args = {
+
+  resolver: zodResolver(CustomerDataZodSchema),
+  defaultValues: {
+    wantInvoice: false,
+    address: {
+      name: '',
+      street: '',
+      city: '',
+      state: '',
+      zip: '',
+      country: '',
+      phone: '',
+      email: '',
+      homeNumber: '',
+      flatNumber: '',
+      info: '',
+    },
+    invoice: {
+      companyName: "",
+      nip: "",
+
+      street: "",
+      city: "",
+      state: "",
+      zip: "",
+      country: "",
+      phone: "",
+      email: "",
+      homeNumber: "",
+      flatNumber: "",
+      info: "",
+    }
+  }
 }
 
 const SummaryPage = ({
@@ -54,120 +127,221 @@ const SummaryPage = ({
                        formSchema,
                        layoutSchema,
                      }: KoszykPageClientProps) => {
-  const [formData, setFormData] = useState<Record<string, unknown>>(initialData);
-  const [hasErrors, setHasErrors] = useState(true);
   const [isChecked] = useListSelect();
-
   const selectedItems = cart.items
     .filter(x => isChecked(x.productId));
 
-  return <Grid container spacing={6}>
-    <Grid size={{xs: 12, lg: 8}}>
-      <JsonForms
-        schema={formSchema}
-        uischema={layoutSchema}
-        data={formData}
-        renderers={materialRenderers}
-        cells={materialCells}
-        validationMode={'ValidateAndShow'}
+  return <FormContainer
+    {...args}
+    onSuccess={(data) => {
+      console.log('Success', data);
+      createOrder({
+        ...data,
+        items: selectedItems.map(x => ({
+          productId: x.productId,
+          quantity: x.quantity,
+        }))
+      });
+    }}>
+    <Grid container spacing={6}>
+      <Grid size={{xs: 12, lg: 8}}>
 
-        onChange={({data, errors}) => {
-          setFormData(data);
 
-          console.log(data, errors);
-          setHasErrors(() => !!errors?.length)
-        }}
-      />
+        <Card sx={{}}>
+          <CardHeader title={'Twoje dane'}/>
 
-      <Card>
-        <CardHeader title={'Przedmioty'}/>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid size={{xs: 12, md: 12}}>
+                <TextFieldElement name="address.name" label="Imię i nazwisko"/>
+              </Grid>
 
-        <CardContent>
-          <List disablePadding dense>
-            {selectedItems.map(({name, productId, quantity, price}) => {
-              return <ListItem
-                key={productId}
-                disableGutters
-              >
-                <ListItemAvatar>
-                  <Avatar variant={"rounded"}>
-                    AD
-                  </Avatar>
-                </ListItemAvatar>
+              <Grid size={{xs: 12, md: 6}}>
+                <TextFieldElement name="address.city" label="Miasto"/>
+              </Grid>
+              <Grid size={{xs: 12, md: 6}}>
+                <TextFieldElement name="address.zip" label="Kod pocztowy"/>
+              </Grid>
 
+              <Grid size={{xs: 12, md: 6}}>
+                <TextFieldElement name="address.street" label="Ulica"/>
+              </Grid>
+
+
+              <Grid size={{xs: 12, md: 3}}>
+                <TextFieldElement name="address.homeNumber" label="Numer domu / mieszkania"
+                                  sx={{}}
+                                  slotProps={{
+                                    inputLabel: {
+                                      sx: {
+
+                                        overflow: 'visible',
+                                        maxWidth: '400px'
+                                      }
+                                    }
+                                  }}
+                />
+              </Grid>
+
+              <Grid size={{xs: 12, md: 3}}>
+                <TextFieldElement name="address.flatNumber" label=""/>
+              </Grid>
+
+              <Grid size={{xs: 12, md: 6}}>
+                <TextFieldElement name="address.phone" label="Numer telefonu"/>
+              </Grid>
+              <Grid size={{xs: 12, md: 6}}>
+                <TextFieldElement name="address.email" label="Adres e-mail"/>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+
+        <Box sx={{mb: 3}}>
+          <CheckboxElement
+            name={'wantInvoice'}
+            label={"Chcę otrzymać fakturę"}
+          />
+        </Box>
+
+
+        <WatchField<boolean>
+          watch={'wantInvoice'}
+          render={(wantInvoice) => {
+            if (!wantInvoice) {
+              return null
+            }
+
+            return <Card sx={{mb: 2}}>
+              <CardHeader title={'Dane do faktury'}/>
+
+              <CardContent>
+                <Grid container spacing={2}>
+                  <Grid size={{xs: 12, md: 6}}>
+                    <TextFieldElement name="invoice.nip" label="NIP"/>
+                  </Grid>
+                  <Grid size={{xs: 12, md: 6}}>
+                    <TextFieldElement name="invoice.companyName" label="Nazwa firmy"/>
+                  </Grid>
+
+                  <Grid size={{xs: 12, md: 6}}>
+                    <TextFieldElement name="invoice.city" label="Miasto"/>
+                  </Grid>
+                  <Grid size={{xs: 12, md: 6}}>
+                    <TextFieldElement name="invoice.zip" label="Kod pocztowy"/>
+                  </Grid>
+
+                  <Grid size={{xs: 12, md: 6}}>
+                    <TextFieldElement name="invoice.street" label="Ulica"/>
+                  </Grid>
+
+
+                  <Grid size={{xs: 12, md: 3}}>
+                    <TextFieldElement name="invoice.homeNumber" label="Numer domu / mieszkania" required
+                                      sx={{}}
+                                      slotProps={{
+                                        inputLabel: {
+                                          sx: {
+
+                                            overflow: 'visible',
+                                            maxWidth: '400px'
+                                          }
+                                        }
+                                      }}
+                    />
+                  </Grid>
+
+                  <Grid size={{xs: 12, md: 3}}>
+                    <TextFieldElement name="invoice.flatNumber" label=""/>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          }}
+
+        />
+
+
+        <Card>
+          <CardHeader title={'Przedmioty'}/>
+
+          <CardContent>
+            <List disablePadding dense>
+              {selectedItems.map(({name, productId, quantity, image}) => {
+                return <ListItem
+                  key={productId}
+                  disableGutters
+                >
+                  <ListItemAvatar>
+                    <ListItemAvatar>
+                      <Avatar variant={"square"} src={image}>
+                        <ImageTwoTone/>
+                      </Avatar>
+                    </ListItemAvatar>
+                  </ListItemAvatar>
+
+                  <ListItemText
+                    slotProps={{primary: {variant: 'subtitle1'}}}
+                    primary={`${quantity} x ${name}`}
+                  />
+                </ListItem>
+              })}
+            </List>
+
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid size={{xs: 12, lg: 4}}>
+        <Card variant={'elevation'}>
+          <CardContent>
+            <Typography variant={'h2'}>
+              Podsumowanie
+            </Typography>
+
+            <List>
+              <ListItem secondaryAction={<Typography variant={'body1'}>
+                <TotalStr cart={cart}/>
+              </Typography>}>
                 <ListItemText
                   slotProps={{primary: {variant: 'subtitle1'}}}
-                  primary={`${quantity} x ${name}`}
-                  secondary={'Tu tez trzeba slug zeby był link do produktu'}
-                />
+                  primary={<>
+                    Wartość produktów
+                  </>}/>
               </ListItem>
-            })}
-          </List>
-        </CardContent>
-      </Card>
+
+              <ListItem secondaryAction={<Typography variant={'body1'}>
+                {cart.shippingFees} zł
+              </Typography>}>
+                <ListItemText
+                  slotProps={{primary: {variant: 'subtitle1'}}}
+                  primary={<>
+                    Dostawa
+                  </>}/>
+              </ListItem>
+
+              <Divider/>
+
+              <ListItem
+                secondaryAction={<Typography variant={'h6'} fontWeight={800}>
+                  <TotalStr cart={cart}/>
+                </Typography>}
+              >
+                <ListItemText
+                  slotProps={{primary: {variant: 'h6'}}}
+                  primary={<>
+                    Całość
+                  </>}/>
+              </ListItem>
+            </List>
+
+            <SubmitButton/>
+
+          </CardContent>
+        </Card>
+      </Grid>
     </Grid>
-
-    <Grid size={{xs: 12, lg: 4}}>
-      <Card variant={'elevation'}>
-        <CardContent>
-          <Typography variant={'h2'}>
-            Podsumowanie
-          </Typography>
-
-          <List>
-            <ListItem secondaryAction={<Typography variant={'body1'}>
-              {cart?.total || ' - '}
-            </Typography>}>
-              <ListItemText
-                slotProps={{primary: {variant: 'subtitle1'}}}
-                primary={<>
-                  Wartość produktów
-                </>}/>
-            </ListItem>
-
-            <ListItem secondaryAction={<Typography variant={'body1'}>
-              12 zł
-            </Typography>}>
-              <ListItemText
-                slotProps={{primary: {variant: 'subtitle1'}}}
-                primary={<>
-                  Dostawa
-                </>}/>
-            </ListItem>
-
-            <Divider/>
-
-            <ListItem
-              secondaryAction={<Typography variant={'h6'} fontWeight={800}>
-                <TotalStr cart={cart}/>
-              </Typography>}
-            >
-              <ListItemText
-                slotProps={{primary: {variant: 'h6'}}}
-                primary={<>
-                  Całość
-                </>}/>
-            </ListItem>
-          </List>
-
-          <Button
-            variant={'contained'}
-            size={'large'}
-            fullWidth
-            onClick={() => createOrder({
-              items: selectedItems,
-              ...formData,
-            })}
-            disabled={hasErrors}
-          >
-            Płacę
-          </Button>
-
-        </CardContent>
-      </Card>
-    </Grid>
-  </Grid>
-
+  </FormContainer>
 }
 
 export const CartPage = ({
@@ -176,33 +350,31 @@ export const CartPage = ({
                          }: KoszykPageClientProps & {
   goToSummary: () => void;
 }) => {
-  const router = useRouter();
-
   return <Grid container spacing={6}>
     <Grid size={{xs: 12, lg: 8}}>
       {cart?.uuid || 'brak'}
 
       {cart && <List>
-        {cart.items.map(({name, productId, quantity, price}) => {
+        {cart.items.map(({name, productId, quantity, price, image, url, categoryName}) => {
           return <ListItem
             key={productId}
             disableGutters
             secondaryAction={
-              <ItemCardActions {...{productId, quantity, price}} />
+              <KoszykPageItemActions {...{productId, quantity, price}} />
             }
           >
             <KoszykPageCheckbox id={productId}/>
 
             <ListItemAvatar>
-              <Avatar variant={"rounded"}>
-                AD
+              <Avatar component={Link} href={url} variant={"square"} src={image}>
+                <ImageTwoTone/>
               </Avatar>
             </ListItemAvatar>
 
             <ListItemText
               slotProps={{primary: {variant: 'subtitle1'}}}
               primary={name}
-              secondary={'Tu tez trzeba slug zeby był link do produktu'}
+              secondary={categoryName}
             />
           </ListItem>
         })}
@@ -220,7 +392,7 @@ export const CartPage = ({
 
           <List>
             <ListItem secondaryAction={<Typography variant={'body1'}>
-              {cart?.total || ' - '}
+              <TotalStr cart={cart}/>
             </Typography>}>
               <ListItemText
                 slotProps={{primary: {variant: 'subtitle1'}}}
@@ -230,7 +402,7 @@ export const CartPage = ({
             </ListItem>
 
             <ListItem secondaryAction={<Typography variant={'body1'}>
-              12 zł
+              {cart.shippingFees} zł
             </Typography>}>
               <ListItemText
                 slotProps={{primary: {variant: 'subtitle1'}}}
@@ -276,7 +448,6 @@ export const KoszykPageClient = (props: KoszykPageClientProps) => {
     cart,
   } = props;
   const [summary, setSummary] = useState<boolean>(false);
-  const router = useRouter();
 
   return <>
     <Typography variant={'h1'} sx={{mb: 6}}>

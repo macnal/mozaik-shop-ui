@@ -10,31 +10,38 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Popover,
   Stack,
   Typography
 } from "@mui/material";
-import PopupState, {bindPopover, bindTrigger, bindToggle} from "material-ui-popup-state";
+import PopupState, {bindHover, bindPopover, bindToggle} from "material-ui-popup-state";
 import {useEffect, useLayoutEffect, useState} from "react";
-import {AddToCartPUT, ApiCartResponse, RemoveFromCartDELETE} from "@/types/responses";
-import {AddItemToCartEvent, CART_ID_COOKIE_NAME, CartEvents} from './Navbar.types';
-import {Delete} from '@mui/icons-material';
+import {AddToCartPUT, ApiCartResponse, AppCartResponse, RemoveFromCartDELETE} from "@/types/responses";
+import {AddItemToCartEvent, CartEvents, RemoveItemFromCartEvent} from './Navbar.types';
+import {Delete, ImageTwoTone} from '@mui/icons-material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import Cookies from 'js-cookie';
 import Link from "next/link";
-
+import HoverPopover from 'material-ui-popup-state/HoverPopover'
 
 export const NavbarCartButton = ({}) => {
-  const [cart, setCart] = useState<ApiCartResponse | null>(null);
+  const [cart, setCart] = useState<AppCartResponse | null>(null);
 
-  useEffect(() => {
-
+  const refetchCart = () => {
     void fetch(`/api/cart`)
       .then((res) => res.json())
       .then((data) => {
         setCart(data)
-      });
 
+        const event = new CustomEvent(CartEvents.fetch, {
+          detail: {} as never,
+        });
+
+        document.dispatchEvent(event);
+
+      });
+  }
+
+  useEffect(() => {
+    void refetchCart();
   }, [])
 
   const handleAddItem = async (items: AddToCartPUT["items"]) => {
@@ -51,11 +58,11 @@ export const NavbarCartButton = ({}) => {
       .then((res) => res.json())
       .then((data) => {
         setCart(data);
+        const event = new CustomEvent(CartEvents.fetch, {
+          detail: {} as never,
+        });
 
-        // if (!cartId) {
-        //   setCartId(data.uuid);
-        //   Cookies.set(CART_ID_COOKIE_NAME, data.uuid, {expires: 365});
-        // }
+        document.dispatchEvent(event);
       });
   }
 
@@ -72,25 +79,29 @@ export const NavbarCartButton = ({}) => {
       .then((res) => res.json())
       .then((data) => {
         setCart(data);
+        const event = new CustomEvent(CartEvents.fetch, {
+          detail: {} as never,
+        });
 
-        //if (!cartId) {
-        //  setCartId(data.uuid);
-        //  Cookies.set(CART_ID_COOKIE_NAME, data.uuid, {expires: 365});
-        //}
+        document.dispatchEvent(event);
       });
   }
 
-
   useLayoutEffect(() => {
-    const fn = (event: AddItemToCartEvent) => {
-      void handleAddItem(event.detail.items)
-
+    const onAddItem = (event: AddItemToCartEvent) => {
+      void handleAddItem(event.detail.items);
     }
 
-    document.addEventListener(CartEvents.addItem, fn);
+    const onRemoveItem = (event: RemoveItemFromCartEvent) => {
+      void handleRemoveFromCart(event.detail.items);
+    }
+
+    document.addEventListener(CartEvents.addItem, onAddItem);
+    document.addEventListener(CartEvents.removeItem, onRemoveItem);
 
     return () => {
-      document.removeEventListener(CartEvents.addItem, fn);
+      document.removeEventListener(CartEvents.addItem, onAddItem);
+      document.removeEventListener(CartEvents.removeItem, onRemoveItem);
     }
 
   }, [])
@@ -103,13 +114,19 @@ export const NavbarCartButton = ({}) => {
     <PopupState variant="popover" popupId="demo-popup-popover">
       {(popupState) => (
         <div>
-          <IconButton color={'inherit'} {...bindTrigger(popupState)}>
+          <IconButton
+            component={Link}
+            href={'/koszyk'}
+            color={'inherit'}
+
+            {...bindHover(popupState)}>
             <Badge badgeContent={itemsInCartCount} color="error">
               <ShoppingCartTwoToneIcon/>
             </Badge>
           </IconButton>
 
-          <Popover
+          <HoverPopover
+            disableScrollLock
             {...bindPopover(popupState)}
             anchorOrigin={{
               vertical: 'bottom',
@@ -142,18 +159,20 @@ export const NavbarCartButton = ({}) => {
                 {cart.items.map((x) => {
                   return <ListItem
                     key={x.productId}
-                    secondaryAction={
-                      <IconButton edge="end" aria-label="delete">
-                        <Delete onClick={() => {
-                          void handleRemoveFromCart([x]);
-                        }}/>
-                      </IconButton>
-                    }
+                    // secondaryAction={
+                    //   <IconButton edge="end" aria-label="delete">
+                    //     <Delete onClick={() => {
+                    //       void handleRemoveFromCart([x]);
+                    //     }}/>
+                    //   </IconButton>
+                    // }
                   >
                     <ListItemAvatar>
-                      <Avatar variant={"rounded"}>
-                        AD
-                      </Avatar>
+                      <ListItemAvatar>
+                        <Avatar component={Link} href={x.url} variant={"square"} src={x.image}>
+                          <ImageTwoTone />
+                        </Avatar>
+                      </ListItemAvatar>
                     </ListItemAvatar>
                     <ListItemText
                       slotProps={{primary: {variant: 'subtitle1'}}}
@@ -181,7 +200,7 @@ export const NavbarCartButton = ({}) => {
 
               </>
             }
-          </Popover>
+          </HoverPopover>
         </div>
       )}
     </PopupState>

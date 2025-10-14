@@ -1,44 +1,43 @@
 import {PageContainer} from "@/components/PageContainer";
 import {cookies} from "next/headers";
-import {CART_ID_COOKIE_NAME} from "@/components/global/Navbar.types";
+import {CART_ID_COOKIE_NAME} from "@/app/@navbar/_components/Navbar.types";
 import {WebLinkerService} from "@/services/weblinker";
 import {Typography} from "@mui/material";
 import {redirect} from "next/navigation";
 import {KoszykPageClient} from "@/app/koszyk/page.client";
 import layoutSchema from '../../../public/order/uischema.json';
 import formSchema from '../../../public/order/schema.json';
-import {jsonSchemaObjectToZodRawShape} from "zod-from-json-schema";
 import z from "zod";
-import type {JSONSchema} from "zod/v4/core";
 import {CreateOrderRequest} from "@/types/responses";
+import {CustomerDataZodSchema} from "@/app/koszyk/_schema";
 
 async function createOrder(formData: Record<string, unknown>) {
   'use server';
   const dataSource = WebLinkerService();
 
   const cookieStore = await cookies();
-  const cartId = (await cookieStore.get(CART_ID_COOKIE_NAME))?.value || null;
+  const cartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
 
   let cart;
   if (cartId) {
     cart = await dataSource.fetchCart(cartId);
     if (cart) {
-      const FromJsonSchema = jsonSchemaObjectToZodRawShape(formSchema as JSONSchema.Schema);
-      const RequestSchema = z.object({
+      const RequestSchema = CustomerDataZodSchema.safeExtend({
         items: z.array(z.object({
           productId: z.number(),
           quantity: z.number(),
         })),
-        ...FromJsonSchema
+      }).omit({
+        wantInvoice: true
       });
 
-      const {data, error} = RequestSchema.safeParse(formData);
+      const {data, error, success} = RequestSchema.safeParse(formData);
 
-      if (data) {
+      if (success && data) {
         const paymentUrl = await dataSource.createOrder({
           uuid: cartId,
           ...data,
-        } as CreateOrderRequest);
+        } as unknown as CreateOrderRequest);
         redirect(paymentUrl);
       }
 
@@ -61,14 +60,14 @@ export default async function KoszykPage() {
   if (cartId) {
     cart = await dataSource.fetchCart(cartId);
 
-    if (cart) {
+    if (cart && cart.items?.length > 0) {
       return <PageContainer>
         <KoszykPageClient
           cart={cart}
           createOrder={createOrder}
           layoutSchema={layoutSchema}
           formSchema={formSchema}
-          initialData={{}}
+          initialData={{address: {}}}
         />
       </PageContainer>
     }

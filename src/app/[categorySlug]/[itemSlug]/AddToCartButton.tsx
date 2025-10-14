@@ -3,7 +3,7 @@
 import {GameExtended} from "@/types/responses";
 import {ShoppingCartTwoTone} from "@mui/icons-material";
 import {Button} from "@mui/material";
-import {AddItemToCartEvent, CartEvents} from "@/components/global/Navbar.types";
+import {AddItemToCartEvent, CartEvents} from "@/app/@navbar/_components/Navbar.types";
 
 export const AddToCartButton = ({item}: { item: GameExtended }) => {
 

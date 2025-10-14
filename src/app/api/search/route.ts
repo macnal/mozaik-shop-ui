@@ -27,6 +27,7 @@ export const GET = async (
           name: item.name,
           categoryName: category.name,
           url: `/${category.slug}/${item.slug}`,
+          image: item.image
         })
       }))
   })

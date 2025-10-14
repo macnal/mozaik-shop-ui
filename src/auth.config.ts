@@ -1,5 +1,6 @@
 import type {NextAuthOptions} from 'next-auth';
 import KeycloakProvider from "next-auth/providers/keycloak";
+import {clearCart, maybeMergeCart} from "@/utils/cart";
 
 export const authConfig = {
   debug: false,
@@ -7,22 +8,30 @@ export const authConfig = {
   pages: {
     signIn: "/api/sign-in",
   },
-
-  callbacks: {
-
-
-    // authorized({auth, request: {nextUrl}}) {
-    //   const isLoggedIn = !!auth?.user;
-    //   const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-    //   if (isOnDashboard) {
-    //     if (isLoggedIn) return true;
-    //     return false; // Redirect unauthenticated users to login page
-    //   } else if (isLoggedIn) {
-    //     return Response.redirect(new URL('/dashboard', nextUrl));
-    //   }
-    //   return true;
-    // },
+  events: {
+    async signIn({user, account}) {
+      // console.log({
+      //   user,
+      //   account
+      // })
+      await maybeMergeCart({user});
+    },
+    async signOut() {
+      await clearCart();
+    }
   },
+  callbacks: {
+    session({session, user, newSession}) {
+      console.log({
+        session,
+        user,
+        newSession
+      })
+      session!.user!.id = user?.id
+      return session
+    },
+  },
+
   // events: {
   //
   //

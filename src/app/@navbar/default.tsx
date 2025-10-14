@@ -2,14 +2,14 @@ import {AppBar, Box, Button, Container, IconButton, Stack, Toolbar} from "@mui/m
 import NextLink from "next/link";
 import {getSlug} from "@/utils/slug";
 import {WebLinkerService} from "@/services/weblinker";
-import {NavbarClient} from "./Navbar.client";
+import {NavbarClient} from "@/app/@navbar/_components/Navbar.client";
 import {getServerSession} from "next-auth/next";
 import {authConfig} from "@/auth.config";
-import {NavbarCartButton} from './NavbarCartButton';
-import {NavbarSearch} from "./NavbarSearch";
+import {NavbarCartButton} from '@/app/@navbar/_components/NavbarCartButton';
+import {NavbarSearch} from "@/app/@navbar/_components/NavbarSearch";
 import {CartSummaryFocus} from "@/components/common/CartSummaryFocus";
 
-export const Navbar = async () => {
+const Navbar = async () => {
   const session = await getServerSession(authConfig);
   const dataSource = WebLinkerService();
   const {items: categories} = await dataSource.fetchCategories({parentId: 0});
@@ -61,3 +61,5 @@ export const Navbar = async () => {
     </Stack>
   </AppBar>
 }
+
+export default Navbar;
