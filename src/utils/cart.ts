@@ -10,16 +10,18 @@ export const maybeMergeCart = async ({user}: { user: User }) => {
   const cookieStore = await cookies();
   const nextCartId = user.id;
   const currentCartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
+  cookieStore.set(CART_ID_COOKIE_NAME, nextCartId);
 
   console.log('maybeMergeCart');
   console.log([currentCartId, nextCartId, currentCartId === nextCartId]);
-
   if (currentCartId && (currentCartId !== nextCartId)) {
     const cartItems = await dataSource.fetchCart(currentCartId);
-    await dataSource.addToCart(nextCartId, cartItems.items);
+    console.log('nowy koszyk', [nextCartId, cartItems.items]);
+    await dataSource.addToCart(nextCartId, cartItems.items.map(x => ({
+      quantity: x.quantity,
+      productId: x.productId,
+    })));
   }
-
-  cookieStore.set(CART_ID_COOKIE_NAME, nextCartId);
 }
 
 

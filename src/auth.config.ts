@@ -10,27 +10,24 @@ export const authConfig = {
   },
   events: {
     async signIn({user, account}) {
-      // console.log({
-      //   user,
-      //   account
-      // })
       await maybeMergeCart({user});
     },
+
     async signOut() {
       await clearCart();
     }
   },
-  callbacks: {
-    session({session, user, newSession}) {
-      console.log({
-        session,
-        user,
-        newSession
-      })
-      session!.user!.id = user?.id
-      return session
-    },
-  },
+  // callbacks: {
+  //   session({session, user, newSession}) {
+  //     console.log({
+  //       session,
+  //       user,
+  //       newSession
+  //     })
+  //     session!.user!.id = user?.id
+  //     return session
+  //   },
+  // },
 
   // events: {
   //
