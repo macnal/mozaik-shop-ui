@@ -12,18 +12,15 @@ export const maybeMergeCart = async ({user}: { user: User }) => {
   const currentCartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
   cookieStore.set(CART_ID_COOKIE_NAME, nextCartId);
 
-  console.log('maybeMergeCart');
-  console.log([currentCartId, nextCartId, currentCartId === nextCartId]);
   if (currentCartId && (currentCartId !== nextCartId)) {
     const cartItems = await dataSource.fetchCart(currentCartId);
-    console.log('nowy koszyk', [nextCartId, cartItems.items]);
+
     await dataSource.addToCart(nextCartId, cartItems.items.map(x => ({
       quantity: x.quantity,
       productId: x.productId,
     })));
   }
 }
-
 
 export const clearCart = async () => {
   const cookieStore = await cookies();

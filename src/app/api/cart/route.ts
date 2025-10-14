@@ -13,13 +13,6 @@ export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
   const cartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
 
-  const session = await getServerSession(authConfig);
-  console.log('xxx => GET ', session?.user);
-  if (session?.user?.id) {
-
-  }
-
-
   if (!cartId) {
     return Response.json({ uuid: null, items: [] }, {status: 404});
   }
