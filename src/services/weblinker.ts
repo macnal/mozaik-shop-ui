@@ -145,7 +145,7 @@ export const WebLinkerService = async () => {
         items: AddToCartPUTItem[];
       } = {items};
 
-      if (id) {
+      if (id && id !== 'USER') {
         data.uuid = id;
       }
 
@@ -169,7 +169,9 @@ export const WebLinkerService = async () => {
     async removeFromCart(id: string, items: AddToCartPUTItem[]): Promise<RemoveFromCartDELETEResponse> {
       const item = items[0];
 
-      const res = await fetch(`${this.baseUrl}/weblinker/cart/${id}?p=${item.productId}&q=${item.quantity}`, {
+      const url = id === 'USER' ? `${this.baseUrl}/weblinker/cart` : `${this.baseUrl}/weblinker/cart/${id}`
+
+      const res = await fetch(`${url}?p=${item.productId}&q=${item.quantity}`, {
         method: 'DELETE',
         headers: {
           ...await this.maybeAddToken()
