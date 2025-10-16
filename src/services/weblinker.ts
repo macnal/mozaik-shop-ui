@@ -37,8 +37,8 @@ export const WebLinkerService = async () => {
     async getAccessToken() {
       const session = await getServerSession(authConfig);
 
-      if (session?.user.token) {
-        return session?.user.token
+      if (session?.access_token) {
+        return session?.access_token
       }
 
       return null;
@@ -46,6 +46,7 @@ export const WebLinkerService = async () => {
 
     async maybeAddToken() {
       const token = await this.getAccessToken();
+
       if (token) {
         return {
           Authorization: `Bearer ${token}`,
@@ -56,6 +57,10 @@ export const WebLinkerService = async () => {
     },
 
     async createOrder(data: CreateOrderRequest): Promise<string> {
+
+      console.log('ORDER');
+      console.log(data);
+
       const res = await fetch(`${this.baseUrl}/weblinker/order`, {
         method: 'POST',
         headers: {
@@ -72,11 +77,7 @@ export const WebLinkerService = async () => {
 
     async fetchCategory(slug: string): Promise<Category> {
       const url = new URL(`${this.baseUrl}/weblinker/categories`);
-      const res = await fetch(url, {
-        headers: {
-          ...await this.maybeAddToken()
-        }
-      });
+      const res = await fetch(url);
       const {items} = (await res.json()) as ApiResponse<Category>;
 
       return items.find(x => x.slug === slug)! || items[0];
@@ -84,11 +85,7 @@ export const WebLinkerService = async () => {
 
     async fetchCategoryById(id: number): Promise<Category> {
       const url = new URL(`${this.baseUrl}/weblinker/categories`);
-      const res = await fetch(url, {
-        headers: {
-          ...await this.maybeAddToken()
-        }
-      });
+      const res = await fetch(url);
       const {items} = (await res.json()) as ApiResponse<Category>;
 
       return items.find(x => x.id === id)! || items[0];
@@ -96,12 +93,7 @@ export const WebLinkerService = async () => {
 
     async fetchCategories(params: FetchCategoriesParams) {
       const url = new URL(`${this.baseUrl}/weblinker/categories`);
-      const res = await fetch(url, {
-        headers: {
-          ...await this.maybeAddToken()
-        }
-      });
-
+      const res = await fetch(url);
       const {items} = (await res.json()) as ApiResponse<Category>;
 
       return {
@@ -120,8 +112,8 @@ export const WebLinkerService = async () => {
       }
     },
 
-    async fetchCart(id: string): Promise<AppCartResponse> {
-      const url = id === 'USER' ? `${this.baseUrl}/weblinker/cart` : `${this.baseUrl}/weblinker/cart/${id}`
+    async fetchCart(id: string | null = null): Promise<AppCartResponse> {
+      const url = id ? `${this.baseUrl}/weblinker/cart/${id}` : `${this.baseUrl}/weblinker/cart`;
 
       const res = await fetch(url, {
         headers: {
@@ -130,7 +122,15 @@ export const WebLinkerService = async () => {
         }
       });
 
+      console.log('headers', {
+        ...await this.maybeAddToken()
+      });
+
+      console.log(`fetchCart: ${id}`);
+      console.log(await res.clone().text());
+
       const data: ApiCartResponse = await res.json();
+
 
       return {
         ...data,
@@ -145,7 +145,7 @@ export const WebLinkerService = async () => {
         items: AddToCartPUTItem[];
       } = {items};
 
-      if (id && id !== 'USER') {
+      if (id) {
         data.uuid = id;
       }
 
@@ -157,9 +157,10 @@ export const WebLinkerService = async () => {
           ...await this.maybeAddToken()
         }
       });
+      console.log(`addtocart: ${id}`);
+      console.log(await res.clone().text());
 
       const resData: ApiCartResponse = await res.json();
-
       return {
         ...resData,
         items: await Promise.all(resData.items.map(this.enhanceCartItem.bind(this))),
@@ -169,7 +170,7 @@ export const WebLinkerService = async () => {
     async removeFromCart(id: string, items: AddToCartPUTItem[]): Promise<RemoveFromCartDELETEResponse> {
       const item = items[0];
 
-      const url = id === 'USER' ? `${this.baseUrl}/weblinker/cart` : `${this.baseUrl}/weblinker/cart/${id}`
+      const url = `${this.baseUrl}/weblinker/cart/${id}`
 
       const res = await fetch(`${url}?p=${item.productId}&q=${item.quantity}`, {
         method: 'DELETE',

@@ -45,7 +45,7 @@ const Navbar = async () => {
           <NavbarSearch sx={{width: "100%", order: 1}}/>
         </Grid>
 
-        <Grid size={{xs: 'auto', md: 12}} sx={{order: 8, mt: 1}}>
+        <Grid size={{xs: 'auto', md: 12}} sx={{order: 8, mt: {xs: 1, md: 0}}}>
           <Stack sx={{
             position: 'relative',
             bgcolor: 'primary.light',
