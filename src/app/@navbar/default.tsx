@@ -11,7 +11,7 @@ import {CartSummaryFocus} from "@/components/common/CartSummaryFocus";
 
 const Navbar = async () => {
   const session = await getServerSession(authConfig);
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
   const {items: categories} = await dataSource.fetchCategories({parentId: 0});
 
   return <AppBar position="static">

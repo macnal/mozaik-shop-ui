@@ -17,6 +17,7 @@
     "@jsonforms/core": "^3.7.0-alpha.1",
     "@jsonforms/material-renderers": "^3.7.0-alpha.1",
     "@jsonforms/react": "^3.7.0-alpha.1",
+    "@majlxrd/inpost-geowidget-next": "^1.0.1",
     "@mui/icons-material": "^7.3.2",
     "@mui/material": "^7.3.2",
     "@mui/material-nextjs": "^7.3.2",
@@ -50,5 +51,10 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@jsonforms/material-renderers": {
+      "@mui/x-date-pickers": "^8.10.2"
+    }
   }
 }

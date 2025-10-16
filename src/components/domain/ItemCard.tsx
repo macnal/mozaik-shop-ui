@@ -33,7 +33,7 @@ export const ItemCard = async ({
   rating?: number
 }) => {
   const mainImage = image;
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
   const category = await dataSource.fetchCategoryById(categoryId);
   const url = `/${category.slug}/${slug}`;
 
@@ -99,7 +99,10 @@ export const ItemCard = async ({
 
 
       <Stack sx={{
-        p: 3,
+        p: {
+          xs: 2,
+          md: 3
+        },
         '& > img': {
           height: 'auto',
           maxWidth: '100%'

@@ -17,7 +17,7 @@ export default async function ItemPage({params}: ItemPageProps) {
   const {itemSlug} = await params;
   const [id] = splitSlug(itemSlug);
 
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
   const {item} = await dataSource.fetchProduct(id);
 
   if (!item) {

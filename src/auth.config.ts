@@ -17,33 +17,20 @@ export const authConfig = {
       await clearCart();
     }
   },
-  // callbacks: {
-  //   session({session, user, newSession}) {
-  //     console.log({
-  //       session,
-  //       user,
-  //       newSession
-  //     })
-  //     session!.user!.id = user?.id
-  //     return session
-  //   },
-  // },
-
-  // events: {
-  //
-  //
-  //   async signOut({ token }: { token:any }) {
-  //     if (token.provider === "keycloak") {
-  //       const issuerUrl =  `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}`; //((this).providers.find(p => p.id === "keycloak")).options!.issuer!
-  //       const logOutUrl = new URL(`${issuerUrl}/protocol/openid-connect/logout`);
-  //       logOutUrl.searchParams.set("id_token_hint", token.id_token!);
-  //
-  //       console.log('Robi sie ten event?', token);
-  //
-  //       void fetch(logOutUrl);
-  //     }
-  //   }
-  // },
+  callbacks: {
+    async jwt({token, account}) {
+      if (account) {
+        token = Object.assign({}, token, { access_token: account.access_token });
+      }
+      return token
+    },
+    async session({session, token}) {
+      if(session) {
+        session = Object.assign({}, session, {access_token: token.access_token})
+      }
+      return session
+    }
+  },
   providers: [
     KeycloakProvider({
       clientSecret: process.env.KEYCLOAK_SECRET,

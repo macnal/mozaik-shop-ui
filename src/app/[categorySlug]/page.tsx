@@ -14,7 +14,7 @@ interface CategoryPageProps {
 
 export default async function CategoryPage({params, searchParams}: CategoryPageProps) {
   const {page, query, ...restParams} = await searchParams;
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
   const {categorySlug} = await params;
 
   const category = await dataSource.fetchCategory(categorySlug);
@@ -22,10 +22,6 @@ export default async function CategoryPage({params, searchParams}: CategoryPageP
   const zodSchema = convertJsonSchemaToZod(formSchema) as ZodType<Record<string, string | string[]>>
 
   const {data, error} = zodSchema.safeParse(restParams);
-  console.log({
-    data,
-    error
-  });
 
   const r = dataSource.fetchProducts({
     page: isNaN(+page) ? 0 : +page,

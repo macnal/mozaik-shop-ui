@@ -4,7 +4,7 @@ import {ItemsGrid} from "@/components/domain/ItemsGrid";
 import config from "@/../public/config.json";
 
 export default async function HomePage() {
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
   // const res = await fetch(`${process.env.PUBLIC_URL}/config.json`);
   // const config = await res.json();
 

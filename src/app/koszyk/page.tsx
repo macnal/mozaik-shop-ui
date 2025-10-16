@@ -13,7 +13,7 @@ import {CustomerDataZodSchema} from "@/app/koszyk/_schema";
 
 async function createOrder(formData: Record<string, unknown>) {
   'use server';
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
 
   const cookieStore = await cookies();
   const cartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
@@ -51,7 +51,7 @@ async function createOrder(formData: Record<string, unknown>) {
 }
 
 export default async function KoszykPage() {
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
   const cookieStore = await cookies();
   const cartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
 

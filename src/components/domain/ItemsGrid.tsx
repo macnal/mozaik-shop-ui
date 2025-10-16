@@ -5,7 +5,7 @@ import {Suspense} from "react";
 import {ApiPageResponsePage, Game} from "@/types/responses";
 import {ItemGridPagination} from "@/components/domain/ItemGridPagination";
 
-const size = {xs: 12, md: 3, lg: 2};
+const size = {xs: 5, md: 3, lg: 2};
 
 interface ItemsGridProps {
   items: Game[], //Promise<Game[]> |
@@ -37,7 +37,7 @@ const ItemsGridInner = ({items, pagination: promisePagination}: ItemsGridInnerPr
 export const ItemsGrid = ({items, pagination}: ItemsGridProps) => {
 
 
-  return <Grid container spacing={2} columns={10}><ItemsGridInner items={items} pagination={pagination}/>
+  return <Grid container spacing={{ xs: 1, md: 2 }} columns={10}><ItemsGridInner items={items} pagination={pagination}/>
     {/*<Suspense fallback={<>*/}
     {/*  {[1, 2, 3, 4, 5, 6, 7].map(x => <Grid key={x} size={size} sx={{display: "flex", flexDirection: "column"}}>*/}
     {/*    <Skeleton variant={'rectangular'} width={"100%"} height={339}/>*/}

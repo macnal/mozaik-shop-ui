@@ -6,9 +6,9 @@ import {WebLinkerService} from "@/services/weblinker";
 
 
 export const maybeMergeCart = async ({user}: { user: User }) => {
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
   const cookieStore = await cookies();
-  const nextCartId = user.id;
+  const nextCartId = `USER`; // user.id;
   const currentCartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
   cookieStore.set(CART_ID_COOKIE_NAME, nextCartId);
 

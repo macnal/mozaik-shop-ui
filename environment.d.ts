@@ -18,6 +18,7 @@ declare global {
       KEYCLOAK_REALM: string;
       KEYCLOAK_CLIENT_ID: string;
       KEYCLOAK_SECRET: string;
+      NEXT_PUBLIC_INPOST_TOKEN?: string;
     }
   }
 

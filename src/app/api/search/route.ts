@@ -8,14 +8,12 @@ export const GET = async (
   const query = request.nextUrl.searchParams.get('query') || '';
   //const {query} = req.query;
 
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
   const {items} = await dataSource.fetchProducts({
     query,
     page: 0,
     size: 10
   });
-  console.log(items);
-
 
   return Response.json({
     items: await Promise.all(

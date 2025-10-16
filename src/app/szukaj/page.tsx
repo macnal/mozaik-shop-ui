@@ -11,7 +11,7 @@ interface SearchPageProps {
 
 export default async function SearchPage({params, searchParams}: SearchPageProps) {
   const {page, query} = await searchParams;
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
   //const {categorySlug} = await params;
 
   //const category = await dataSource.fetchCategory(categorySlug);

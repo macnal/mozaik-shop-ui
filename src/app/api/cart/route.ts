@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     return Response.json({ uuid: null, items: [] }, {status: 404});
   }
 
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
   return Response.json(await dataSource.fetchCart(cartId!));
 }
 
@@ -26,7 +26,7 @@ export async function PUT(request: NextRequest) {
   const cartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
 
   const {items} = await request.json()
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
 
   const nextCart = await dataSource.addToCart(cartId, items);
   cookieStore.set(CART_ID_COOKIE_NAME, nextCart.uuid);
@@ -43,7 +43,7 @@ export async function DELETE(request: NextRequest) {
   }
 
   const {items} = await request.json()
-  const dataSource = WebLinkerService();
+  const dataSource = await WebLinkerService();
 
   const nextCart = await dataSource.removeFromCart(cartId, items);
   cookieStore.set(CART_ID_COOKIE_NAME, nextCart.uuid);

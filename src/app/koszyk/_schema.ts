@@ -7,7 +7,7 @@ const invoiceSchema = z.object({
 
   street: z.string().trim(),
   city: z.string().trim().min(1, {error: 'Pole wymagane'}),
-  zip: z.string().trim().min(1, {error: 'Pole wymagane'}).refine(zipCodeValidator),
+  zip: z.string().trim().min(1, {error: 'Pole wymagane'}).refine(zipCodeValidator, {error: 'Podaj poprawny kod w formacie xx-xxx' }),
 
   homeNumber: z.string().trim().min(1, {error: 'Pole wymagane'}),
   flatNumber: z.string().trim(),
@@ -22,14 +22,14 @@ export const CustomerDataZodSchema = z.object({
     name: z.string().trim().min(1, {error: 'Pole wymagane'}),
     street: z.string().trim(),
     city: z.string().trim().min(1, {error: 'Pole wymagane'}),
-    zip: z.string().trim().min(1, {error: 'Pole wymagane'}),
+    zip: z.string().trim().min(1, {error: 'Pole wymagane'}).refine(zipCodeValidator, {error: 'Podaj poprawny kod w formacie xx-xxx' }),
 
     homeNumber: z.string().trim().min(1, {error: 'Pole wymagane'}),
     flatNumber: z.string().trim(),
     country: z.string().trim(),
     state: z.string().trim(),
 
-    phone: z.string().trim().min(1, {error: 'Pole wymagane'}).refine(mobilePhoneValidator),
+    phone: z.string().trim().min(1, {error: 'Pole wymagane'}).refine(mobilePhoneValidator, {error: 'Podaj poprawny numer' }),
     email: z.email({error: 'Podaj poprawny adres e-mail'}).trim().min(1, {error: 'Pole wymagane'}),
     info: z.string().trim(),
   }),

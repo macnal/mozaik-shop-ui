@@ -25,6 +25,7 @@ import {CustomerDataZodSchema} from "@/app/koszyk/_schema";
 import Link from "next/link";
 import {AppCartResponse} from "@/types/responses";
 import {ImageTwoTone} from "@mui/icons-material";
+import KoszykPageSummaryInpost from "@/app/koszyk/KoszykPageSummaryInpost";
 
 interface KoszykPageClientProps {
   cart: AppCartResponse;
@@ -134,7 +135,7 @@ const SummaryPage = ({
   return <FormContainer
     {...args}
     onSuccess={(data) => {
-      console.log('Success', data);
+
       createOrder({
         ...data,
         items: selectedItems.map(x => ({
@@ -261,6 +262,13 @@ const SummaryPage = ({
 
         />
 
+        <Card sx={{ mb: 3 }}>
+          <CardHeader title={'Dostawa'}/>
+
+          <CardContent>
+            <KoszykPageSummaryInpost />
+          </CardContent>
+        </Card>
 
         <Card>
           <CardHeader title={'Przedmioty'}/>

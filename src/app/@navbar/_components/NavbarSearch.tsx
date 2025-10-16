@@ -144,7 +144,6 @@ export const NavbarSearch = ({defaultValue}: {
   }, [open]);
 
   const goToSearchPage = () => {
-    console.log('value', value);
     router.push(`/szukaj?query=${inputValue}`);
   }
 
