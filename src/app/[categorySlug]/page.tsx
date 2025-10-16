@@ -2,7 +2,7 @@ import {WebLinkerService} from "@/services/weblinker";
 import {ItemsGrid} from "@/components/domain/ItemsGrid";
 import config from "@/../public/config.json";
 import {PageContainer} from "@/components/PageContainer";
-import {NoSsr, Typography} from "@mui/material";
+import {NoSsr, Stack, Typography} from "@mui/material";
 import {PageFilter} from "@/components/common/PageFilter";
 import {convertJsonSchemaToZod} from 'zod-from-json-schema';
 import {ZodType} from "zod";
@@ -43,14 +43,26 @@ export default async function CategoryPage({params, searchParams}: CategoryPageP
         {category.name}
       </Typography>
 
-      <NoSsr>
-        <PageFilter
-          formSchema={formSchema}
-          layoutSchema={layoutSchema}
-          initialData={await searchParams}
-          sx={{mb: 6}}
-        />
-      </NoSsr>
+      <Stack direction={'row'} sx={{
+        display: 'flex',
+        justifyContent: {
+          xs: 'flex-end',
+          md: 'flex-start'
+        },
+        mb: {
+          xs: 2,
+          md: 6
+        }
+      }}>
+        <NoSsr>
+          <PageFilter
+            formSchema={formSchema}
+            layoutSchema={layoutSchema}
+            initialData={await searchParams}
+          />
+        </NoSsr>
+      </Stack>
+
 
       <ItemsGrid items={items} pagination={pagination}/>
     </PageContainer>

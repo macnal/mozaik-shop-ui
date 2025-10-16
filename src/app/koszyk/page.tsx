@@ -74,7 +74,7 @@ export default async function KoszykPage() {
   }
 
   return <PageContainer>
-    <Typography variant={'h1'} sx={{mb: 6}}>
+    <Typography variant={'h1'} gutterBottom>
       Koszyk
     </Typography>
 

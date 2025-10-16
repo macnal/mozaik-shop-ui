@@ -18,7 +18,7 @@ export const Footer = async () => {
   return <Stack component={'footer'} sx={{bgcolor: grey[50], py: 6}}>
     <Container>
       <Grid container spacing={3}>
-        <Grid size={{md: 3}} sx={colSx}>
+        <Grid size={{ xs: 6, md: 3}} sx={colSx}>
           <Typography variant={'subtitle1'} sx={{mb: 1}}>Obsługa klienta</Typography>
 
           <Link component={NextLink} href={'/strony/kontakt'}>Koszty dostawy</Link>
@@ -26,7 +26,7 @@ export const Footer = async () => {
           <Link component={NextLink} href={'/strony/kontakt'}>O rejestracji</Link>
           <Link component={NextLink} href={'/strony/kontakt'}>FAQ</Link>
         </Grid>
-        <Grid size={{md: 3}} sx={colSx}>
+        <Grid size={{ xs: 6, md: 3}} sx={colSx}>
           <Typography variant={'subtitle1'} sx={{mb: 1}}>Przydatne linki</Typography>
 
           <Link component={NextLink} href={'/strony/kontakt'}>Koszty dostawy</Link>
@@ -34,7 +34,7 @@ export const Footer = async () => {
           <Link component={NextLink} href={'/strony/kontakt'}>O rejestracji</Link>
           <Link component={NextLink} href={'/strony/kontakt'}>FAQ</Link>
         </Grid>
-        <Grid size={{md: 3}} sx={colSx}>
+        <Grid size={{ xs: 6, md: 3}} sx={colSx}>
           <Typography variant={'subtitle1'} sx={{mb: 1}}>Obserwuj nas</Typography>
 
           <Link component={NextLink} href={'/strony/kontakt'}>Koszty dostawy</Link>
@@ -42,7 +42,7 @@ export const Footer = async () => {
           <Link component={NextLink} href={'/strony/kontakt'}>O rejestracji</Link>
           <Link component={NextLink} href={'/strony/kontakt'}>FAQ</Link>
         </Grid>
-        <Grid size={{md: 3}} sx={colSx}>
+        <Grid size={{ xs: 6, md: 3}} sx={colSx}>
 
         </Grid>
 

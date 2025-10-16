@@ -1,4 +1,4 @@
-import {AppBar, Box, Button, Container, IconButton, Stack, Toolbar} from "@mui/material"
+import {AppBar, Button, Container, Grid, IconButton, Stack, Toolbar} from "@mui/material"
 import NextLink from "next/link";
 import {getSlug} from "@/utils/slug";
 import {WebLinkerService} from "@/services/weblinker";
@@ -7,58 +7,84 @@ import {getServerSession} from "next-auth/next";
 import {authConfig} from "@/auth.config";
 import {NavbarCartButton} from '@/app/@navbar/_components/NavbarCartButton';
 import {NavbarSearch} from "@/app/@navbar/_components/NavbarSearch";
-import {CartSummaryFocus} from "@/components/common/CartSummaryFocus";
 
 const Navbar = async () => {
   const session = await getServerSession(authConfig);
   const dataSource = await WebLinkerService();
   const {items: categories} = await dataSource.fetchCategories({parentId: 0});
 
-  return <AppBar position="static">
-    <Container component={Toolbar}>
-      <IconButton
-        component={NextLink}
-        href={`/`}
-        size="large"
-        edge="start"
-        color="inherit"
-        aria-label="open drawer"
-        sx={{mr: 2}}
-      >
-        Logo
-      </IconButton>
+  return <AppBar position="static" sx={{overflow: 'hidden'}}>
+    <Container component={Toolbar} >
+      <Grid container sx={{width: '100%'}}>
+        <Grid size={{xs: 'auto',}} sx={{order: 0}}>
+          <IconButton
+            component={NextLink}
+            href={`/`}
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            sx={{mr: 2}}
+          >
+            Logo
+          </IconButton>
+        </Grid>
 
-      <Box sx={{flexGrow: 1}}/>
+        <Grid size={{xs: 'grow',}} sx={{order: 3}}></Grid>
 
-      <CartSummaryFocus>
-        <NavbarSearch/>
+        <Grid size={{xs: 'grow',}} sx={{order: 5}}></Grid>
 
-        <Box sx={{flexGrow: 1}}/>
 
-        <Stack direction={'row'} spacing={1} sx={{display: {xs: 'none', md: 'flex'}, alignItems: 'center'}}>
+        <Grid size={{xs: 'auto',}} sx={{order: 6, display: 'flex', alignItems: 'center', gap: 1,}}>
           <NavbarCartButton/>
 
           <NavbarClient isAuthenticated={!!session} name={session?.user?.name}/>
-        </Stack>
+        </Grid>
 
-        <Box sx={{display: {xs: 'flex', md: 'none'}}}>
-          <NavbarClient isAuthenticated={!!session} name={session?.user?.name}/>
-        </Box>
-      </CartSummaryFocus>
+        <Grid size={{xs: 12, md: 4}} sx={{display: 'flex', alignItems: 'center', order: {xs: 8, md: 4}}}>
+          <NavbarSearch sx={{width: "100%", order: 1}}/>
+        </Grid>
+
+        <Grid size={{xs: 'auto', md: 12}} sx={{order: 8, mt: 1}}>
+          <Stack sx={{
+            position: 'relative',
+            bgcolor: 'primary.light',
+            color: 'primary.contrastText',
+
+            '&::after': {
+              content: "''",
+              bgcolor: 'primary.light',
+              position: 'absolute',
+              top: 0,
+              right: '100%',
+              width: '9999px',
+              height: '100%'
+            },
+            '&::before': {
+              content: "''",
+              bgcolor: 'primary.light',
+              position: 'absolute',
+              top: 0,
+              left: '100%',
+              width: '9999px',
+              height: '100%'
+            },
+
+          }}>
+            <Stack direction={"row"} spacing={2}>
+              {categories.map(x => <Button
+                component={NextLink}
+                key={x.id}
+                href={`/${getSlug(x)}`}
+                color={'inherit'}
+              >{x.name}</Button>)}
+            </Stack>
+          </Stack>
+        </Grid>
+      </Grid>
     </Container>
 
-    <Stack sx={{bgcolor: 'primary.light', color: 'primary.contrastText'}}>
-      <Container>
-        <Stack direction={"row"} spacing={2}>
-          {categories.map(x => <Button
-            component={NextLink}
-            key={x.id}
-            href={`/${getSlug(x)}`}
-            color={'inherit'}
-          >{x.name}</Button>)}
-        </Stack>
-      </Container>
-    </Stack>
+
   </AppBar>
 }
 

@@ -6,10 +6,11 @@ import {ErrorBoundary} from "./ErrorBoundary";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {deepmerge} from '@mui/utils';
 import {ThemeOptions} from "@mui/system";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {useState} from 'react';
-import {Button, Stack, SxProps} from '@mui/material';
-
+import {Button, Dialog, DialogContent, DialogTitle, IconButton, Stack, SxProps, useMediaQuery} from '@mui/material';
+import FilterListTwoToneIcon from '@mui/icons-material/FilterListTwoTone';
+import {Close} from '@mui/icons-material';
 
 export const PageFilter = ({layoutSchema, formSchema, initialData, sx}: {
   formSchema: JsonSchema;
@@ -17,10 +18,12 @@ export const PageFilter = ({layoutSchema, formSchema, initialData, sx}: {
   initialData: unknown;
   sx?: SxProps;
 }) => {
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const router = useRouter();
   const [form, setForm] = useState<Record<string, string>>({});
+  const [isOpen, setOpen] = useState(false);
   // const debounced = useDebounceCallback(setValue, 500);
 
   const handleSubmit = () => {
@@ -29,37 +32,72 @@ export const PageFilter = ({layoutSchema, formSchema, initialData, sx}: {
     router.push(nextUrl);
   }
 
-  // const data = useMemo(() => ({...searchParams}), [searchParams]);
-
-  return (<Stack sx={sx} direction={'row'}>
-      <ErrorBoundary fallback={<p>Upss... Niewłaściwe filtry</p>}>
-        <ThemeProvider theme={theme => createTheme(deepmerge(theme, {
-          components: {
-            MuiFormControl: {
-              defaultProps: {
-                size: "small",
-              }
-            }
+  const formEl = <ErrorBoundary fallback={<p>Upss... Niewłaściwe filtry</p>}>
+    <ThemeProvider theme={theme => createTheme(deepmerge(theme, {
+      components: {
+        MuiFormControl: {
+          defaultProps: {
+            size: "small",
           }
+        }
+      }
 
-        } as Omit<Partial<ThemeOptions>, "shadows">))}>
+    } as Omit<Partial<ThemeOptions>, "shadows">))}>
 
-          <JsonForms
-            schema={formSchema}
-            uischema={layoutSchema}
-            data={form}
-            renderers={materialRenderers}
-            cells={materialCells}
-            onChange={({data, errors}) => {
-              setForm(data);
+      <JsonForms
+        schema={formSchema}
+        uischema={layoutSchema}
+        data={form}
+        renderers={materialRenderers}
+        cells={materialCells}
+        onChange={({data, errors}) => {
+          setForm(data);
+        }}
+      />
+    </ThemeProvider>
+  </ErrorBoundary>
+
+  if (isMobile) {
+    return <>
+      <Button
+        onClick={() => setOpen(true)}
+        startIcon={<FilterListTwoToneIcon/>}
+      >Filtruj</Button>
+
+      <Dialog fullScreen open={isOpen} onClose={() => setOpen(false)}>
+        <DialogTitle variant={'h1'} sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+          Filtruj
+
+          <IconButton onClick={() => setOpen(false)}>
+            <Close/>
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent>
+          {formEl}
+
+          <Button
+            onClick={() => {
+              handleSubmit();
+              setOpen(false);
             }}
-          />
-
-          <Button onClick={handleSubmit}>
+            variant="contained"
+            fullWidth
+            sx={{mt: 3}}
+          >
             Szukaj
           </Button>
-        </ThemeProvider>
-      </ErrorBoundary>
+        </DialogContent>
+      </Dialog>
+    </>
+  }
+
+  return (<Stack sx={sx} direction={'row'}>
+      {formEl}
+
+      <Button onClick={handleSubmit}>
+        Szukaj
+      </Button>
     </Stack>
   );
 }

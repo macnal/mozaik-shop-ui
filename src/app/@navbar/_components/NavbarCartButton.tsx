@@ -11,19 +11,21 @@ import {
   ListItemAvatar,
   ListItemText,
   Stack,
-  Typography
+  Typography,
+  useMediaQuery
 } from "@mui/material";
 import PopupState, {bindHover, bindPopover, bindToggle} from "material-ui-popup-state";
 import {useEffect, useLayoutEffect, useState} from "react";
-import {AddToCartPUT, ApiCartResponse, AppCartResponse, RemoveFromCartDELETE} from "@/types/responses";
+import {AddToCartPUT, AppCartResponse, RemoveFromCartDELETE} from "@/types/responses";
 import {AddItemToCartEvent, CartEvents, RemoveItemFromCartEvent} from './Navbar.types';
-import {Delete, ImageTwoTone} from '@mui/icons-material';
+import {ImageTwoTone} from '@mui/icons-material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Link from "next/link";
 import HoverPopover from 'material-ui-popup-state/HoverPopover'
 
 export const NavbarCartButton = ({}) => {
   const [cart, setCart] = useState<AppCartResponse | null>(null);
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   const refetchCart = () => {
     void fetch(`/api/cart`)
@@ -113,19 +115,19 @@ export const NavbarCartButton = ({}) => {
   return <>
     <PopupState variant="popover" popupId="demo-popup-popover">
       {(popupState) => (
-        <div>
+        <>
           <IconButton
             component={Link}
             href={'/koszyk'}
             color={'inherit'}
-
-            {...bindHover(popupState)}>
+            {...!isMobile && bindHover(popupState)}
+          >
             <Badge badgeContent={itemsInCartCount} color="error">
               <ShoppingCartTwoToneIcon/>
             </Badge>
           </IconButton>
 
-          <HoverPopover
+          {!isMobile && <HoverPopover
             disableScrollLock
             {...bindPopover(popupState)}
             anchorOrigin={{
@@ -170,7 +172,7 @@ export const NavbarCartButton = ({}) => {
                     <ListItemAvatar>
                       <ListItemAvatar>
                         <Avatar component={Link} href={x.url} variant={"square"} src={x.image}>
-                          <ImageTwoTone />
+                          <ImageTwoTone/>
                         </Avatar>
                       </ListItemAvatar>
                     </ListItemAvatar>
@@ -196,12 +198,10 @@ export const NavbarCartButton = ({}) => {
                     endIcon={<ArrowForwardIcon/>}
                   >Przejdź do koszyka</Button>
                 </Stack>
-
-
               </>
             }
-          </HoverPopover>
-        </div>
+          </HoverPopover>}
+        </>
       )}
     </PopupState>
   </>

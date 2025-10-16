@@ -2,54 +2,68 @@
 import {createTheme} from '@mui/material/styles';
 import {ThemeOptions} from "@mui/system";
 import {deepmerge} from "@mui/utils";
+import {responsiveFontSizes} from "@mui/material";
 
-const themeFactory = (options: Omit<Partial<ThemeOptions>, "shadows">) => createTheme(
-  deepmerge({
-    components: {
-      MuiTextField: {
-        defaultProps: {
-          fullWidth: true,
-        }
-      },
-      MuiFormControl: {
-        defaultProps: {
-          fullWidth: true
-        },
-        styleOverrides: {
-          root: ({theme}) => theme.unstable_sx({
-            mt: `${23 + 8}px`,
-
-            ".MuiInputLabel-root": {
-              transform: "none",
-              transition: "none",
-              bottom: `calc(100% + ${8}px)`,
-              top: "unset"
-            },
-            ".MuiOutlinedInput-notchedOutline": {
-              top: -2.5,
-              bottom: -2.5,
-              legend: {
-                display: "none"
+const themeFactory = (options: Omit<Partial<ThemeOptions>, "shadows">) => responsiveFontSizes(
+  createTheme(
+    deepmerge({
+      components: {
+        MuiTypography: {
+          styleOverrides: {
+            root: ({theme}) => theme.unstable_sx({}),
+            gutterBottom: ({theme}) => theme.unstable_sx({
+              mb: {
+                xs: 2,
+                md: 6
               }
-              // backgroundColor: theme.palette.background.paper
-            },
+            })
+          }
+        },
+        MuiTextField: {
+          defaultProps: {
+            fullWidth: true,
+          }
+        },
+        MuiFormControl: {
+          defaultProps: {
+            fullWidth: true
+          },
+          styleOverrides: {
+            root: ({theme}) => theme.unstable_sx({
+              mt: `${23 + 8}px`,
 
-            ".MuiFormHelperText-root": {
-              mx: 0
-            }
-          })
-        }
-      },
-      MuiChip: {
-        styleOverrides: {
-          root: ({theme}) => ({
-            fontWeight: 600,
-            letterSpacing: '0.042em',
-          }),
+              ".MuiInputLabel-root": {
+                transform: "none",
+                transition: "none",
+                bottom: `calc(100% + ${8}px)`,
+                top: "unset"
+              },
+              ".MuiOutlinedInput-notchedOutline": {
+                top: -2.5,
+                bottom: -2.5,
+                legend: {
+                  display: "none"
+                }
+                // backgroundColor: theme.palette.background.paper
+              },
+
+              ".MuiFormHelperText-root": {
+                mx: 0
+              }
+            })
+          }
+        },
+        MuiChip: {
+          styleOverrides: {
+            root: ({theme}) => ({
+              fontWeight: 600,
+              letterSpacing: '0.042em',
+            }),
+          }
         }
       }
-    }
-  }, options)
+    }, options)
+  )
 )
 
 export default themeFactory;

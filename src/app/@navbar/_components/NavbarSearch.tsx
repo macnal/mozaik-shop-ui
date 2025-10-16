@@ -8,7 +8,7 @@ import {
   IconButton,
   InputAdornment, ListItemAvatar,
   OutlinedInput,
-  Stack,
+  Stack, SxProps,
   Typography
 } from "@mui/material";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -38,8 +38,9 @@ interface Option {
   image: string
 }
 
-export const NavbarSearch = ({defaultValue}: {
+export const NavbarSearch = ({defaultValue, sx}: {
   defaultValue?: string;
+  sx?: SxProps;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -148,6 +149,7 @@ export const NavbarSearch = ({defaultValue}: {
   }
 
   return <Autocomplete
+    sx={sx}
     open={open && !!options?.length}
     onOpen={() => {
       setOpen(true);
@@ -228,7 +230,6 @@ export const NavbarSearch = ({defaultValue}: {
       );
     }}
     filterOptions={(x) => x}
-    sx={{flexBasis: 400,}}
     renderInput={({InputProps, InputLabelProps, ...params}) => (
       <OutlinedInput
         {...InputProps}

@@ -12,10 +12,11 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Stack,
   Typography
 } from "@mui/material";
 import {ListSelectProvider, useListSelect} from "@/components/common/ListSelect/ListSelectProvider";
-import {KoszykPageItemActions} from "@/app/koszyk/KoszykPageItemActions";
+import {KoszykPageItemAmountButtons} from "@/app/koszyk/KoszykPageItemAmountButtons";
 import {KoszykPageCheckbox} from "@/app/koszyk/KoszykPageCheckbox";
 import {JSX, useEffect, useRef, useState} from "react";
 import {JsonSchema, UISchemaElement} from "@jsonforms/core";
@@ -26,6 +27,9 @@ import Link from "next/link";
 import {AppCartResponse} from "@/types/responses";
 import {ImageTwoTone} from "@mui/icons-material";
 import KoszykPageSummaryInpost from "@/app/koszyk/KoszykPageSummaryInpost";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
+import {KoszykPageItemDelete} from "@/app/koszyk/KoszykPageItemDelete";
 
 interface KoszykPageClientProps {
   cart: AppCartResponse;
@@ -79,8 +83,10 @@ const SubmitButton = () => {
     variant={'contained'}
     size={'large'}
     fullWidth
+    color={'success'}
+    startIcon={<LockTwoToneIcon/>}
   >
-    Płacę
+    Bezpieczna płatność
   </Button>
 }
 
@@ -169,7 +175,7 @@ const SummaryPage = ({
               </Grid>
 
 
-              <Grid size={{xs: 12, md: 3}}>
+              <Grid size={{xs: 6, md: 3}}>
                 <TextFieldElement name="address.homeNumber" label="Numer domu / mieszkania"
                                   sx={{}}
                                   slotProps={{
@@ -184,7 +190,7 @@ const SummaryPage = ({
                 />
               </Grid>
 
-              <Grid size={{xs: 12, md: 3}}>
+              <Grid size={{xs: 6, md: 3}}>
                 <TextFieldElement name="address.flatNumber" label=""/>
               </Grid>
 
@@ -237,7 +243,7 @@ const SummaryPage = ({
                   </Grid>
 
 
-                  <Grid size={{xs: 12, md: 3}}>
+                  <Grid size={{xs: 6, md: 3}}>
                     <TextFieldElement name="invoice.homeNumber" label="Numer domu / mieszkania" required
                                       sx={{}}
                                       slotProps={{
@@ -252,7 +258,7 @@ const SummaryPage = ({
                     />
                   </Grid>
 
-                  <Grid size={{xs: 12, md: 3}}>
+                  <Grid size={{xs: 6, md: 3}}>
                     <TextFieldElement name="invoice.flatNumber" label=""/>
                   </Grid>
                 </Grid>
@@ -262,11 +268,11 @@ const SummaryPage = ({
 
         />
 
-        <Card sx={{ mb: 3 }}>
+        <Card sx={{mb: 3}}>
           <CardHeader title={'Dostawa'}/>
 
           <CardContent>
-            <KoszykPageSummaryInpost />
+            <KoszykPageSummaryInpost/>
           </CardContent>
         </Card>
 
@@ -360,33 +366,56 @@ export const CartPage = ({
 }) => {
   return <Grid container spacing={6}>
     <Grid size={{xs: 12, lg: 8}}>
-      {cart?.uuid || 'brak'}
-
-      {cart && <List>
-        {cart.items.map(({name, productId, quantity, price, image, url, categoryName}) => {
-          return <ListItem
+      {cart && <Stack component={'ul'} sx={{pl: 0}}>
+        {cart.items.map(({name, productId, quantity, price, image, url, categoryName}, index, {length}) => {
+          return <Grid
+            container
             key={productId}
-            disableGutters
-            secondaryAction={
-              <KoszykPageItemActions {...{productId, quantity, price}} />
-            }
+            component={'li'}
+            spacing={0}
           >
-            <KoszykPageCheckbox id={productId}/>
+            <Grid size={{xs: 'auto'}}>
+              <KoszykPageCheckbox id={productId}/>
+            </Grid>
 
-            <ListItemAvatar>
-              <Avatar component={Link} href={url} variant={"square"} src={image}>
-                <ImageTwoTone/>
-              </Avatar>
-            </ListItemAvatar>
+            <Grid container size={{xs: 'grow'}} spacing={{ xs: 2 }} sx={{alignItems: 'center'}}>
+              <Grid container spacing={2} size={{xs: 'grow'}}
+                    sx={{order: 0, display: 'flex', alignItems: 'center', flexWrap: 'nowrap'}}>
+                <Avatar component={Link} href={url} variant={"square"} src={image}>
+                  <ImageTwoTone/>
+                </Avatar>
 
-            <ListItemText
-              slotProps={{primary: {variant: 'subtitle1'}}}
-              primary={name}
-              secondary={categoryName}
-            />
-          </ListItem>
+                <Stack sx={{ flexShrink: 0 }}>
+                  <Typography variant={'subtitle1'}>{name}</Typography>
+                  <Typography variant={'body2'} color={'textSecondary'}
+                              whiteSpace={'nowrap'}>{categoryName}</Typography>
+                </Stack>
+              </Grid>
+
+              <Grid size={{xs: 6, sm: 2}} sx={{
+                order: {sm: 3},
+                display: 'flex', alignItems: 'center', justifyContent: 'flex-end'
+              }}>
+                <Typography variant={'h6'} fontWeight={800}>
+                  {(price * quantity).toFixed(2)} zł
+                </Typography>
+              </Grid>
+
+              <Grid size={{xs: 6, sm: 'auto'}} sx={{order: {sm: 2}}}>
+                <KoszykPageItemAmountButtons sx={{}} {...{productId, quantity, price}} />
+              </Grid>
+
+              <Grid size={{xs: 6, sm: 'auto'}} sx={{order: {sm: 4}, display: 'flex', justifyContent: 'flex-end'}}>
+                <KoszykPageItemDelete sx={{}} {...{productId, quantity, price}} />
+              </Grid>
+
+              {index !== (length - 1) && <Grid size={{xs: 12}} sx={{order: 12}}>
+                <Divider sx={{mb: { xs: 2  }}}/>
+              </Grid>}
+            </Grid>
+          </Grid>
         })}
-      </List>
+      </Stack>
 
       }
     </Grid>
@@ -438,8 +467,8 @@ export const CartPage = ({
             fullWidth
             onClick={() => {
               goToSummary();
-
             }}
+            endIcon={<ArrowForwardIcon/>}
           >
             Dostawa i płatność
           </Button>
@@ -458,7 +487,7 @@ export const KoszykPageClient = (props: KoszykPageClientProps) => {
   const [summary, setSummary] = useState<boolean>(false);
 
   return <>
-    <Typography variant={'h1'} sx={{mb: 6}}>
+    <Typography variant={'h1'} gutterBottom>
       {summary ? 'Podsumowanie' : 'Koszyk'}
     </Typography>
 

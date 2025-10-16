@@ -1,10 +1,11 @@
 'use client'
 import {AccountCircleTwoTone, ExpandMore} from "@mui/icons-material"
-import {Button, CardActionArea, Divider, IconButton, Popover, Stack, Typography} from "@mui/material"
+import {Button, CardActionArea, Divider, IconButton, Popover, Stack, Typography, useMediaQuery} from "@mui/material"
 import PopupState, {bindHover, bindPopover, bindTrigger} from "material-ui-popup-state"
 import {signIn, signOut} from "next-auth/react"
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import HoverPopover from 'material-ui-popup-state/HoverPopover'
+import HoverPopover from 'material-ui-popup-state/HoverPopover';
+import Link from "next/link";
 
 
 export const NavbarClient = ({
@@ -15,13 +16,13 @@ export const NavbarClient = ({
   name?: string | null | undefined,
 
 }) => {
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   if (isAuthenticated) {
     return <PopupState variant="popover" popupId="account-popup">
       {(popupState) => (
-        <div>
-
-          <CardActionArea {...bindTrigger(popupState)} sx={{px: 2, py: .5}}>
+        <>
+          <CardActionArea {...!isMobile && bindHover(popupState)} sx={{px: 2, py: .5}}>
             <Stack direction={'row'} spacing={2} sx={{alignItems: 'center'}}>
               <Stack>
                 <Typography variant={'subtitle2'} fontWeight={600}>
@@ -37,7 +38,7 @@ export const NavbarClient = ({
             </Stack>
           </CardActionArea>
 
-          <Popover
+          {!isMobile && <Popover
             {...bindPopover(popupState)}
             anchorOrigin={{
               vertical: 'bottom',
@@ -65,10 +66,8 @@ export const NavbarClient = ({
                 Wyloguj
               </Button>
             </Stack>
-
-
-          </Popover>
-        </div>
+          </Popover>}
+        </>
       )}
     </PopupState>
 
@@ -76,12 +75,16 @@ export const NavbarClient = ({
 
   return <PopupState variant="popover" popupId="anon-account-popup">
     {(popupState) => (
-      <div>
-        <IconButton color={'inherit'} {...bindHover(popupState)}>
+      <>
+        <IconButton
+          color={'inherit'}
+          component={Link}
+          href={'/konto'}
+                    {...!isMobile && bindHover(popupState)}>
           <AccountCircleTwoTone/>
         </IconButton>
 
-        <HoverPopover
+        {!isMobile && <HoverPopover
           disableScrollLock
           {...bindPopover(popupState)}
           anchorOrigin={{
@@ -117,8 +120,8 @@ export const NavbarClient = ({
               Zarejestruj się
             </Button>
           </Stack>
-        </HoverPopover>
-      </div>
+        </HoverPopover>}
+      </>
     )}
   </PopupState>
 
