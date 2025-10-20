@@ -488,7 +488,7 @@ export const KoszykPageClient = (props: KoszykPageClientProps) => {
 
   return <>
     <Typography variant={'h1'} gutterBottom>
-      {summary ? 'Podsumowanie' : 'Koszyk'}
+      {summary ? 'Podsumowanie' : 'Koszyk'} {cart.uuid}
     </Typography>
 
     <ListSelectProvider

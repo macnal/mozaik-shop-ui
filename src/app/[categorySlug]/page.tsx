@@ -6,10 +6,28 @@ import {NoSsr, Stack, Typography} from "@mui/material";
 import {PageFilter} from "@/components/common/PageFilter";
 import {convertJsonSchemaToZod} from 'zod-from-json-schema';
 import {ZodType} from "zod";
+import {Metadata, ResolvingMetadata} from "next";
+import {getSlug, splitSlug} from "@/utils/slug";
 
 interface CategoryPageProps {
   params: Promise<{ categorySlug: string }>,
   searchParams: Promise<{ page: string, size: string, query: string }>
+}
+
+export async function generateMetadata(
+  {params}: CategoryPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const dataSource = await WebLinkerService();
+  const {categorySlug} = await params;
+  const category = await dataSource.fetchCategory(categorySlug);
+
+  return {
+    title: { default: `${category.name}`, template: `%s | ${category.name}` },
+    openGraph: {
+
+    },
+  }
 }
 
 export default async function CategoryPage({params, searchParams}: CategoryPageProps) {
@@ -33,10 +51,6 @@ export default async function CategoryPage({params, searchParams}: CategoryPageP
 
   const items = await r.then(({items}) => items);
   const pagination = await r.then(({page}) => page);
-
-  // const {items: childCategories} = await dataSource.fetchCategories({
-  //   parentId: category.id,
-  // });
 
   return (<PageContainer>
       <Typography variant={'h1'} gutterBottom>

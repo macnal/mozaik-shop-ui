@@ -4,9 +4,47 @@ import {notFound} from "next/navigation";
 import {NotionToMarkdown} from "notion-to-md";
 import ReactMarkdown from "react-markdown";
 import {DataSourceObjectResponse} from "@notionhq/client";
+import {Metadata, ResolvingMetadata} from "next";
 
 interface GenericPageProps {
   params: Promise<{ pageSlug: string }>,
+}
+
+export async function generateMetadata(
+  {params}: GenericPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const {pageSlug} = await params;
+  const notion = NotionService();
+
+  const {results} = (await notion.dataSources.query({
+    data_source_id: process.env.NOTION_PAGES_DATA_SOURCE_ID!
+  })) as { results: DataSourceObjectResponse[] };
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const target = results.find(x => (x.properties.slug as never).rich_text[0].plain_text === pageSlug);
+
+  if (!target) {
+    return {}
+  }
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const title = (target.properties.name as never).title[0].plain_text;
+
+  return {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    title: {default: `${title}`, template: `%s | ${title}`},
+    // tags: getTags(target.properties.Tags.multi_select),
+    // description: target.properties.description.rich_text[0].plain_text,
+    // date: getToday(target.properties.Date.last_edited_time),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+
+    // slug: (target.properties.slug as never).rich_text[0].plain_text,
+  }
 }
 
 const NextImageTag = (props: { src: string; alt: string } & Record<string, never>) => <img {...props} />

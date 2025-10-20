@@ -29,6 +29,14 @@ interface FetchCategoriesParams {
   parentId: number;
 }
 
+type PaymentStatus =
+  | "PENDING"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCELLED"
+  | "SETTLED"
+  | "NO_MATCHED_BL"
+
 export const WebLinkerService = async () => {
 
   return ({
@@ -37,8 +45,8 @@ export const WebLinkerService = async () => {
     async getAccessToken() {
       const session = await getServerSession(authConfig);
 
-      if (session?.access_token) {
-        return session?.access_token
+      if (session?.accessToken) {
+        return session?.accessToken
       }
 
       return null;
@@ -73,6 +81,13 @@ export const WebLinkerService = async () => {
       const responseData = await res.json();
 
       return responseData.url;
+    },
+  i: 0,
+    async fetchOrderStatus(id: string) {
+      const url = new URL(`${this.baseUrl}/weblinker/order/${id}`);
+      const res = await fetch(url);
+      const {paymentStatus} = (await res.json()) as { paymentStatus: PaymentStatus };
+      return {paymentStatus};
     },
 
     async fetchCategory(slug: string): Promise<Category> {
@@ -112,9 +127,21 @@ export const WebLinkerService = async () => {
       }
     },
 
+    async fetchCardId(token: string) {
+      const url = `${this.baseUrl}/weblinker/cart`;
+      const res = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      const data = await res.json();
+
+      return data.uuid;
+    },
+
     async fetchCart(id: string | null = null): Promise<AppCartResponse> {
       const url = id ? `${this.baseUrl}/weblinker/cart/${id}` : `${this.baseUrl}/weblinker/cart`;
-
       const res = await fetch(url, {
         headers: {
           'Content-Type': 'application/json',
@@ -122,15 +149,7 @@ export const WebLinkerService = async () => {
         }
       });
 
-      console.log('headers', {
-        ...await this.maybeAddToken()
-      });
-
-      console.log(`fetchCart: ${id}`);
-      console.log(await res.clone().text());
-
       const data: ApiCartResponse = await res.json();
-
 
       return {
         ...data,

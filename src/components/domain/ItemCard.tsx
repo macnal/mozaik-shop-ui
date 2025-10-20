@@ -103,9 +103,13 @@ export const ItemCard = async ({
           xs: 2,
           md: 3
         },
+        //alignItems: "center",
+
         '& > img': {
           height: 'auto',
-          maxWidth: '100%'
+          width: '100%',
+          maxWidth: '100%',
+          maxHeight: '100%',
         }
       }}>
         <AspectRatio>

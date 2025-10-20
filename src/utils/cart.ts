@@ -1,17 +1,20 @@
 import 'server-only';
 import {cookies} from "next/headers";
 import {CART_ID_COOKIE_NAME} from "@/app/@navbar/_components/Navbar.types";
-import {User} from "next-auth";
+import {Account, User} from "next-auth";
 import {WebLinkerService} from "@/services/weblinker";
 
 
-export const maybeMergeCart = async ({user}: { user: User }) => {
+export const maybeMergeCart = async ({user, account}: { user: User, account: Account | null }) => {
   const dataSource = await WebLinkerService();
   const cookieStore = await cookies();
   const currentCartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
 
-  const nextCart = await dataSource.fetchCart(null);
-  const nextCartId = nextCart.uuid;
+  if (!account || !account.access_token) {
+    return
+  }
+
+  const nextCartId = await dataSource.fetchCardId(account.access_token);
   cookieStore.set(CART_ID_COOKIE_NAME, nextCartId);
 
   if (currentCartId && (currentCartId !== nextCartId)) {
