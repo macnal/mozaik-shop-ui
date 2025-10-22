@@ -49,8 +49,7 @@ export default function KoszykPageSummaryShippingInpost() {
   };
 
   const handleApiReady: InpostGeowidgetProps['onApiReady'] = (api: InpostGeowidget) => {
-    console.log("GeoWidget API is ready:", api?.selectPoint('ZRA01G'));
-
+   
     // You can now use the API, for example: api.openMap();
   };
 
