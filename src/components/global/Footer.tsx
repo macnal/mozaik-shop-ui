@@ -3,6 +3,8 @@ import NextLink from 'next/link';
 import {grey} from "@mui/material/colors";
 import {DataSourceObjectResponse} from "@notionhq/client";
 import { NotionService } from "@/services/notion";
+// Import package.json to read app version (server component -> safe to import)
+import pkg from '../../../package.json';
 
 const colSx = {
   display: "flex",
@@ -50,10 +52,14 @@ export const Footer = async () => {
           <Divider/>
         </Grid>
         <Grid size={{xs: 12}}>
-          <Stack direction={'row'} spacing={2} sx={{mb: 3, justifyContent: 'flex-end'}}>
+          {/* Footer bottom row: version left, policy links right */}
+          <Stack direction={'row'} spacing={2} sx={{mb: 3, justifyContent: 'space-between', alignItems: 'center'}}>
+            <Typography variant={'body2'} color="text.secondary">Wersja: {pkg.version}</Typography>
 
-            <Link component={NextLink} href={'/strony/polityka-prywatnosci'} fontWeight={600}>Polityka prywatności</Link>
-            <Link component={NextLink} href={'/strony/regulamin'} fontWeight={600}>Regulamin</Link>
+            <Stack direction={'row'} spacing={2}>
+              <Link component={NextLink} href={'/strony/polityka-prywatnosci'} fontWeight={600}>Polityka prywatności</Link>
+              <Link component={NextLink} href={'/strony/regulamin'} fontWeight={600}>Regulamin</Link>
+            </Stack>
           </Stack>
 
 
