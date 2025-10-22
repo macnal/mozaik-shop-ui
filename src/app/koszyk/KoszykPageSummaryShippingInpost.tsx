@@ -116,7 +116,7 @@ export default function KoszykPageSummaryShippingInpost() {
           <InpostGeowidget
             identifier={'summary'}
             token={process.env.NEXT_PUBLIC_INPOST_TOKEN}
-            sandbox={true} // Use true for testing, false for production
+            sandbox={false} // Use true for testing, false for production
             onPointSelect={handlePointSelect}
             onApiReady={handleApiReady}
           />
