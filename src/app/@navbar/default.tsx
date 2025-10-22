@@ -3,18 +3,17 @@ import NextLink from "next/link";
 import {getSlug} from "@/utils/slug";
 import {WebLinkerService} from "@/services/weblinker";
 import {NavbarClient} from "@/app/@navbar/_components/Navbar.client";
-import {getServerSession} from "next-auth/next";
-import {authConfig} from "@/auth.config";
 import {NavbarCartButton} from '@/app/@navbar/_components/NavbarCartButton';
 import {NavbarSearch} from "@/app/@navbar/_components/NavbarSearch";
+import {auth} from "@/auth";
 
 const Navbar = async () => {
-  const session = await getServerSession(authConfig);
+  const session = await auth();
   const dataSource = await WebLinkerService();
   const {items: categories} = await dataSource.fetchCategories({parentId: 0});
 
   return <AppBar position="static" sx={{overflow: 'hidden'}}>
-    <Container component={Toolbar} >
+    <Container component={Toolbar}>
       <Grid container sx={{width: '100%'}}>
         <Grid size={{xs: 'auto',}} sx={{order: 0}}>
           <IconButton
@@ -38,7 +37,10 @@ const Navbar = async () => {
         <Grid size={{xs: 'auto',}} sx={{order: 6, display: 'flex', alignItems: 'center', gap: 1,}}>
           <NavbarCartButton/>
 
-          <NavbarClient isAuthenticated={!!session} name={session?.user?.name}/>
+          <NavbarClient
+            isAuthenticated={!!session}
+            name={session?.user?.name}
+          />
         </Grid>
 
         <Grid size={{xs: 12, md: 4}} sx={{display: 'flex', alignItems: 'center', order: {xs: 8, md: 4}}}>

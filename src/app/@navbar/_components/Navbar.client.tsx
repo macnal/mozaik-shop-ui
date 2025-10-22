@@ -1,7 +1,7 @@
 'use client'
 import {AccountCircleTwoTone, ExpandMore} from "@mui/icons-material"
 import {Button, CardActionArea, Divider, IconButton, Popover, Stack, Typography, useMediaQuery} from "@mui/material"
-import PopupState, {bindHover, bindPopover, bindTrigger} from "material-ui-popup-state"
+import PopupState, {bindHover, bindPopover} from "material-ui-popup-state"
 import {signIn, signOut} from "next-auth/react"
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import HoverPopover from 'material-ui-popup-state/HoverPopover';
@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export const NavbarClient = ({
                                isAuthenticated,
-                               name
+                               name,
                              }: {
   isAuthenticated: boolean,
   name?: string | null | undefined,
@@ -80,7 +80,7 @@ export const NavbarClient = ({
           color={'inherit'}
           component={Link}
           href={'/konto'}
-                    {...!isMobile && bindHover(popupState)}>
+          {...!isMobile && bindHover(popupState)}>
           <AccountCircleTwoTone/>
         </IconButton>
 

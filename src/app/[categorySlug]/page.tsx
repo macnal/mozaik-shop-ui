@@ -20,7 +20,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const dataSource = await WebLinkerService();
   const {categorySlug} = await params;
-  const category = await dataSource.fetchCategory(categorySlug);
+  const category = await dataSource.fetchCategoryBySlug(categorySlug);
 
   return {
     title: { default: `${category.name}`, template: `%s | ${category.name}` },
@@ -35,7 +35,7 @@ export default async function CategoryPage({params, searchParams}: CategoryPageP
   const dataSource = await WebLinkerService();
   const {categorySlug} = await params;
 
-  const category = await dataSource.fetchCategory(categorySlug);
+  const category = await dataSource.fetchCategoryBySlug(categorySlug);
   const {formSchema, layoutSchema} = await dataSource.fetchCategoryFormSchema(category.id);
   const zodSchema = convertJsonSchemaToZod(formSchema) as ZodType<Record<string, string | string[]>>
 
