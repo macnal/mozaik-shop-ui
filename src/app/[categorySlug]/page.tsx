@@ -8,6 +8,7 @@ import {convertJsonSchemaToZod} from 'zod-from-json-schema';
 import {ZodType} from "zod";
 import {Metadata, ResolvingMetadata} from "next";
 import {getSlug, splitSlug} from "@/utils/slug";
+import type {JSONSchema} from "zod/v4/core";
 
 interface CategoryPageProps {
   params: Promise<{ categorySlug: string }>,
@@ -36,17 +37,16 @@ export default async function CategoryPage({params, searchParams}: CategoryPageP
   const {categorySlug} = await params;
 
   const category = await dataSource.fetchCategoryBySlug(categorySlug);
-  const {formSchema, layoutSchema} = await dataSource.fetchCategoryFormSchema(category.id);
-  const zodSchema = convertJsonSchemaToZod(formSchema) as ZodType<Record<string, string | string[]>>
-
-  const {data, error} = zodSchema.safeParse(restParams);
+  // const {formSchema, layoutSchema} = await dataSource.fetchCategoryFormSchema(category.id);
+  // const zodSchema = convertJsonSchemaToZod(formSchema as JSONSchema.BaseSchema) as ZodType<Record<string, string | string[]>>
+  // const {data, error} = zodSchema.safeParse(restParams);
 
   const r = dataSource.fetchProducts({
     page: isNaN(+page) ? 0 : +page,
     size: config.interface.itemsPerPage,
     category: category.id,
     query,
-    ...data,
+    // ...data,
   });
 
   const items = await r.then(({items}) => items);
@@ -57,25 +57,25 @@ export default async function CategoryPage({params, searchParams}: CategoryPageP
         {category.name}
       </Typography>
 
-      <Stack direction={'row'} sx={{
-        display: 'flex',
-        justifyContent: {
-          xs: 'flex-end',
-          md: 'flex-start'
-        },
-        mb: {
-          xs: 2,
-          md: 6
-        }
-      }}>
-        <NoSsr>
-          <PageFilter
-            formSchema={formSchema}
-            layoutSchema={layoutSchema}
-            initialData={await searchParams}
-          />
-        </NoSsr>
-      </Stack>
+      {/*<Stack direction={'row'} sx={{*/}
+      {/*  display: 'flex',*/}
+      {/*  justifyContent: {*/}
+      {/*    xs: 'flex-end',*/}
+      {/*    md: 'flex-start'*/}
+      {/*  },*/}
+      {/*  mb: {*/}
+      {/*    xs: 2,*/}
+      {/*    md: 6*/}
+      {/*  }*/}
+      {/*}}>*/}
+      {/*  <NoSsr>*/}
+      {/*    <PageFilter*/}
+      {/*      formSchema={formSchema}*/}
+      {/*      layoutSchema={layoutSchema}*/}
+      {/*      initialData={await searchParams}*/}
+      {/*    />*/}
+      {/*  </NoSsr>*/}
+      {/*</Stack>*/}
 
 
       <ItemsGrid items={items} pagination={pagination}/>

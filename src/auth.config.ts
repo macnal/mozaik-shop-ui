@@ -21,8 +21,8 @@ export const authConfig = {
     strategy: "jwt",
   },
   events: {
-    async signIn({user, account,}) {
-      await maybeMergeCart({user, account});
+    async signIn({account}) {
+      await maybeMergeCart({account});
     },
     async signOut() {
       await clearCart();
@@ -39,7 +39,7 @@ export const authConfig = {
           expires_at: account.expires_at,
           refresh_token: account.refresh_token,
         }
-      } else if (Date.now() < token.expires_at * 1000) {
+      } else if (Date.now() < (token.expires_at as number) * 1000) {
 
 
         return token
@@ -93,7 +93,7 @@ export const authConfig = {
       }
     },
     async session({session, token}) {
-      session.error = token.error;
+      session.error = token.error as string;
       session.access_token = token.access_token;
       return session
     },

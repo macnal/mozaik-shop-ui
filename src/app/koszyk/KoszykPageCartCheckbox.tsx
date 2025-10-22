@@ -2,7 +2,7 @@
 import {useListSelect} from "@/components/common/ListSelect/ListSelectProvider";
 import {Checkbox} from "@mui/material";
 
-export const KoszykPageCheckbox = ({id}: { id: number }) => {
+export const KoszykPageCartCheckbox = ({id}: { id: number }) => {
   const [isSelected, toggle] = useListSelect();
 
   return <Checkbox

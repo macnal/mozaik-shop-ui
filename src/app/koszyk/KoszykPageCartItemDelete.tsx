@@ -15,7 +15,7 @@ interface ItemCardActionsProps {
   sx?: SxProps;
 }
 
-export function KoszykPageItemDelete({sx, productId, quantity, price}: ItemCardActionsProps) {
+export function KoszykPageCartItemDelete({sx, productId, quantity, price}: ItemCardActionsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState<{ productId: number | null, direction: 'add' | 'sub' | null }>({
     productId: null,

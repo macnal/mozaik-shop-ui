@@ -17,7 +17,7 @@ import {
 import {auth} from "@/auth";
 import ky from "ky";
 import {JsonSchema, UISchemaElement} from "@jsonforms/core";
-import {JSONSchema} from "zod/v4/core/json-schema";
+
 
 interface FetchProductsParams {
   page: number;
@@ -195,7 +195,7 @@ export const WebLinkerService = async () => {
 
     async fetchCategoryFormSchema(categoryId: number) {
       const [formSchema, layoutSchema] = await Promise.all([
-        this.api.get(`jsonforms/schema/${categoryId}`).json<JSONSchema>(),
+        this.api.get(`jsonforms/schema/${categoryId}`).json<JsonSchema>(),
         this.api.get(`jsonforms/uischema/${categoryId}`).json<UISchemaElement>(),
       ]);
 

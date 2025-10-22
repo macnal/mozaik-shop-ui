@@ -3,6 +3,7 @@
 import {SessionProvider as NextAuthSessionProvider} from "next-auth/react";
 import {PropsWithChildren, useEffect} from "react";
 import {signIn, signOut} from "next-auth/react"
+import {Session} from "next-auth";
 
 const LogoutOnError = () => {
 
@@ -12,7 +13,7 @@ const LogoutOnError = () => {
   // }
 }
 
-export const SessionProvider = ({session, children}: PropsWithChildren<{ session: any }>) => {
+export const SessionProvider = ({session, children}: PropsWithChildren<{ session: Session | null }>) => {
 
   useEffect(() => {
     if (session?.error === "RefreshTokenError" || session?.error === "NoRefreshTokenError") {

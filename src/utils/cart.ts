@@ -1,11 +1,11 @@
 import 'server-only';
 import {cookies} from "next/headers";
 import {CART_ID_COOKIE_NAME} from "@/app/@navbar/_components/Navbar.types";
-import {Account, User} from "next-auth";
+import {Account} from "next-auth";
 import {WebLinkerService} from "@/services/weblinker";
 
 
-export const maybeMergeCart = async ({user, account}: { user: User, account: Account | null }) => {
+export const maybeMergeCart = async ({account}: { account?: Account | null }) => {
   const dataSource = await WebLinkerService();
   const cookieStore = await cookies();
   const currentCartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
