@@ -15,7 +15,7 @@ interface ItemCardActionsProps {
   sx?: SxProps;
 }
 
-export function KoszykPageItemAmountButtons({sx, productId, quantity, price}: ItemCardActionsProps) {
+export function KoszykPageCartItemAmountButtons({sx, productId, quantity, price}: ItemCardActionsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState<{ productId: number | null, direction: 'add' | 'sub' | null }>({
     productId: null,

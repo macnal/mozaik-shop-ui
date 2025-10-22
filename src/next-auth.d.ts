@@ -1,23 +1,21 @@
-import NextAuth, { DefaultSession } from "next-auth";
+import * as nextAuth from 'next-auth'
+import * as nextAuthJwt from 'next-auth/jwt'
 
-declare module "next-auth" {
-  /**
-   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   */
+declare module 'next-auth' {
   interface Session {
-    // access_token: accessToken;
-
-    accessToken: accessToken;
-    accessTokenExpires: number;
-    refreshToken: refreshToken;
-
-    // user: DefaultSession["user"];
+    access_token: accessToken;
+    expires_at: number;
+    refresh_token: refreshToken;
+    error?: string;
   }
 
   interface JWT {
-    accessToken: string;
-    accessTokenExpires: number;
-    refreshToken: string;
+    access_token: string;
+    expires_at: number;
+    refresh_token: string;
   }
 }
 
+declare module 'next-auth/jwt' {
+
+}

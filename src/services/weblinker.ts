@@ -14,8 +14,10 @@ import {
   GameExtended,
   RemoveFromCartDELETEResponse
 } from "@/types/responses";
-import {getServerSession} from "next-auth/next";
-import {authConfig} from "@/auth.config";
+import {auth} from "@/auth";
+import ky from "ky";
+import {JsonSchema, UISchemaElement} from "@jsonforms/core";
+
 
 interface FetchProductsParams {
   page: number;
@@ -39,81 +41,79 @@ type PaymentStatus =
 
 export const WebLinkerService = async () => {
 
+  const getAccessToken = async () => {
+    const session = await auth();
+
+    if (session?.access_token) {
+      return session?.access_token
+    }
+
+    return null;
+  }
+
   return ({
     baseUrl: process.env.API_BASE,
+    api: ky.create({
 
-    async getAccessToken() {
-      const session = await getServerSession(authConfig);
+      prefixUrl: process.env.API_BASE,
+      hooks: {
+        beforeRequest: [
+          async (options) => {
+            const token = await getAccessToken();
 
-      if (session?.accessToken) {
-        return session?.accessToken
+            if (token) {
+              options.headers.set('Authorization', `Bearer ${token}`);
+            }
+          }]
       }
-
-      return null;
-    },
-
-    async maybeAddToken() {
-      const token = await this.getAccessToken();
-
-      if (token) {
-        return {
-          Authorization: `Bearer ${token}`,
-        }
-      }
-
-      return {} as unknown as { Authorization: string }
-    },
+    }),
 
     async createOrder(data: CreateOrderRequest): Promise<string> {
-
       console.log('ORDER');
       console.log(data);
 
-      const res = await fetch(`${this.baseUrl}/weblinker/order`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...await this.maybeAddToken()
-        },
-        body: JSON.stringify(data)
-      });
-
-      const responseData = await res.json();
+      const responseData = await this.api.post<{ url: string }>(
+        `weblinker/order`,
+        {
+          json: data
+        }
+      ).json();
 
       return responseData.url;
     },
-  i: 0,
+
     async fetchOrderStatus(id: string) {
-      const url = new URL(`${this.baseUrl}/weblinker/order/${id}`);
-      const res = await fetch(url);
-      const {paymentStatus} = (await res.json()) as { paymentStatus: PaymentStatus };
-      return {paymentStatus};
+      const responseData = await this.api.get<{ paymentStatus: PaymentStatus }>(
+        `weblinker/order/${id}`
+      ).json();
+
+      return responseData
     },
 
-    async fetchCategory(slug: string): Promise<Category> {
-      const url = new URL(`${this.baseUrl}/weblinker/categories`);
-      const res = await fetch(url);
-      const {items} = (await res.json()) as ApiResponse<Category>;
+    async fetchCategoryBySlug(slug: string) {
+      const responseData = await this.api.get<ApiResponse<Category>>(
+        `weblinker/categories`
+      ).json();
 
-      return items.find(x => x.slug === slug)! || items[0];
+      return responseData.items.find(x => x.slug === slug)! || responseData.items[0];
     },
 
-    async fetchCategoryById(id: number): Promise<Category> {
-      const url = new URL(`${this.baseUrl}/weblinker/categories`);
-      const res = await fetch(url);
-      const {items} = (await res.json()) as ApiResponse<Category>;
+    async fetchCategoryById(id: number) {
+      const responseData = await this.api.get<ApiResponse<Category>>(
+        `weblinker/categories`
+      ).json();
 
-      return items.find(x => x.id === id)! || items[0];
+      return responseData.items.find(x => x.id === id)! || responseData.items[0];
     },
 
     async fetchCategories(params: FetchCategoriesParams) {
-      const url = new URL(`${this.baseUrl}/weblinker/categories`);
-      const res = await fetch(url);
-      const {items} = (await res.json()) as ApiResponse<Category>;
+      const responseData = await this.api.get<ApiResponse<Category>>(
+        `weblinker/categories`
+      ).json();
 
       return {
-        items: items.filter(x => x.parent === (params.parentId || 0))
-      };
+        items: responseData.items.filter(x => x.parent === (params.parentId || 0))
+      }
     },
 
     async enhanceCartItem(item: ApiCartResponseItem): Promise<AppCartResponseItem> {
@@ -128,34 +128,28 @@ export const WebLinkerService = async () => {
     },
 
     async fetchCardId(token: string) {
-      const url = `${this.baseUrl}/weblinker/cart`;
-      const res = await fetch(url, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+      const responseData = await this.api.get<ApiCartResponse>(
+        `weblinker/cart`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
         }
-      });
-      const data = await res.json();
+      ).json();
 
-      return data.uuid;
+      return responseData.uuid;
     },
 
     async fetchCart(id: string | null = null): Promise<AppCartResponse> {
-      const url = id ? `${this.baseUrl}/weblinker/cart/${id}` : `${this.baseUrl}/weblinker/cart`;
-      const res = await fetch(url, {
-        headers: {
-          'Content-Type': 'application/json',
-          ...await this.maybeAddToken()
-        }
-      });
-
-      const data: ApiCartResponse = await res.json();
+      const url = id ? `weblinker/cart/${id}` : `weblinker/cart`;
+      const responseData = await this.api.get<ApiCartResponse>(
+        url
+      ).json();
 
       return {
-        ...data,
-        items: await Promise.all((data.items || []).map(this.enhanceCartItem.bind(this))),
+        ...responseData,
+        items: await Promise.all((responseData.items || []).map(this.enhanceCartItem.bind(this))),
       };
-
     },
 
     async addToCart(id: string | null = null, items: AddToCartPUTItem[]): Promise<AppCartResponse> {
@@ -168,56 +162,41 @@ export const WebLinkerService = async () => {
         data.uuid = id;
       }
 
-      const res = await fetch(`${this.baseUrl}/weblinker/cart`, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-          ...await this.maybeAddToken()
+      const responseData = await this.api.put<ApiCartResponse>(
+        `weblinker/cart`,
+        {
+          json: data,
         }
-      });
-      console.log(`addtocart: ${id}`);
-      console.log(await res.clone().text());
+      ).json();
 
-      const resData: ApiCartResponse = await res.json();
       return {
-        ...resData,
-        items: await Promise.all(resData.items.map(this.enhanceCartItem.bind(this))),
+        ...responseData,
+        items: await Promise.all(responseData.items.map(this.enhanceCartItem.bind(this))),
       };
     },
 
     async removeFromCart(id: string, items: AddToCartPUTItem[]): Promise<RemoveFromCartDELETEResponse> {
       const item = items[0];
-
-      const url = `${this.baseUrl}/weblinker/cart/${id}`
-
-      const res = await fetch(`${url}?p=${item.productId}&q=${item.quantity}`, {
-        method: 'DELETE',
-        headers: {
-          ...await this.maybeAddToken()
+      const responseData = await this.api.delete<ApiCartResponse>(
+        `weblinker/cart/${id}`,
+        {
+          searchParams: {
+            p: item.productId,
+            q: item.quantity,
+          },
         }
-      });
-
-      const resData: ApiCartResponse = await res.json();
+      ).json();
 
       return {
-        ...resData,
-        items: await Promise.all(resData.items.map(this.enhanceCartItem.bind(this))),
+        ...responseData,
+        items: await Promise.all(responseData.items.map(this.enhanceCartItem.bind(this))),
       };
     },
 
     async fetchCategoryFormSchema(categoryId: number) {
       const [formSchema, layoutSchema] = await Promise.all([
-        fetch(`${this.baseUrl}/jsonforms/schema/${categoryId}`, {
-          headers: {
-            ...await this.maybeAddToken()
-          }
-        }).then(async (x) => await x.json()),
-        fetch(`${this.baseUrl}/jsonforms/uischema/${categoryId}`, {
-          headers: {
-            ...await this.maybeAddToken()
-          }
-        }).then(async (x) => await x.json()),
+        this.api.get(`jsonforms/schema/${categoryId}`).json<JsonSchema>(),
+        this.api.get(`jsonforms/uischema/${categoryId}`).json<UISchemaElement>(),
       ]);
 
       return {
@@ -227,19 +206,12 @@ export const WebLinkerService = async () => {
     },
 
     async fetchProduct(id: number): Promise<ApiSingleItemResponse<GameExtended>> {
-      const res = await fetch(`${this.baseUrl}/weblinker/products/${id}`, {
-        headers: {
-          ...await this.maybeAddToken()
-        }
-      });
-
+      const res = await this.api.get(`weblinker/products/${id}`);
       return await res.json()
     },
 
     async fetchProducts(params: FetchProductsParams): Promise<ApiResponsePaginated<Game>> {
       // await new Promise(r => setTimeout(r, 5000));
-
-      const url = new URL(`${this.baseUrl}/weblinker/products`);
       const nextSearchParams = new URLSearchParams({
         page: `${params.page - 1}`,
         size: `${params.size}`,
@@ -253,20 +225,15 @@ export const WebLinkerService = async () => {
         });
       }
 
-      url.search = nextSearchParams.toString();
-
-
-      const res = await fetch(url, {
-        headers: {
-          ...await this.maybeAddToken()
+      const responseData = await this.api.get<ApiResponsePaginated<Game>>(
+        `weblinker/products`,
+        {
+          searchParams: nextSearchParams
         }
-      });
+      ).json();
 
-      const data = (await res.json()) as ApiResponsePaginated<Game>;
-      data.page.number = data.page.number + 1;
-      return data
+      responseData.page.number = responseData.page.number + 1;
+      return responseData
     },
-
-
   })
 }

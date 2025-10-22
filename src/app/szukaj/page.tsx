@@ -14,7 +14,7 @@ export default async function SearchPage({params, searchParams}: SearchPageProps
   const dataSource = await WebLinkerService();
   //const {categorySlug} = await params;
 
-  //const category = await dataSource.fetchCategory(categorySlug);
+  //const category = await dataSource.fetchCategoryBySlug(categorySlug);
   //const {formSchema, layoutSchema} = await dataSource.fetchCategoryFormSchema(category.id);
 
   const r = dataSource.fetchProducts({
