@@ -24,7 +24,7 @@ const Navbar = async () => {
         {id: 5126627, name: 'Akcesoria', parent: 0, slug: 'akcesoria'},
     ]
     return <AppBar position="static" sx={{overflow: 'hidden'}}>
-        <Container component={Toolbar} >
+        <Container component={Toolbar} maxWidth={false} disableGutters>
             <Grid container sx={{width: '100%'}}>
                 <Grid size={{xs: 'auto',}} sx={{order: 0}}>
                     <IconButton
@@ -40,11 +40,6 @@ const Navbar = async () => {
                     </IconButton>
                 </Grid>
 
-                <Grid size={{xs: 'grow',}} sx={{order: 3}}></Grid>
-
-                <Grid size={{xs: 'grow',}} sx={{order: 5}}></Grid>
-
-
                 <Grid size={{xs: 'auto',}} sx={{order: 6, display: 'flex', alignItems: 'center', gap: 1,}}>
                     <NavbarCartButton/>
 
@@ -54,8 +49,8 @@ const Navbar = async () => {
                     />
                 </Grid>
 
-                <Grid size={{xs: 12, md: 4}} sx={{display: 'flex', alignItems: 'center', order: {xs: 8, md: 4}}}>
-                    <NavbarSearch sx={{width: "100%", order: 1}}/>
+                <Grid item xs={12} md={4} sx={{display: 'flex', alignItems: 'center', order: {xs: 8, md: 4}, flex: '1 1 0%', minWidth: 0, px: {xs: 0, md: 2}}}>
+                    <NavbarSearch sx={{flex: 1, minWidth: 0, width: '100%'}}/>
                 </Grid>
 
                 <Grid size={{xs: 'auto', md: 12}} sx={{order: 8, mt: {xs: 1, md: 0}}}>
