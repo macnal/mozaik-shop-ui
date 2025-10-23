@@ -1,3 +1,6 @@
+http://web.archive.org/web/20250615131711/https://shop.guildmage.pl/
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
