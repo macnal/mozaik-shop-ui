@@ -1,41 +1,14 @@
 'use client';
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Stack,
-  Typography
-} from "@mui/material";
-import {ListSelectProvider, useListSelect} from "@/components/common/ListSelect/ListSelectProvider";
-import {KoszykPageCartItemAmountButtons} from "@/app/koszyk/KoszykPageCartItemAmountButtons";
-import {KoszykPageCartCheckbox} from "@/app/koszyk/KoszykPageCartCheckbox";
-import {JSX, useEffect, useRef, useState} from "react";
+import {Grid, Skeleton, Typography} from "@mui/material";
+import {ListSelectProvider} from "@/components/common/ListSelect/ListSelectProvider";
+import {useEffect, useState} from "react";
 import {JsonSchema, UISchemaElement} from "@jsonforms/core";
-import {CheckboxElement, FormContainer, TextFieldElement, useFormContext} from 'react-hook-form-mui'
-import {zodResolver} from '@hookform/resolvers/zod';
-import {CustomerDataZodSchema} from "@/app/koszyk/_schema";
-import Link from "next/link";
 import {AppCartResponse} from "@/types/responses";
-import {ImageTwoTone} from "@mui/icons-material";
-import KoszykPageSummaryShippingInpost from "@/app/koszyk/KoszykPageSummaryShippingInpost";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
-import {KoszykPageCartItemDelete} from "@/app/koszyk/KoszykPageCartItemDelete";
 import {KoszykPageSummary} from "@/app/koszyk/KoszykPageSummary";
-import { CartTotalStr } from "./components/CartTotalStr";
 import {KoszykPageCart} from "@/app/koszyk/KoszykPageCart";
+import ky from "ky";
 
 interface KoszykPageClientProps {
-  cart: AppCartResponse;
   createOrder: (arg: Record<string, unknown>) => void,
   initialData: Record<string, unknown>,
   formSchema: JsonSchema,
@@ -43,10 +16,92 @@ interface KoszykPageClientProps {
 }
 
 export const KoszykPageClient = (props: KoszykPageClientProps) => {
-  const {
-    cart,
-  } = props;
+  const {} = props;
   const [summary, setSummary] = useState<boolean>(false);
+  const [discountCode, setDiscountCode] = useState<string>('');
+  const [cartLoading, setCartLoading] = useState<boolean>(true);
+
+  const [discountCodeState, setDiscountCodeState] = useState<"IDLE" | "ERROR" | "LOADING">("IDLE");
+  const [hasDiscountCode, setHasDiscountCode] = useState<boolean>(false);
+
+  const [cart, setCart] = useState<AppCartResponse | null>(null);
+
+  const handleFetchCart = async () => {
+
+    try {
+      await ky<AppCartResponse>(`/api/cart`, {
+        searchParams: {
+          discountCode,
+        }
+      }).json().then(data => {
+        setCart(data);
+        return data
+      });
+    } finally {
+    }
+  }
+
+  useEffect(() => {
+
+    setCartLoading(true);
+    void handleFetchCart().finally(() => {
+      setCartLoading(false);
+    });
+
+  }, []);
+
+  useEffect(() => {
+    if (!cart) {
+      return
+    }
+
+    setDiscountCodeState("LOADING");
+    void handleFetchCart().then(() => {
+      setHasDiscountCode(!!discountCode);
+    }).then(() => {
+      setDiscountCodeState("IDLE");
+    }).catch(() => {
+      setDiscountCodeState("ERROR");
+    });
+  }, [discountCode]);
+
+
+  if (!cart && cartLoading) {
+    return <>
+      <Typography variant={'h1'} gutterBottom>
+        Koszyk
+      </Typography>
+
+      <Grid container spacing={6}>
+        <Grid size={{xs: 12, lg: 8}}>
+
+
+          <Skeleton variant={'rectangular'} width={"100%"} height={339}/>
+        </Grid>
+
+        <Grid size={{xs:12,lg: 4}}>
+          <Skeleton variant={'rectangular'} width={"100%"} height={200} sx={{mb:2}}/>
+          <Skeleton variant={'rectangular'} width={"100%"} height={500}/>
+        </Grid>
+
+      </Grid>
+
+
+
+    </>
+  }
+
+  if (!cart) {
+    return <>
+      <Typography variant={'h1'} gutterBottom>
+        Koszyk
+      </Typography>
+
+      <Typography>
+        Koszyk jest pusty
+      </Typography>
+    </>
+  }
 
   return <>
     <Typography variant={'h1'} gutterBottom>
@@ -57,12 +112,27 @@ export const KoszykPageClient = (props: KoszykPageClientProps) => {
       initialValue={(cart.items).map(x => x.productId)}
     >
       {summary
-        ? <KoszykPageSummary {...props} goBack={() => {
-          setSummary(false);
-        }}/>
-        : <KoszykPageCart {...props} goToSummary={() => {
-          setSummary(true);
-        }}/>
+        ? <KoszykPageSummary
+          {...props}
+          discountCode={discountCode}
+          cart={cart}
+          goBack={() => {
+            setSummary(false);
+          }}
+
+        />
+        : <KoszykPageCart
+          {...props}
+          cart={cart}
+          discountCodeState={discountCodeState}
+          hasDiscountCode={hasDiscountCode}
+          goToSummary={() => {
+            setSummary(true);
+          }}
+          onDiscountCodeChange={(nextValue) => {
+            setDiscountCode(() => nextValue)
+          }}
+        />
       }
     </ListSelectProvider>
   </>

@@ -1,6 +1,7 @@
 {
   "interface": {
-    "itemsPerPage": 48
+    "itemsPerPage": 48,
+    "availableProductsMin": 2
   },
   "mui": {
     "typography": {
@@ -25,6 +26,11 @@
       "MuiCard": {
         "defaultProps": {
           "variant": "outlined"
+        }
+      },
+      "MuiLink": {
+        "defaultProps": {
+          "underline": "hover"
         }
       }
     }

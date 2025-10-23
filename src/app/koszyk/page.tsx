@@ -2,7 +2,6 @@ import {PageContainer} from "@/components/PageContainer";
 import {cookies} from "next/headers";
 import {CART_ID_COOKIE_NAME} from "@/app/@navbar/_components/Navbar.types";
 import {WebLinkerService} from "@/services/weblinker";
-import {Typography} from "@mui/material";
 import {redirect} from "next/navigation";
 import {KoszykPageClient} from "@/app/koszyk/page.client";
 import layoutSchema from '../../../public/order/uischema.json';
@@ -51,35 +50,15 @@ async function createOrder(formData: Record<string, unknown>) {
 }
 
 export default async function KoszykPage() {
-  const dataSource = await WebLinkerService();
-  const cookieStore = await cookies();
-  const cartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
 
-  let cart;
-
-  if (cartId) {
-    cart = await dataSource.fetchCart(cartId);
-
-    if (cart && cart.items?.length > 0) {
-      return <PageContainer>
-        <KoszykPageClient
-          cart={cart}
-          createOrder={createOrder}
-          layoutSchema={layoutSchema}
-          formSchema={formSchema}
-          initialData={{address: {}}}
-        />
-      </PageContainer>
-    }
-  }
 
   return <PageContainer>
-    <Typography variant={'h1'} gutterBottom>
-      Koszyk
-    </Typography>
-
-    <Typography>
-      Koszyk jest pusty
-    </Typography>
+    <KoszykPageClient
+      createOrder={createOrder}
+      layoutSchema={layoutSchema}
+      formSchema={formSchema}
+      initialData={{address: {}}}
+    />
   </PageContainer>
+
 }

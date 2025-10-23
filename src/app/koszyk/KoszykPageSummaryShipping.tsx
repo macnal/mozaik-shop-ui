@@ -1,4 +1,13 @@
-import {FormControlLabel, FormControlLabelProps, Radio, RadioGroup, Stack, SxProps, Typography} from "@mui/material"
+import {
+  FormControlLabel,
+  FormControlLabelProps,
+  Grid,
+  Radio,
+  RadioGroup,
+  Stack,
+  SxProps,
+  Typography
+} from "@mui/material"
 import {ReactNode} from "react";
 import LocalShippingTwoToneIcon from '@mui/icons-material/LocalShippingTwoTone';
 import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
@@ -7,7 +16,8 @@ import {ReactComponentLike} from "prop-types";
 import {mergeSx} from "@/utils/sx";
 import {useRadioGroup} from '@mui/material/RadioGroup';
 import KoszykPageSummaryShippingInpost from "@/app/koszyk/KoszykPageSummaryShippingInpost";
-import {useController} from "react-hook-form";
+import {useController, useFormContext} from "react-hook-form";
+import {TextFieldElement} from "react-hook-form-mui";
 
 export type ShippingType = "INPOST" | "HOME" | "PERSONAL_PICKUP"
 
@@ -59,7 +69,8 @@ const RadioBtn = ({label, Icon, sx, ...props}: Partial<FormControlLabelProps> & 
 
 export const KoszykPageSummaryShipping = () => {
   // const [value, setValue] = useState<ShippingType>("INPOST");
-  const {field: {value, onChange, onBlur}, fieldState: {error}} = useController({name: 'shippingMethod'})
+  const {field: {value, onChange, onBlur}, fieldState: {error}} = useController({name: 'shippingMethod'});
+  const {formState: {errors}} = useFormContext();
 
   return <RadioGroup
     aria-labelledby="demo-controlled-radio-buttons-group"
@@ -69,7 +80,6 @@ export const KoszykPageSummaryShipping = () => {
       onChange(nextValue as ShippingType);
       onBlur();
     }}
-
     sx={{gap: 1}}
   >
     <RadioBtn
@@ -98,9 +108,43 @@ export const KoszykPageSummaryShipping = () => {
         pb: 3
       }}
     >
-      <Typography color={'textSecondary'}>
-        Zamówienie zostanie wysłane na podany wyżej adres.
-      </Typography>
+      <Grid container spacing={2}>
+        <Grid size={{xs: 12, md: 6}}>
+          <TextFieldElement name="address.city" label="Miasto"/>
+        </Grid>
+        <Grid size={{xs: 12, md: 6}}>
+          <TextFieldElement name="address.zip" label="Kod pocztowy"/>
+        </Grid>
+
+        <Grid size={{xs: 12, md: 6}}>
+          <TextFieldElement name="address.street" label="Ulica"/>
+        </Grid>
+
+
+        <Grid size={{xs: 6, md: 3}}>
+          <TextFieldElement name="address.homeNumber" label="Numer domu / mieszkania"
+                            sx={{}}
+                            slotProps={{
+                              inputLabel: {
+                                sx: {
+
+                                  overflow: 'visible',
+                                  maxWidth: '400px'
+                                }
+                              }
+                            }}
+          />
+        </Grid>
+
+        <Grid size={{xs: 6, md: 3}}>
+          <TextFieldElement name="address.flatNumber" label=""/>
+        </Grid>
+
+
+        <Grid size={{xs: 12,}}>
+          <TextFieldElement name="address.info" label="Dodatkowe uwagi" multiline rows={2}/>
+        </Grid>
+      </Grid>
     </Stack>)}
 
 

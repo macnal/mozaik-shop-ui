@@ -1,5 +1,6 @@
 export interface Game {
   categoryId: number;
+  minPrice30Days: number;
   id: number;
   ean: string;
   sku: string;

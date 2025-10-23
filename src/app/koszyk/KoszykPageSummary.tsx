@@ -77,18 +77,24 @@ const args = {
 
   resolver: zodResolver(CustomerDataZodSchema),
   defaultValues: {
+    discountCode: '',
     wantInvoice: false,
     shippingMethod: 'INPOST' as ShippingType,
     inpostMachineCode: '',
-    address: {
+    person: {
       name: '',
+      phone: '',
+      email: '',
+
+    },
+    address: {
+
       street: '',
       city: '',
       state: '',
       zip: '',
       country: '',
-      phone: '',
-      email: '',
+
       homeNumber: '',
       flatNumber: '',
       info: '',
@@ -115,9 +121,11 @@ const args = {
 export const KoszykPageSummary = ({
                                     cart,
                                     createOrder,
-                                    goBack
+                                    goBack,
+                                    discountCode
                                   }: KoszykPageClientProps & {
-  goBack: () => void
+  goBack: () => void,
+  discountCode: string
 }) => {
   const [isChecked] = useListSelect();
   const selectedItems = cart.items
@@ -129,6 +137,7 @@ export const KoszykPageSummary = ({
 
       createOrder({
         ...data,
+        discountCode,
         items: selectedItems.map(x => ({
           productId: x.productId,
           quantity: x.quantity,
@@ -145,45 +154,13 @@ export const KoszykPageSummary = ({
           <CardContent>
             <Grid container spacing={2}>
               <Grid size={{xs: 12, md: 12}}>
-                <TextFieldElement name="address.name" label="Imię i nazwisko"/>
-              </Grid>
-
-              <Grid size={{xs: 12, md: 6}}>
-                <TextFieldElement name="address.city" label="Miasto"/>
+                <TextFieldElement name="person.name" label="Imię i nazwisko"/>
               </Grid>
               <Grid size={{xs: 12, md: 6}}>
-                <TextFieldElement name="address.zip" label="Kod pocztowy"/>
-              </Grid>
-
-              <Grid size={{xs: 12, md: 6}}>
-                <TextFieldElement name="address.street" label="Ulica"/>
-              </Grid>
-
-
-              <Grid size={{xs: 6, md: 3}}>
-                <TextFieldElement name="address.homeNumber" label="Numer domu / mieszkania"
-                                  sx={{}}
-                                  slotProps={{
-                                    inputLabel: {
-                                      sx: {
-
-                                        overflow: 'visible',
-                                        maxWidth: '400px'
-                                      }
-                                    }
-                                  }}
-                />
-              </Grid>
-
-              <Grid size={{xs: 6, md: 3}}>
-                <TextFieldElement name="address.flatNumber" label=""/>
-              </Grid>
-
-              <Grid size={{xs: 12, md: 6}}>
-                <TextFieldElement name="address.phone" label="Numer telefonu"/>
+                <TextFieldElement name="person.phone" label="Numer telefonu"/>
               </Grid>
               <Grid size={{xs: 12, md: 6}}>
-                <TextFieldElement name="address.email" label="Adres e-mail"/>
+                <TextFieldElement name="person.email" label="Adres e-mail"/>
               </Grid>
             </Grid>
           </CardContent>
@@ -262,8 +239,6 @@ export const KoszykPageSummary = ({
         </Card>
 
         <Card>
-
-
           <CardHeader
             title={'Przedmioty'}
             action={<Button size={'small'} onClick={() => {

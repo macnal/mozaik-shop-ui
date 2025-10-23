@@ -10,13 +10,20 @@ const themeFactory = (options: Omit<Partial<ThemeOptions>, "shadows">) => respon
       components: {
         MuiTypography: {
           styleOverrides: {
-            root: ({theme}) => theme.unstable_sx({}),
-            gutterBottom: ({theme}) => theme.unstable_sx({
-              mb: {
-                xs: 2,
-                md: 6
+            root: {
+              variants: [
+                {
+                props: {gutterBottom: true, variant: 'h1'},
+                style: ({theme}) => theme.unstable_sx({
+                  mb: {
+                    xs: 2,
+                    md: 6
+                  }
+                })
               }
-            })
+              ]
+            },
+
           }
         },
         MuiTextField: {

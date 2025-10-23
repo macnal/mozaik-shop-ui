@@ -16,23 +16,25 @@ const invoiceSchema = z.object({
   info: z.string().trim(),
 });
 
+const addressSchema = z.object(({
+  street: z.string().trim(),
+  city: z.string().trim().min(1, {error: 'Pole wymagane'}),
+  zip: z.string().trim().min(1, {error: 'Pole wymagane'}).refine(zipCodeValidator, {error: 'Podaj poprawny kod w formacie xx-xxx'}),
+  homeNumber: z.string().trim().min(1, {error: 'Pole wymagane'}),
+  flatNumber: z.string().trim(),
+  country: z.string().trim(),
+  state: z.string().trim(),
+  info: z.string().trim(),
+}))
+
 export const CustomerDataZodSchema = z.object({
   wantInvoice: z.coerce.boolean().default(false),
-  address: z.object({
+  person: z.object({
     name: z.string().trim().min(1, {error: 'Pole wymagane'}),
-    street: z.string().trim(),
-    city: z.string().trim().min(1, {error: 'Pole wymagane'}),
-    zip: z.string().trim().min(1, {error: 'Pole wymagane'}).refine(zipCodeValidator, {error: 'Podaj poprawny kod w formacie xx-xxx'}),
-
-    homeNumber: z.string().trim().min(1, {error: 'Pole wymagane'}),
-    flatNumber: z.string().trim(),
-    country: z.string().trim(),
-    state: z.string().trim(),
-
     phone: z.string().trim().min(1, {error: 'Pole wymagane'}).refine(mobilePhoneValidator, {error: 'Podaj poprawny numer'}),
     email: z.email({error: 'Podaj poprawny adres e-mail'}).trim().min(1, {error: 'Pole wymagane'}),
-    info: z.string().trim(),
   }),
+  address: z.object().loose(),
   invoice: z.object().loose(),
   shippingMethod: z.union([
     z.literal('INPOST'),
@@ -40,6 +42,7 @@ export const CustomerDataZodSchema = z.object({
     z.literal('PERSONAL_PICKUP'),
   ]),
   inpostMachineCode: z.string(),
+  discountCode: z.string().trim(),
 
 }).superRefine((val, ctx) => {
   if (val.shippingMethod === 'INPOST') {
@@ -53,6 +56,17 @@ export const CustomerDataZodSchema = z.object({
         ctx.addIssue({
           ...value,
           path: ['inpostMachineCode', ...path],
+        })
+      });
+    }
+  } else if (val.shippingMethod === 'HOME') {
+    const {data, error, success} = addressSchema.safeParse(val.address || {});
+
+    if (error) {
+      error.issues.forEach(({path, ...value}) => {
+        ctx.addIssue({
+          ...value,
+          path: ['address', ...path],
         })
       });
     }

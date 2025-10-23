@@ -6,6 +6,7 @@ import {NavbarClient} from "@/app/@navbar/_components/Navbar.client";
 import {NavbarCartButton} from '@/app/@navbar/_components/NavbarCartButton';
 import {NavbarSearch} from "@/app/@navbar/_components/NavbarSearch";
 import {auth} from "@/auth";
+import {NavbarCategorySubmenu} from "@/app/@navbar/_components/NavbarCategorySubmenu";
 
 const Navbar = async () => {
   const session = await auth();
@@ -74,12 +75,12 @@ const Navbar = async () => {
 
           }}>
             <Stack direction={"row"} spacing={2}>
-              {categories.map(x => <Button
-                component={NextLink}
+
+
+              {categories.map(x => <NavbarCategorySubmenu
                 key={x.id}
-                href={`/${getSlug(x)}`}
-                color={'inherit'}
-              >{x.name}</Button>)}
+                parent={x}
+              />)}
             </Stack>
           </Stack>
         </Grid>

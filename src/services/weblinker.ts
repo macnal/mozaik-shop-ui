@@ -17,6 +17,7 @@ import {
 import {auth} from "@/auth";
 import ky from "ky";
 import {JsonSchema, UISchemaElement} from "@jsonforms/core";
+import {Options} from "ky";
 
 
 interface FetchProductsParams {
@@ -140,10 +141,11 @@ export const WebLinkerService = async () => {
       return responseData.uuid;
     },
 
-    async fetchCart(id: string | null = null): Promise<AppCartResponse> {
+    async fetchCart(id: string | null = null, options: Options = {}): Promise<AppCartResponse> {
       const url = id ? `weblinker/cart/${id}` : `weblinker/cart`;
       const responseData = await this.api.get<ApiCartResponse>(
-        url
+        url,
+        options
       ).json();
 
       return {

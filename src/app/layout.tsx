@@ -6,10 +6,10 @@ import {AppRouterCacheProvider} from '@mui/material-nextjs/v15-appRouter';
 import {CssBaseline, Stack} from "@mui/material";
 import {Footer} from "@/components/global/Footer";
 import {ThemeContext} from "@/context/theme";
-import config from "@/../public/config.json";
+
 import {SessionProvider} from "@/context/auth";
-import {auth, signOut} from "@/auth";
-import {redirect} from "next/navigation";
+import {auth} from "@/auth";
+import {AppConfigContextProvider} from "@/context/config";
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '600', '700', '800'],
@@ -39,26 +39,27 @@ export default async function RootLayout({
 }>) {
   // const res = await fetch(`${process.env.PUBLIC_URL}/config.json`);
   // const config = await res.json();
-  const ui = config.mui;
   const session = await auth();
 
   return (
     <html lang="pl">
     <body className={`${roboto.variable}`} style={{display: 'flex', flexDirection: 'column', minHeight: "100vh"}}>
     <AppRouterCacheProvider>
-      <ThemeContext ui={ui}>
-        <SessionProvider session={session}>
-          <CssBaseline/>
+      <AppConfigContextProvider>
+        <ThemeContext>
+          <SessionProvider session={session}>
+            <CssBaseline/>
 
-          {navbar}
+            {navbar}
 
-          <Stack sx={{flexGrow: 1}}>
-            {children}
-          </Stack>
+            <Stack sx={{flexGrow: 1}}>
+              {children}
+            </Stack>
 
-          <Footer/>
-        </SessionProvider>
-      </ThemeContext>
+            <Footer/>
+          </SessionProvider>
+        </ThemeContext>
+      </AppConfigContextProvider>
     </AppRouterCacheProvider>
     </body>
     </html>

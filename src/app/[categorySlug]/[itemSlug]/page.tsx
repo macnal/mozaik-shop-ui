@@ -105,7 +105,7 @@ export default async function ItemPage({params}: ItemPageProps) {
             {/*}*/}
 
             <Typography variant="h5" component={'span'}>
-              {formatMoney(item.price)}
+              {formatMoney(item.price)} zł
             </Typography>
           </Stack>
 

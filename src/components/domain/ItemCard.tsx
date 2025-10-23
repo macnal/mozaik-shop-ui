@@ -1,11 +1,13 @@
 import {Game} from "@/types/responses"
-import {Card, CardActionArea, CardContent, Chip, Rating, Stack, Typography} from "@mui/material";
+import {Card, CardActionArea, CardContent, Chip, Stack, Typography} from "@mui/material";
 import {blue, orange, purple, red, yellow} from "@mui/material/colors";
 import Image from "next/image";
 import Link from "next/link";
 import {AspectRatio} from "@/components/common/AspectRatio";
 import {WebLinkerService} from "@/services/weblinker";
 import {ItemCardAddToCart} from "@/components/domain/ItemCardAddToCart";
+import {formatMoney} from "@/utils/money";
+import {getAppConfig} from "@/app.config";
 
 const colors = {
   orange,
@@ -16,26 +18,27 @@ const colors = {
 }
 
 export const ItemCard = async ({
-                                 image,
-                                 name,
-                                 shortDescription,
-                                 slug,
-                                 categoryId,
-                                 rating = 4,
-                                 tag,
-                                 stock,
-                                 id,
-                                 // categories = [],
-
-                               }: Game & {
-
-  //tags?: { color: keyof typeof colors, label: string, }[],
-  rating?: number
-}) => {
+                                 item
+                               }: { item: Game }) => {
+  const {
+    image,
+    name,
+    shortDescription,
+    slug,
+    categoryId,
+    tag,
+    stock,
+    id,
+    price,
+    minPrice30Days
+  } = item;
   const mainImage = image;
+  const {interface: {availableProductsMin}} = await getAppConfig();
   const dataSource = await WebLinkerService();
   const category = await dataSource.fetchCategoryById(categoryId);
   const url = `/${category.slug}/${slug}`;
+
+  const isAvailable = availableProductsMin >= stock
 
   return <Card component={'article'} sx={{flexGrow: 1}}>
     <CardActionArea
@@ -43,23 +46,23 @@ export const ItemCard = async ({
       href={url}
       data-prevent-progress={true}
       sx={{
-      position: 'relative',
-      height: '100%',
+        position: 'relative',
+        height: '100%',
 
-      '.MuiFab-root': {
-        opacity: 0,
-        transition: 'opacity .3s'
-      },
-
-      '&:hover, &:focus, &:active': {
         '.MuiFab-root': {
-          opacity: 1,
+          opacity: 0,
           transition: 'opacity .3s'
+        },
+
+        '&:hover, &:focus, &:active': {
+          '.MuiFab-root': {
+            opacity: 1,
+            transition: 'opacity .3s'
+          }
         }
-      }
 
 
-    }}>
+      }}>
       <Stack
         sx={{
           zIndex: 3,
@@ -70,6 +73,19 @@ export const ItemCard = async ({
         }}
         spacing={1}
       >
+        {!isAvailable && <Chip
+          label={"Brak w magazynie"}
+          variant={"filled"}
+          color={"default"}
+          sx={{
+            boxShadow: 1,
+            fontWeight: 600,
+            bgcolor: 'grey.300',
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0,
+          }}
+        />}
+
         <Chip
           label={tag}
           variant={"filled"}
@@ -117,6 +133,7 @@ export const ItemCard = async ({
             src={mainImage}
             fill
             alt="Picture of the author"
+            objectFit={'contain'}
           />}
         </AspectRatio>
       </Stack>
@@ -126,16 +143,24 @@ export const ItemCard = async ({
           {name}
         </Typography>
 
-        <Typography variant="body2" color={'textSecondary'} sx={{ mb: 1 }}>
-          {shortDescription}
+        <Typography variant="body2" color={'textSecondary'} sx={{mb: 1}}>
+          {category.name}
         </Typography>
 
-{/*
-        <Rating size={'small'} value={rating} precision={0.5} readOnly/>
-*/}
+        {minPrice30Days === price ? <Typography variant={'subtitle1'}>
+          {formatMoney(price)}
+        </Typography> : <Typography variant={'subtitle1'}>
+          <Typography
+            variant={'inherit'}
+            sx={{textDecoration: 'line-through', color: 'action.disabled'}}
+          >{formatMoney(minPrice30Days)}</Typography>{' '}
+          <Typography variant={'inherit'}>{formatMoney(price)}</Typography>
+        </Typography>}
+
+
       </CardContent>
 
-      <ItemCardAddToCart itemId={id} disabled={stock === 0}/>
+      <ItemCardAddToCart itemId={id} disabled={!isAvailable}/>
 
     </CardActionArea>
   </Card>

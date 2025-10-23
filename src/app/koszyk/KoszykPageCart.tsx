@@ -6,21 +6,24 @@ import {
   CardContent,
   Divider,
   Grid,
+  IconButton,
   List,
   ListItem,
   ListItemText,
   Stack,
+  TextField,
   Typography
 } from "@mui/material";
 import {KoszykPageCartItemAmountButtons} from "@/app/koszyk/KoszykPageCartItemAmountButtons";
 import {KoszykPageCartCheckbox} from "@/app/koszyk/KoszykPageCartCheckbox";
 import Link from "next/link";
-import {ImageTwoTone} from "@mui/icons-material";
+import {Close, ImageTwoTone} from "@mui/icons-material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {KoszykPageCartItemDelete} from "@/app/koszyk/KoszykPageCartItemDelete";
 import {CartTotalStr} from "./components/CartTotalStr";
 import {AppCartResponse} from "@/types/responses";
 import {JsonSchema, UISchemaElement} from "@jsonforms/core";
+import {useRef} from "react";
 
 interface KoszykPageClientProps {
   cart: AppCartResponse;
@@ -32,10 +35,18 @@ interface KoszykPageClientProps {
 
 export const KoszykPageCart = ({
                                  cart,
-                                 goToSummary
+                                 goToSummary,
+                                 onDiscountCodeChange,
+                                 discountCodeState,
+                                 hasDiscountCode
                                }: KoszykPageClientProps & {
   goToSummary: () => void;
+  onDiscountCodeChange: (code: string) => void;
+  discountCodeState: "IDLE" | "LOADING" | "ERROR";
+  hasDiscountCode: boolean;
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null as unknown as HTMLInputElement);
+
   return <Grid container spacing={6}>
     <Grid size={{xs: 12, lg: 8}}>
       {cart && <Stack component={'ul'} sx={{pl: 0}}>
@@ -94,7 +105,56 @@ export const KoszykPageCart = ({
       }
     </Grid>
 
-    <Grid size={{xs: 12, lg: 4}}>
+    <Grid size={{xs: 12, lg: 4}} sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+      <Card variant={'elevation'}>
+        <CardContent>
+          <Typography variant={'h2'} gutterBottom>
+            Kod rabatowy
+          </Typography>
+
+          <TextField
+            inputRef={inputRef}
+            label={'Wprowadź go tutaj'}
+            margin={'normal'}
+            size={'small'}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                onDiscountCodeChange(inputRef.current!.value)
+              }
+            }}
+            slotProps={{
+              input: {
+                endAdornment: hasDiscountCode ? <IconButton
+                  loading={discountCodeState === 'LOADING'}
+                  onClick={event => {
+                    inputRef.current.value = '';
+                    onDiscountCodeChange('')
+                  }}
+                >
+                  <Close />
+                </IconButton> : <IconButton
+                  loading={discountCodeState === 'LOADING'}
+                  onClick={event => {
+                    onDiscountCodeChange(inputRef.current!.value)
+                  }}>
+                  <ArrowForwardIcon/>
+                </IconButton>
+              },
+            }}
+
+          />
+
+          {hasDiscountCode && <Typography color={'success'}>
+            Kod rabatowy zaakceptowany
+          </Typography>}
+
+          {discountCodeState === 'ERROR' && <Typography color={'error'}>
+            Kod rabatowy jest niepoprawny
+          </Typography>}
+
+        </CardContent>
+      </Card>
+
       <Card variant={'elevation'}>
         <CardContent>
           <Typography variant={'h2'}>
