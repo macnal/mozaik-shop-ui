@@ -38,7 +38,7 @@ export const Footer = async () => {
 {/*
                     <Link component={NextLink} href={'/strony/faq'}>FAQ</Link>
 */}
-                    <Link component={NextLink} href={'/strony/turnieje'}>Kalendarz turniejów</Link>
+                    <Link component={NextLink} href={'https://www.facebook.com/guildmage.krakow/events'}>Kalendarz turniejów</Link>
                     <Link component={NextLink} href={'https://www.cardmarket.com/en/Magic/Users/guildmage-pl'}>Single na Cardmarket</Link>
                 </Grid>
                 <Grid size={{xs: 6, md: 3}} sx={colSx}>
