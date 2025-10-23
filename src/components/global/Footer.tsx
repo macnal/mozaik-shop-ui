@@ -38,7 +38,7 @@ export const Footer = async () => {
 {/*
                     <Link component={NextLink} href={'/strony/faq'}>FAQ</Link>
 */}
-                    <Link component={NextLink} href={'/strony/turnieje'}>Kalendarz turniejów</Link>
+                    <Link component={NextLink} href={'https://www.facebook.com/guildmage.krakow/events'}>Kalendarz turniejów</Link>
                     <Link component={NextLink} href={'https://www.cardmarket.com/en/Magic/Users/guildmage-pl'}>Single na Cardmarket</Link>
                 </Grid>
                 <Grid size={{xs: 6, md: 3}} sx={colSx}>
@@ -48,7 +48,9 @@ export const Footer = async () => {
                     <Link component={NextLink} href={'https://www.youtube.com/@guildmage'}>Kanał Youtube</Link>
                     <Link component={NextLink} href={'https://x.com/guildmage_pl'}>Twitter / X</Link>
                     <Link component={NextLink} href={'https://www.tiktok.com/@guildmage.pl'}>Tiktok</Link>
+{/*
                     <Link component={NextLink} href={'https://www.twitch.tv/GuildmageMTG'}>Twitch</Link>
+*/}
                     <Link component={NextLink} href={'https://discord.com/invite/VKCcqSG'}>Dołącz do Discord</Link>
                 </Grid>
                 <Grid size={{xs: 6, md: 3}} sx={colSx}>
