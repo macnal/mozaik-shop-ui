@@ -1,12 +1,12 @@
 import 'server-only'
 import {Client} from '@notionhq/client';
 import {Input} from "ky";
-import deepmerge from 'deepmerge'
+import deepMerge from 'deepmerge'
 
 
 
 export async function notionFetch(url: Input, init: RequestInit = {}) {
-  const resultOptions: RequestInit = deepmerge({
+  const resultOptions: RequestInit = deepMerge({
     // cache: "force-cache",
     next: { revalidate: 300 }
   }, init)
