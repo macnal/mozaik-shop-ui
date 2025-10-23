@@ -6,6 +6,8 @@ import ReactMarkdown from "react-markdown";
 import {DataSourceObjectResponse} from "@notionhq/client";
 import {Metadata, ResolvingMetadata} from "next";
 
+export const revalidate = 300;
+
 interface GenericPageProps {
   params: Promise<{ pageSlug: string }>,
 }
