@@ -130,7 +130,9 @@ export const ItemCard = async ({
           {shortDescription}
         </Typography>
 
+{/*
         <Rating size={'small'} value={rating} precision={0.5} readOnly/>
+*/}
       </CardContent>
 
       <ItemCardAddToCart itemId={id} disabled={stock === 0}/>
