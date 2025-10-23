@@ -1,11 +1,10 @@
-import {AppBar, Button, Container, Grid, IconButton, Stack, Toolbar} from "@mui/material"
+import {AppBar, Container, Grid, IconButton, Stack, Toolbar} from "@mui/material"
 import NextLink from "next/link";
-import {getSlug} from "@/utils/slug";
-import {WebLinkerService} from "@/services/weblinker";
 import {NavbarClient} from "@/app/@navbar/_components/Navbar.client";
 import {NavbarCartButton} from '@/app/@navbar/_components/NavbarCartButton';
 import {NavbarSearch} from "@/app/@navbar/_components/NavbarSearch";
 import {auth} from "@/auth";
+import {NavbarCategories} from "@/app/@navbar/_components/NavbarCategories";
 import {NavbarCategorySubmenu} from "@/app/@navbar/_components/NavbarCategorySubmenu";
 
 const Navbar = async () => {
@@ -61,7 +60,7 @@ const Navbar = async () => {
           <NavbarSearch sx={{width: "100%", order: 1}}/>
         </Grid>
 
-        <Grid size={{xs: 'auto', md: 12}} sx={{order: 8, mt: {xs: 1, md: 0}}}>
+        <Grid size={{xs: 12, md: 12}} sx={{order: 8, mt: {xs: 1, md: 0}}}>
           <Stack sx={{
             position: 'relative',
             bgcolor: 'primary.light',
@@ -87,14 +86,15 @@ const Navbar = async () => {
             },
 
           }}>
-            <Stack direction={"row"} spacing={2}>
+            <NavbarCategories categories={categories}/>
 
-
+            <Stack direction={'row'} spacing={2} sx={{display: {xs: 'none', md: 'flex'}}}>
               {categories.map(x => <NavbarCategorySubmenu
                 key={x.id}
                 parent={x}
               />)}
             </Stack>
+
           </Stack>
         </Grid>
       </Grid>
