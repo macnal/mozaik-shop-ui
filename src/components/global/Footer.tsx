@@ -28,12 +28,18 @@ export const Footer = async () => {
                     <Link component={NextLink} href={'/strony/dostawa'} fontWeight={600}>Dostawa</Link>
                 </Grid>
                 <Grid size={{xs: 6, md: 3}} sx={colSx}>
-                    <Typography variant={'subtitle1'} sx={{mb: 1}}>Przydatne linki</Typography>
-                    <Link component={NextLink} href={'/strony/faq'}>FAQ</Link>
-                    <Link component={NextLink} href={'https://www.cardmarket.com'}>Nasze karty na Cardmarket</Link>
+                    <Typography variant={'subtitle1'} sx={{mb: 1}}>Guildmage</Typography>
+                    <Link component={NextLink} href={'/strony/guildmage'}>O nas</Link>
                     <Link component={NextLink} href={'/strony/sklep'}>Sklep stacjonarny</Link>
-                    <Link component={NextLink} href={'/strony/kawiarnia'}>Guildmage Caffe</Link>
-                    <Link component={NextLink} href={'/strony/turnieje'}>Turnieje</Link>
+                    <Link component={NextLink} href={'/strony/kawiarnia'}>Kawiarnia</Link>
+                </Grid>
+                <Grid size={{xs: 6, md: 3}} sx={colSx}>
+                    <Typography variant={'subtitle1'} sx={{mb: 1}}>Przydatne linki</Typography>
+{/*
+                    <Link component={NextLink} href={'/strony/faq'}>FAQ</Link>
+*/}
+                    <Link component={NextLink} href={'/strony/turnieje'}>Kalendarz turniejów</Link>
+                    <Link component={NextLink} href={'https://www.cardmarket.com/en/Magic/Users/guildmage-pl'}>Single na Cardmarket</Link>
                 </Grid>
                 <Grid size={{xs: 6, md: 3}} sx={colSx}>
                     <Typography variant={'subtitle1'} sx={{mb: 1}}>Obserwuj nas</Typography>
