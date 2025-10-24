@@ -36,20 +36,20 @@ export const CustomerDataZodSchema = z.object({
   }),
   address: z.object().loose(),
   invoice: z.object().loose(),
-  shippingMethod: z.union([
+    deliveryMethod: z.union([
     z.literal('INPOST'),
     z.literal('HOME'),
     z.literal('PERSONAL_PICKUP'),
   ]),
-  inpostMachineCode: z.string(),
-  discountCode: z.string().trim(),
+  deliveryPointId: z.string(),
+
 
 }).superRefine((val, ctx) => {
-  if (val.shippingMethod === 'INPOST') {
+  if (val.deliveryMethod === 'INPOST') {
     const {data, error, success} = z.string()
       .min(6, {
         error: `Musisz wybrać paczkomat`
-      }).safeParse(val.inpostMachineCode);
+      }).safeParse(val.deliveryPointId);
 
     if (error) {
       error.issues.forEach(({path, ...value}) => {
@@ -59,7 +59,7 @@ export const CustomerDataZodSchema = z.object({
         })
       });
     }
-  } else if (val.shippingMethod === 'HOME') {
+  } else if (val.deliveryMethod === 'HOME') {
     const {data, error, success} = addressSchema.safeParse(val.address || {});
 
     if (error) {

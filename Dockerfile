@@ -18,4 +18,5 @@ COPY --from=builder /opt/shop/public ./public
 COPY --from=builder /opt/shop/.next ./.next
 COPY --from=builder /opt/shop/node_modules ./node_modules
 COPY --from=builder /opt/shop/package.json ./package.json
+COPY --from=builder /opt/shop/next.config.ts ./next.config.ts
 ENTRYPOINT node_modules/.bin/next start -p 3000

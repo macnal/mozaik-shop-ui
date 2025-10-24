@@ -79,13 +79,12 @@ const args = {
   defaultValues: {
     discountCode: '',
     wantInvoice: false,
-    shippingMethod: 'INPOST' as ShippingType,
-    inpostMachineCode: '',
+    deliveryMethod: 'INPOST' as ShippingType,
+    deliveryPointId: '',
     person: {
       name: '',
       phone: '',
       email: '',
-
     },
     address: {
 

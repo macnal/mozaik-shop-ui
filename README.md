@@ -1,5 +1,5 @@
 http://web.archive.org/web/20250615131711/https://shop.guildmage.pl/
-
+https://www.figma.com/design/BflQY6nV8AMYxcSE3m9jn6xY/Guildmage---Brand-Guide?node-id=4074-1977&t=aVzKO3bPrVIZu84z-1
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 

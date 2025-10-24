@@ -5,6 +5,7 @@ import {Category} from "@/types/responses";
 import NextLink from "next/link";
 import HoverPopover from 'material-ui-popup-state/HoverPopover'
 import {getSlug} from '@/utils/slug';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const createChunks = <T = unknown>(arr: T[], chunkSize = 10) =>
   Array.from({length: Math.ceil(arr.length / chunkSize)}, (_, i) =>
@@ -23,6 +24,7 @@ export const NavbarCategorySubmenuClient = ({parent, categories}: { parent: Cate
           component={NextLink}
           href={`/${getSlug(parent)}`}
           color={'inherit'}
+          endIcon={<ArrowDropDownIcon sx={{color: 'red', fontSize: 20}} />}
           {...!isMobile && bindHover(popupState)}
         >{parent.name}</Button>
 
@@ -53,9 +55,10 @@ export const NavbarCategorySubmenuClient = ({parent, categories}: { parent: Cate
             <Grid container>
               {
                 chunks.map((items, index) => {
+                  const chunkKey = items[0]?.id ?? `chunk-${index}`;
 
 
-                  return <Grid key={index} size={{xs: 12, sm: 6}}
+                  return <Grid key={chunkKey} size={{xs: 12, sm: 6}}
                                sx={{display: 'flex', flexDirection: 'column', gap: '4px'}}
 
                   >
@@ -66,7 +69,12 @@ export const NavbarCategorySubmenuClient = ({parent, categories}: { parent: Cate
                         href={`/${getSlug(parent)}`}
                         color={'inherit'}
                         sx={{whiteSpace: 'nowrap'}}
-                      >{y.name}</Link>)
+                      >
+                        <span style={{display: 'inline-flex', alignItems: 'center', gap: 6}}>
+                          {y.name}
+                          <ArrowDropDownIcon sx={{color: 'red', fontSize: 16}} />
+                        </span>
+                      </Link>)
                     }
                   </Grid>
                 })

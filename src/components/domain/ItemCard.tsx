@@ -38,7 +38,7 @@ export const ItemCard = async ({
   const category = await dataSource.fetchCategoryById(categoryId);
   const url = `/${category.slug}/${slug}`;
 
-  const isAvailable = availableProductsMin >= stock
+  const isAvailable = availableProductsMin < stock
 
   return <Card component={'article'} sx={{flexGrow: 1}}>
     <CardActionArea
@@ -133,7 +133,7 @@ export const ItemCard = async ({
             src={mainImage}
             fill
             alt="Picture of the author"
-            objectFit={'contain'}
+            style={{ objectFit: 'contain' }}
           />}
         </AspectRatio>
       </Stack>

@@ -259,7 +259,7 @@ export const NavbarSearch = ({defaultValue, sx}: {
             <ArrowForwardIcon/>
           </IconButton>
         </InputAdornment>}
-        placeholder={"Szukaj..."}
+        placeholder={'Szukaj, np. "collector booster"'}
       />)}
 
   />

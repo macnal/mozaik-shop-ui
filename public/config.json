@@ -4,6 +4,11 @@
     "availableProductsMin": 2
   },
   "mui": {
+    "palette": {
+      "primary": {
+        "main": "#E73331"
+      }
+    },
     "typography": {
       "fontFamily": "var(--font-roboto)",
       "h1": {

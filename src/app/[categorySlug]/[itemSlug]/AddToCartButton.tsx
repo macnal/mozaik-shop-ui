@@ -4,8 +4,12 @@ import {GameExtended} from "@/types/responses";
 import {ShoppingCartTwoTone} from "@mui/icons-material";
 import {Button} from "@mui/material";
 import {AddItemToCartEvent, CartEvents} from "@/app/@navbar/_components/Navbar.types";
+import {getAppConfig} from "@/app.config";
+const {interface: {availableProductsMin}} = await getAppConfig();
 
 export const AddToCartButton = ({item}: { item: GameExtended }) => {
+
+  const isAvailable = availableProductsMin < item.stock
 
 
   return <Button
@@ -26,7 +30,7 @@ export const AddToCartButton = ({item}: { item: GameExtended }) => {
     variant={'contained'}
     size={'large'}
     startIcon={<ShoppingCartTwoTone/>}
-    disabled={item.stock === 0}
+    disabled={!isAvailable}
   >
     Dodaj do koszyka
 

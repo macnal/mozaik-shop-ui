@@ -69,7 +69,7 @@ const RadioBtn = ({label, Icon, sx, ...props}: Partial<FormControlLabelProps> & 
 
 export const KoszykPageSummaryShipping = () => {
   // const [value, setValue] = useState<ShippingType>("INPOST");
-  const {field: {value, onChange, onBlur}, fieldState: {error}} = useController({name: 'shippingMethod'});
+  const {field: {value, onChange, onBlur}, fieldState: {error}} = useController({name: 'deliveryMethod'});
   const {formState: {errors}} = useFormContext();
 
   return <RadioGroup
