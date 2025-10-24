@@ -10,158 +10,158 @@ import {formatMoney} from "@/utils/money";
 import {getAppConfig} from "@/app.config";
 
 const colors = {
-  orange,
-  blue,
-  red,
-  purple,
-  yellow
+    orange,
+    blue,
+    red,
+    purple,
+    yellow
 }
 
 export const ItemCard = async ({
-                                 item
+                                   item
                                }: { item: Game }) => {
-  const {
-    image,
-    name,
-    shortDescription,
-    slug,
-    categoryId,
-    tag,
-    stock,
-    id,
-    price,
-    minPrice30Days
-  } = item;
-  const mainImage = image;
-  const {interface: {availableProductsMin}} = await getAppConfig();
-  const dataSource = await WebLinkerService();
-  const category = await dataSource.fetchCategoryById(categoryId);
-  const url = `/${category.slug}/${slug}`;
+    const {
+        image,
+        name,
+        shortDescription,
+        slug,
+        categoryId,
+        tag,
+        stock,
+        id,
+        price,
+        minPrice30Days
+    } = item;
+    const mainImage = image;
+    const {interface: {availableProductsMin}} = await getAppConfig();
+    const dataSource = await WebLinkerService();
+    const category = await dataSource.fetchCategoryById(categoryId);
+    const url = `/${category.slug}/${slug}`;
 
-  const isAvailable = availableProductsMin < stock
+    const isAvailable = availableProductsMin < stock
 
-  return <Card component={'article'} sx={{flexGrow: 1}}>
-    <CardActionArea
-      component={Link}
-      href={url}
-      data-prevent-progress={true}
-      sx={{
-        position: 'relative',
-        height: '100%',
+    return <Card component={'article'} sx={{flexGrow: 1}}>
+        <CardActionArea
+            component={Link}
+            href={url}
+            data-prevent-progress={true}
+            sx={{
+                position: 'relative',
+                height: '100%',
 
-        '.MuiFab-root': {
-          opacity: 0,
-          transition: 'opacity .3s'
-        },
+                '.MuiFab-root': {
+                    opacity: 0,
+                    transition: 'opacity .3s'
+                },
 
-        '&:hover, &:focus, &:active': {
-          '.MuiFab-root': {
-            opacity: 1,
-            transition: 'opacity .3s'
-          }
-        }
-
-
-      }}>
-      <Stack
-        sx={{
-          zIndex: 3,
-          alignItems: "flex-end",
-          position: 'absolute',
-          top: 32,
-          right: 0
-        }}
-        spacing={1}
-      >
-        {!isAvailable && <Chip
-          label={"Brak w magazynie"}
-          variant={"filled"}
-          color={"default"}
-          sx={{
-            boxShadow: 1,
-            fontWeight: 600,
-            bgcolor: 'grey.300',
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-          }}
-        />}
-
-        <Chip
-          label={tag}
-          variant={"filled"}
-          color={"primary"}
-          sx={{
-            boxShadow: 1,
-            fontWeight: 600,
-            bgcolor: colors.orange[600],
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-          }}
-        />
-
-        {/*{badges.map(({color, label}) => (<Chip*/}
-        {/*  key={label}*/}
-        {/*  label={label}*/}
-        {/*  variant={"filled"}*/}
-        {/*  color={"primary"}*/}
-        {/*  sx={{*/}
-        {/*    fontWeight: 600,*/}
-        {/*    bgcolor: colors[color][600],*/}
-        {/*    borderTopRightRadius: 0,*/}
-        {/*    borderBottomRightRadius: 0,*/}
-        {/*  }}*/}
-        {/*/>))}*/}
-      </Stack>
+                '&:hover, &:focus, &:active': {
+                    '.MuiFab-root': {
+                        opacity: 1,
+                        transition: 'opacity .3s'
+                    }
+                }
 
 
-      <Stack sx={{
-        p: {
-          xs: 2,
-          md: 3
-        },
-        //alignItems: "center",
+            }}>
+            <Stack
+                sx={{
+                    zIndex: 3,
+                    alignItems: "flex-end",
+                    position: 'absolute',
+                    top: 32,
+                    right: 0
+                }}
+                spacing={1}
+            >
+                {!isAvailable && <Chip
+                    label={"Brak w magazynie"}
+                    variant={"filled"}
+                    color={"default"}
+                    sx={{
+                        boxShadow: 1,
+                        fontWeight: 600,
+                        bgcolor: 'grey.300',
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
+                    }}
+                />}
 
-        '& > img': {
-          height: 'auto',
-          width: '100%',
-          maxWidth: '100%',
-          maxHeight: '100%',
-        }
-      }}>
-        <AspectRatio>
-          {mainImage && <Image
-            src={mainImage}
-            fill
-            alt="Picture of the author"
-            style={{ objectFit: 'contain' }}
-          />}
-        </AspectRatio>
-      </Stack>
+                {!!tag && <Chip
+                    label={tag}
+                    variant={"filled"}
+                    color={"primary"}
+                    sx={{
+                        boxShadow: 1,
+                        fontWeight: 600,
+                        bgcolor: colors.orange[600],
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
+                    }}
+                />}
 
-      <CardContent sx={{alignItems: 'center', textAlign: 'center'}}>
-        <Typography gutterBottom variant="h3">
-          {name}
-        </Typography>
-
-        <Typography variant="body2" color={'textSecondary'} sx={{mb: 1}}>
-          {category.name}
-        </Typography>
-
-        {minPrice30Days === price ? <Typography variant={'subtitle1'}>
-          {formatMoney(price)}
-        </Typography> : <Typography variant={'subtitle1'}>
-          <Typography
-            variant={'inherit'}
-            sx={{textDecoration: 'line-through', color: 'action.disabled'}}
-          >{formatMoney(minPrice30Days)}</Typography>{' '}
-          <Typography variant={'inherit'}>{formatMoney(price)}</Typography>
-        </Typography>}
+                {/*{badges.map(({color, label}) => (<Chip*/}
+                {/*  key={label}*/}
+                {/*  label={label}*/}
+                {/*  variant={"filled"}*/}
+                {/*  color={"primary"}*/}
+                {/*  sx={{*/}
+                {/*    fontWeight: 600,*/}
+                {/*    bgcolor: colors[color][600],*/}
+                {/*    borderTopRightRadius: 0,*/}
+                {/*    borderBottomRightRadius: 0,*/}
+                {/*  }}*/}
+                {/*/>))}*/}
+            </Stack>
 
 
-      </CardContent>
+            <Stack sx={{
+                p: {
+                    xs: 2,
+                    md: 3
+                },
+                //alignItems: "center",
 
-      <ItemCardAddToCart itemId={id} disabled={!isAvailable}/>
+                '& > img': {
+                    height: 'auto',
+                    width: '100%',
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                }
+            }}>
+                <AspectRatio>
+                    {mainImage && <Image
+                        src={mainImage}
+                        fill
+                        alt="Picture of the author"
+                        style={{objectFit: 'contain'}}
+                    />}
+                </AspectRatio>
+            </Stack>
 
-    </CardActionArea>
-  </Card>
+            <CardContent sx={{alignItems: 'center', textAlign: 'center'}}>
+                <Typography gutterBottom variant="h3">
+                    {name}
+                </Typography>
+
+                <Typography variant="body2" color={'textSecondary'} sx={{mb: 1}}>
+                    {category.name}
+                </Typography>
+
+                {minPrice30Days === price ? <Typography variant={'subtitle1'}>
+                    {formatMoney(price)}
+                </Typography> : <Typography variant={'subtitle1'}>
+                    <Typography
+                        variant={'inherit'}
+                        sx={{textDecoration: 'line-through', color: 'action.disabled'}}
+                    >{formatMoney(minPrice30Days)}</Typography>{' '}
+                    <Typography variant={'inherit'}>{formatMoney(price)}</Typography>
+                </Typography>}
+
+
+            </CardContent>
+
+            <ItemCardAddToCart itemId={id} disabled={!isAvailable}/>
+
+        </CardActionArea>
+    </Card>
 }
