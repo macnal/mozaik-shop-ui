@@ -4,8 +4,6 @@ import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-6SZZHD30W4';
-const GA_DEBUG = process.env.NEXT_PUBLIC_GA_DEBUG === 'true';
-const MAX_QUERY_LENGTH = 200; // przycinamy długie query, żeby nie wysyłać nadmiaru danych
 
 export default function ClientGoogleAnalytics() {
   const pathname = usePathname();
