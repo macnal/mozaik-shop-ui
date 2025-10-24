@@ -1,6 +1,6 @@
 import type {Metadata, Viewport} from "next";
 import {Roboto} from "next/font/google";
-
+import {GoogleAnalytics} from '@next/third-parties/google'
 import {AppRouterCacheProvider} from '@mui/material-nextjs/v15-appRouter';
 
 import {CssBaseline, Stack} from "@mui/material";
@@ -10,6 +10,9 @@ import {ThemeContext} from "@/context/theme";
 import {SessionProvider} from "@/context/auth";
 import {auth} from "@/auth";
 import {AppConfigContextProvider} from "@/context/config";
+import ClientGoogleAnalytics from "@/components/global/ClientGoogleAnalytics";
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-6SZZHD30W4';
 
 const roboto = Roboto({
     weight: ['300', '400', '500', '600', '700', '800'],
@@ -32,6 +35,7 @@ export const viewport: Viewport = {
     maximumScale: 1,
     userScalable: false
 };
+
 
 export default async function RootLayout({
                                              children,
@@ -64,6 +68,8 @@ export default async function RootLayout({
                 </ThemeContext>
             </AppConfigContextProvider>
         </AppRouterCacheProvider>
+        <GoogleAnalytics gaId={GA_ID}/>
+        <ClientGoogleAnalytics/>
         </body>
         </html>
     );
