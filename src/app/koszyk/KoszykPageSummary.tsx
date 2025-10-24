@@ -1,18 +1,18 @@
 'use client';
 import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography
+    Avatar,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    Divider,
+    Grid, Link,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText, Stack,
+    Typography
 } from "@mui/material";
 import {useListSelect} from "@/components/common/ListSelect/ListSelectProvider";
 import {JSX, useEffect, useRef} from "react";
@@ -25,6 +25,7 @@ import {ImageTwoTone} from "@mui/icons-material";
 import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
 import {CartTotalStr} from "./components/CartTotalStr";
 import {KoszykPageSummaryShipping, ShippingType} from "@/app/koszyk/KoszykPageSummaryShipping";
+import NextLink from "next/link";
 
 interface KoszykPageClientProps {
   cart: AppCartResponse;
@@ -46,30 +47,44 @@ function WatchField<FieldType>({watch: fieldsToWatch, render}: {
 }
 
 const SubmitButton = () => {
-  const {trigger, formState: {errors, isSubmitted, isValid, isSubmitting}, watch,} = useFormContext()
+  const {trigger, formState: {isSubmitted, isValid, isSubmitting}, watch,} = useFormContext()
   const wantInvoice = watch('wantInvoice');
+  const acceptedTerms = watch('acceptedTerms');
   const init = useRef(true);
 
   useEffect(() => {
-    if (!init.current) {
-      void trigger();
+    // trigger validation on subsequent changes of dependent toggles
+    if (init.current) {
       init.current = false;
+      return;
     }
 
-  }, [wantInvoice]);
+    void trigger();
 
-  return <Button
-    loading={isSubmitting}
-    disabled={isSubmitting || (isSubmitted && !isValid)}
-    type={"submit"}
-    variant={'contained'}
-    size={'large'}
-    fullWidth
-    color={'success'}
-    startIcon={<LockTwoToneIcon/>}
-  >
-    Bezpieczna płatność
-  </Button>
+  }, [wantInvoice, acceptedTerms, trigger]);
+
+  return <>
+    <Button
+      loading={isSubmitting}
+      disabled={isSubmitting || (isSubmitted && !isValid) || !acceptedTerms}
+      type={"submit"}
+      variant={'contained'}
+      size={'large'}
+      fullWidth
+      color={'success'}
+      startIcon={<LockTwoToneIcon/>}
+    >
+      Bezpieczna płatność
+    </Button>
+    <Box sx={{mt: 1}}>
+      <CheckboxElement name={'acceptedTerms'} label={'Akceptuję regulamin (obowiązkowe)'} />
+        <Stack direction={'row'} spacing={2}>
+            <Link component={NextLink} href={'/strony/regulamin'}>Regulamin</Link>
+            <Link component={NextLink} href={'/strony/polityka-prywatnosci'}>Polityka
+                prywatności</Link>
+        </Stack>
+    </Box>
+  </>
 }
 
 
@@ -79,6 +94,7 @@ const args = {
   defaultValues: {
     discountCode: '',
     wantInvoice: false,
+    acceptedTerms: false,
     deliveryMethod: 'INPOST' as ShippingType,
     deliveryPointId: '',
     person: {

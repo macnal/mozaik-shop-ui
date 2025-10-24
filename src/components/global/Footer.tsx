@@ -21,11 +21,11 @@ export const Footer = async () => {
             <Grid container spacing={3}>
                 <Grid size={{xs: 6, md: 3}} sx={colSx}>
                     <Typography variant={'subtitle1'} sx={{mb: 1}}>Obsługa klienta</Typography>
-                    <Link component={NextLink} href={'/strony/regulamin'} fontWeight={600}>Regulamin</Link>
-                    <Link component={NextLink} href={'/strony/polityka-prywatnosci'} fontWeight={600}>Polityka prywatności</Link>
-                    <Link component={NextLink} href={'/strony/kontakt'} fontWeight={600}>Kontakt</Link>
-                    <Link component={NextLink} href={'/strony/zwroty'} fontWeight={600}>Zwroty</Link>
-                    <Link component={NextLink} href={'/strony/dostawa'} fontWeight={600}>Dostawa</Link>
+                    <Link component={NextLink} href={'/strony/regulamin'} >Regulamin</Link>
+                    <Link component={NextLink} href={'/strony/polityka-prywatnosci'} >Polityka prywatności</Link>
+                    <Link component={NextLink} href={'/strony/kontakt'} >Kontakt</Link>
+                    <Link component={NextLink} href={'/strony/zwroty'} >Zwroty</Link>
+                    <Link component={NextLink} href={'/strony/dostawa'} >Dostawa</Link>
                 </Grid>
                 <Grid size={{xs: 6, md: 3}} sx={colSx}>
                     <Typography variant={'subtitle1'} sx={{mb: 1}}>Guildmage</Typography>

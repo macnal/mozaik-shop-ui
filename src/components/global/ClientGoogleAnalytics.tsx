@@ -23,7 +23,7 @@ export default function ClientGoogleAnalytics() {
           page_path,
         });
       } catch (e) {
-        // nic — gtag może nie akceptować eventów w niektórych konfiguracjach
+        console.error(e)
       }
     }
   }, [pathname, searchParams]);

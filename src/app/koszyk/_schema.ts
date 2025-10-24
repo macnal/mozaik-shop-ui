@@ -29,6 +29,7 @@ const addressSchema = z.object(({
 
 export const CustomerDataZodSchema = z.object({
   wantInvoice: z.coerce.boolean().default(false),
+  acceptedTerms: z.boolean().refine(v => v === true, {message: 'Musisz zaakceptować regulamin'}).default(false),
   person: z.object({
     name: z.string().trim().min(1, {error: 'Pole wymagane'}),
     phone: z.string().trim().min(1, {error: 'Pole wymagane'}).refine(mobilePhoneValidator, {error: 'Podaj poprawny numer'}),
@@ -46,42 +47,41 @@ export const CustomerDataZodSchema = z.object({
 
 }).superRefine((val, ctx) => {
   if (val.deliveryMethod === 'INPOST') {
-    const {data, error, success} = z.string()
-      .min(6, {
-        error: `Musisz wybrać paczkomat`
-      }).safeParse(val.deliveryPointId);
+    const inpostResult = z.string()
+      .min(6, {error: `Musisz wybrać paczkomat`})
+      .safeParse(val.deliveryPointId);
 
-    if (error) {
-      error.issues.forEach(({path, ...value}) => {
+    if (!inpostResult.success) {
+      for (const issue of inpostResult.error.issues) {
         ctx.addIssue({
-          ...value,
-          path: ['inpostMachineCode', ...path],
+          ...issue,
+          path: ['inpostMachineCode', ...(issue.path || [])],
         })
-      });
+      }
     }
   } else if (val.deliveryMethod === 'HOME') {
-    const {data, error, success} = addressSchema.safeParse(val.address || {});
+    const addressResult = addressSchema.safeParse(val.address || {});
 
-    if (error) {
-      error.issues.forEach(({path, ...value}) => {
+    if (!addressResult.success) {
+      for (const issue of addressResult.error.issues) {
         ctx.addIssue({
-          ...value,
-          path: ['address', ...path],
+          ...issue,
+          path: ['address', ...(issue.path || [])],
         })
-      });
+      }
     }
   }
 
   if (val.wantInvoice) {
-    const {data, error, success} = invoiceSchema.safeParse(val.invoice || {});
+    const invoiceResult = invoiceSchema.safeParse(val.invoice || {});
 
-    if (error) {
-      error.issues.forEach(({path, ...value}) => {
+    if (!invoiceResult.success) {
+      for (const issue of invoiceResult.error.issues) {
         ctx.addIssue({
-          ...value,
-          path: ['invoice', ...path],
+          ...issue,
+          path: ['invoice', ...(issue.path || [])],
         })
-      });
+      }
     }
   }
 });
