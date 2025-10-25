@@ -139,6 +139,7 @@ export interface AppCartResponse {
   items: AppCartResponseItem[];
   total: number;
   shippingFees: number;
+  promoDesc: string;
 }
 
 interface Address {

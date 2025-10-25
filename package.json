@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "gen-api": "orval && node scripts/orvalPostScript.js"
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
@@ -53,6 +54,7 @@
     "@types/validator": "^13.15.3",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
+    "orval": "^7.13.2",
     "typescript": "^5"
   },
   "overrides": {

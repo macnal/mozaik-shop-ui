@@ -1,0 +1,3784 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/weblinker/cart": {
+      "get": {
+        "tags": [
+          "weblinker-cart-controller"
+        ],
+        "operationId": "getCart",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerCart"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "weblinker-cart-controller"
+        ],
+        "operationId": "addToCart",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeblinkerCart"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerCart"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weblinker/cart/{uuid}/promo/{code}": {
+      "put": {
+        "tags": [
+          "weblinker-cart-controller"
+        ],
+        "operationId": "registerPromoCode",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerCart"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weblinker/cart/merge/{uuid}": {
+      "put": {
+        "tags": [
+          "weblinker-cart-controller"
+        ],
+        "operationId": "mergeCart",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerCart"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/collection": {
+      "get": {
+        "tags": [
+          "collection-controller"
+        ],
+        "operationId": "myCollection",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "offerTypeTab",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "grouped",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "collection-controller"
+        ],
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GmtpCollectionItemPut"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "collection-controller"
+        ],
+        "operationId": "add",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GmtpCollectionItemPost"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "collection-controller"
+        ],
+        "operationId": "deleteAll",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weblinker/order": {
+      "post": {
+        "tags": [
+          "weblinker-order-controller"
+        ],
+        "operationId": "order",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeblinkerOrder"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerOrderResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/p24/callback": {
+      "post": {
+        "tags": [
+          "p-24-controller"
+        ],
+        "operationId": "paymentCallback",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/P24Notification"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/receive": {
+      "post": {
+        "tags": [
+          "inventory-controller"
+        ],
+        "operationId": "handleFileUpload",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "agreement_number",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "price",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "comments",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/dispatch": {
+      "post": {
+        "tags": [
+          "inventory-controller"
+        ],
+        "operationId": "dispatch",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "issueidentifier",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "price",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "comments",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/file/manabox": {
+      "post": {
+        "tags": [
+          "file-controller"
+        ],
+        "operationId": "handleFileUpload_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "inventory": {
+                    "type": "string"
+                  },
+                  "catalog": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/file/freestyle": {
+      "post": {
+        "tags": [
+          "file-controller"
+        ],
+        "operationId": "freestyleUpload",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/collection/{id}/clone": {
+      "post": {
+        "tags": [
+          "collection-controller"
+        ],
+        "operationId": "clone",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/collection/bulk": {
+      "post": {
+        "tags": [
+          "collection-controller"
+        ],
+        "operationId": "addBulk",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/GmtpCollectionBulkPost"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weblinker/products": {
+      "get": {
+        "tags": [
+          "weblinker-product-controller"
+        ],
+        "operationId": "getProducts",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "c",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerProductsResponse_Summary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weblinker/products/{id}": {
+      "get": {
+        "tags": [
+          "weblinker-product-controller"
+        ],
+        "operationId": "getProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "category",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerProductResponse_Detail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weblinker/products/{category}/{name}/{id}": {
+      "get": {
+        "tags": [
+          "weblinker-product-controller"
+        ],
+        "operationId": "getProduct_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "category",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerProductResponse_Detail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weblinker/order/{id}": {
+      "get": {
+        "tags": [
+          "weblinker-order-controller"
+        ],
+        "operationId": "order_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerOrderResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weblinker/categories": {
+      "get": {
+        "tags": [
+          "weblinker-product-controller"
+        ],
+        "operationId": "getCategories",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerCategoriesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weblinker/cart/{uuid}": {
+      "get": {
+        "tags": [
+          "weblinker-cart-controller"
+        ],
+        "operationId": "getCart_1",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerCart"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "weblinker-cart-controller"
+        ],
+        "operationId": "deleteFromCart",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "p",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerCart"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/task/sync/prices": {
+      "get": {
+        "tags": [
+          "task-controller"
+        ],
+        "operationId": "updatePrices",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/task/sync/orders": {
+      "get": {
+        "tags": [
+          "task-controller"
+        ],
+        "operationId": "syncInventoryAfterOrder",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/task/sync/delivery": {
+      "get": {
+        "tags": [
+          "task-controller"
+        ],
+        "operationId": "syncInventoryAfterDelivery",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "tags": [
+          "card-controller"
+        ],
+        "operationId": "findByCriteria",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "l",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "p",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCardsCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/{set}/{collectorNumber}": {
+      "get": {
+        "tags": [
+          "card-controller"
+        ],
+        "operationId": "findBySetAndCollectorNumber",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "set",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "collectorNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "l",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCardsCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/{id}": {
+      "get": {
+        "tags": [
+          "card-controller"
+        ],
+        "operationId": "findByCardid",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCardsCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/prints/{oracleId}": {
+      "get": {
+        "tags": [
+          "card-controller"
+        ],
+        "operationId": "getPrints",
+        "parameters": [
+          {
+            "name": "oracleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCardsCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/p24/test-connection": {
+      "get": {
+        "tags": [
+          "p-24-controller"
+        ],
+        "operationId": "testConnection",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/p24/status/{sessionId}": {
+      "get": {
+        "tags": [
+          "p-24-controller"
+        ],
+        "operationId": "getPaymentStatus",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/P24PaymentEntity"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/offers/{cardId}": {
+      "get": {
+        "tags": [
+          "offer-controller"
+        ],
+        "operationId": "getOffers",
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "offerTypeTab",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/offers/": {
+      "get": {
+        "tags": [
+          "offer-controller"
+        ],
+        "operationId": "getAllOffers",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "offerTypeTab",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jsonforms/uischema/{categoryId}": {
+      "get": {
+        "tags": [
+          "json-forms-controller"
+        ],
+        "operationId": "getUiSchema",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonNode"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jsonforms/schema/{categoryId}": {
+      "get": {
+        "tags": [
+          "json-forms-controller"
+        ],
+        "operationId": "getSchema",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonNode"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gallery/{id}": {
+      "get": {
+        "tags": [
+          "gallery-controller"
+        ],
+        "operationId": "image",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/collection/{user}": {
+      "get": {
+        "tags": [
+          "collection-controller"
+        ],
+        "operationId": "userCollection",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offerTypeTab",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "grouped",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/collection/compared/{user}": {
+      "get": {
+        "tags": [
+          "collection-controller"
+        ],
+        "operationId": "userCollectionFilteredByMy",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offerTypeTab",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "grouped",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmtpCollection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/collection/{id}": {
+      "delete": {
+        "tags": [
+          "collection-controller"
+        ],
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "printable": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "required": [
+          "traceId"
+        ],
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage"
+            }
+          },
+          "successMessage": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string",
+            "description": "Unikalny identyfikator dołączany do żądań",
+            "default": "string"
+          },
+          "subject": {
+            "type": "string",
+            "description": "użytkownik który stworzył request",
+            "default": "n/a"
+          },
+          "time": {
+            "type": "string",
+            "description": "czas startu obsługi żądania",
+            "format": "date-time"
+          }
+        }
+      },
+      "CartItem": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "image": {
+            "type": "string"
+          }
+        }
+      },
+      "WeblinkerCart": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CartItem"
+            }
+          },
+          "total": {
+            "type": "number"
+          },
+          "shippingFees": {
+            "type": "number"
+          },
+          "promoDesc": {
+            "type": "string"
+          }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GmtpCollectionItemPut": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "cardId": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string"
+          },
+          "foil": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "offerType": {
+            "type": "boolean"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "collectionName": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "GmtpCollection": {
+        "required": [
+          "traceId"
+        ],
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage"
+            }
+          },
+          "successMessage": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string",
+            "description": "Unikalny identyfikator dołączany do żądań",
+            "default": "string"
+          },
+          "subject": {
+            "type": "string",
+            "description": "użytkownik który stworzył request",
+            "default": "n/a"
+          },
+          "time": {
+            "type": "string",
+            "description": "czas startu obsługi żądania",
+            "format": "date-time"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GmtpCollectionItemGet"
+            }
+          },
+          "page": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        }
+      },
+      "GmtpCollectionItemGet": {
+        "type": "object",
+        "properties": {
+          "cardId": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string"
+          },
+          "foil": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "offerType": {
+            "type": "boolean"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "collectionName": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "collectorNumber": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "cardName": {
+            "type": "string"
+          },
+          "setCode": {
+            "type": "string"
+          },
+          "typeLine": {
+            "type": "string"
+          },
+          "rarity": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "cartUserId": {
+            "type": "string"
+          },
+          "cartInsertDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageMetadata": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "WeblinkerAddress": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "zip": {
+            "type": "string"
+          },
+          "homeNumber": {
+            "type": "string"
+          },
+          "flatNumber": {
+            "type": "string"
+          },
+          "info": {
+            "type": "string"
+          }
+        }
+      },
+      "WeblinkerInvoice": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "zip": {
+            "type": "string"
+          },
+          "homeNumber": {
+            "type": "string"
+          },
+          "flatNumber": {
+            "type": "string"
+          },
+          "info": {
+            "type": "string"
+          },
+          "nip": {
+            "type": "string"
+          },
+          "companyName": {
+            "type": "string"
+          }
+        }
+      },
+      "WeblinkerOrder": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CartItem"
+            }
+          },
+          "person": {
+            "$ref": "#/components/schemas/WeblinkerPerson"
+          },
+          "address": {
+            "$ref": "#/components/schemas/WeblinkerAddress"
+          },
+          "invoice": {
+            "$ref": "#/components/schemas/WeblinkerInvoice"
+          },
+          "deliveryMethod": {
+            "type": "string"
+          },
+          "deliveryPointId": {
+            "type": "string"
+          },
+          "deliveryPointName": {
+            "type": "string"
+          },
+          "discountCode": {
+            "type": "string"
+          }
+        }
+      },
+      "WeblinkerPerson": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "WeblinkerOrderResponse": {
+        "required": [
+          "traceId"
+        ],
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage"
+            }
+          },
+          "successMessage": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string",
+            "description": "Unikalny identyfikator dołączany do żądań",
+            "default": "string"
+          },
+          "subject": {
+            "type": "string",
+            "description": "użytkownik który stworzył request",
+            "default": "n/a"
+          },
+          "time": {
+            "type": "string",
+            "description": "czas startu obsługi żądania",
+            "format": "date-time"
+          },
+          "url": {
+            "type": "string"
+          },
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "baselinkerOrderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paymentToken": {
+            "type": "string"
+          },
+          "paymentStatus": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "COMPLETED",
+              "FAILED",
+              "CANCELLED",
+              "SETTLED",
+              "NO_MATCHED_BL"
+            ]
+          }
+        }
+      },
+      "P24Notification": {
+        "type": "object",
+        "properties": {
+          "merchantId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "posId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sessionId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "originAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "orderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "methodId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "statement": {
+            "type": "string"
+          },
+          "sign": {
+            "type": "string"
+          }
+        }
+      },
+      "GmtpCollectionItemPost": {
+        "type": "object",
+        "properties": {
+          "cardId": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string"
+          },
+          "foil": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "offerType": {
+            "type": "boolean"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "collectionName": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "GmtpCollectionBulkPost": {
+        "type": "object",
+        "properties": {
+          "cardName": {
+            "type": "string"
+          },
+          "collectorNumber": {
+            "type": "string"
+          },
+          "set": {
+            "type": "string"
+          },
+          "lang": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string"
+          },
+          "foil": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "offerType": {
+            "type": "boolean"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "collectionName": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorMessage_Summary": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "printable": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageMetadata_Summary": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "WeblinkerProduct_Summary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "shortDescription": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
+          },
+          "stock": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "number"
+          },
+          "minPrice30Days": {
+            "type": "number"
+          }
+        }
+      },
+      "WeblinkerProductsResponse_Summary": {
+        "required": [
+          "traceId"
+        ],
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage_Summary"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage_Summary"
+            }
+          },
+          "successMessage": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string",
+            "description": "Unikalny identyfikator dołączany do żądań",
+            "default": "string"
+          },
+          "subject": {
+            "type": "string",
+            "description": "użytkownik który stworzył request",
+            "default": "n/a"
+          },
+          "time": {
+            "type": "string",
+            "description": "czas startu obsługi żądania",
+            "format": "date-time"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WeblinkerProduct_Summary"
+            }
+          },
+          "page": {
+            "$ref": "#/components/schemas/PageMetadata_Summary"
+          }
+        }
+      },
+      "ErrorMessage_Detail": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "printable": {
+            "type": "boolean"
+          }
+        }
+      },
+      "WeblinkerProductResponse_Detail": {
+        "required": [
+          "traceId"
+        ],
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage_Detail"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage_Detail"
+            }
+          },
+          "successMessage": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string",
+            "description": "Unikalny identyfikator dołączany do żądań",
+            "default": "string"
+          },
+          "subject": {
+            "type": "string",
+            "description": "użytkownik który stworzył request",
+            "default": "n/a"
+          },
+          "time": {
+            "type": "string",
+            "description": "czas startu obsługi żądania",
+            "format": "date-time"
+          },
+          "item": {
+            "$ref": "#/components/schemas/WeblinkerProduct_Detail"
+          }
+        }
+      },
+      "WeblinkerProduct_Detail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "shortDescription": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
+          },
+          "stock": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "number"
+          },
+          "minPrice30Days": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "manufacturerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "star": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "WeblinkerCategoriesResponse": {
+        "required": [
+          "traceId"
+        ],
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage"
+            }
+          },
+          "successMessage": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string",
+            "description": "Unikalny identyfikator dołączany do żądań",
+            "default": "string"
+          },
+          "subject": {
+            "type": "string",
+            "description": "użytkownik który stworzył request",
+            "default": "n/a"
+          },
+          "time": {
+            "type": "string",
+            "description": "czas startu obsługi żądania",
+            "format": "date-time"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WeblinkerCategory"
+            }
+          }
+        }
+      },
+      "WeblinkerCategory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "slug": {
+            "type": "string"
+          }
+        }
+      },
+      "Card": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "oracle_id": {
+            "type": "string"
+          },
+          "multiverse_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "mtgo_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mtgo_foil_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "printed_name": {
+            "type": "string"
+          },
+          "lang": {
+            "type": "string"
+          },
+          "released_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "uri": {
+            "type": "string"
+          },
+          "scryfall_uri": {
+            "type": "string"
+          },
+          "layout": {
+            "type": "string"
+          },
+          "highres_image": {
+            "type": "boolean"
+          },
+          "image_status": {
+            "type": "string"
+          },
+          "mana_cost": {
+            "type": "string"
+          },
+          "cmc": {
+            "type": "number",
+            "format": "double"
+          },
+          "type_line": {
+            "type": "string"
+          },
+          "printed_type_line": {
+            "type": "string"
+          },
+          "oracle_text": {
+            "type": "string"
+          },
+          "printed_text": {
+            "type": "string"
+          },
+          "security_stamp": {
+            "type": "string"
+          },
+          "power": {
+            "type": "string"
+          },
+          "toughness": {
+            "type": "string"
+          },
+          "loyalty": {
+            "type": "string"
+          },
+          "colors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "legalities": {
+            "$ref": "#/components/schemas/MtgLegalities"
+          },
+          "frame_effects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "produced_mana": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "card_faces": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScryfallCardFace"
+            }
+          },
+          "color_indicator": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tcgplayer_etched_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content_warning": {
+            "type": "boolean"
+          },
+          "attraction_lights": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "variation_of": {
+            "type": "string"
+          },
+          "life_modifier": {
+            "type": "string"
+          },
+          "hand_modifier": {
+            "type": "string"
+          },
+          "flavor_name": {
+            "type": "string"
+          },
+          "games": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reserved": {
+            "type": "boolean"
+          },
+          "foil": {
+            "type": "boolean"
+          },
+          "nonfoil": {
+            "type": "boolean"
+          },
+          "finishes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "oversized": {
+            "type": "boolean"
+          },
+          "promo": {
+            "type": "boolean"
+          },
+          "reprint": {
+            "type": "boolean"
+          },
+          "variation": {
+            "type": "boolean"
+          },
+          "set_id": {
+            "type": "string"
+          },
+          "set": {
+            "type": "string"
+          },
+          "set_name": {
+            "type": "string"
+          },
+          "set_type": {
+            "type": "string"
+          },
+          "set_uri": {
+            "type": "string"
+          },
+          "collector_number": {
+            "type": "string"
+          },
+          "digital": {
+            "type": "boolean"
+          },
+          "rarity": {
+            "type": "string"
+          },
+          "flavor_text": {
+            "type": "string"
+          },
+          "card_back_id": {
+            "type": "string"
+          },
+          "artist": {
+            "type": "string"
+          },
+          "border_color": {
+            "type": "string"
+          },
+          "frame": {
+            "type": "string"
+          },
+          "full_art": {
+            "type": "boolean"
+          },
+          "textless": {
+            "type": "boolean"
+          },
+          "booster": {
+            "type": "boolean"
+          },
+          "story_spotlight": {
+            "type": "boolean"
+          },
+          "edhrec_rank": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "penny_rank": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "promo_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "arena_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "stock": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "priceFrom": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "priceFoilFrom": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GmtpCardsCollection": {
+        "required": [
+          "traceId"
+        ],
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorMessage"
+            }
+          },
+          "successMessage": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string",
+            "description": "Unikalny identyfikator dołączany do żądań",
+            "default": "string"
+          },
+          "subject": {
+            "type": "string",
+            "description": "użytkownik który stworzył request",
+            "default": "n/a"
+          },
+          "time": {
+            "type": "string",
+            "description": "czas startu obsługi żądania",
+            "format": "date-time"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Card"
+            }
+          },
+          "page": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        }
+      },
+      "MtgLegalities": {
+        "type": "object",
+        "properties": {
+          "standard": {
+            "type": "boolean"
+          },
+          "future": {
+            "type": "boolean"
+          },
+          "historic": {
+            "type": "boolean"
+          },
+          "gladiator": {
+            "type": "boolean"
+          },
+          "pioneer": {
+            "type": "boolean"
+          },
+          "explorer": {
+            "type": "boolean"
+          },
+          "modern": {
+            "type": "boolean"
+          },
+          "legacy": {
+            "type": "boolean"
+          },
+          "pauper": {
+            "type": "boolean"
+          },
+          "vintage": {
+            "type": "boolean"
+          },
+          "penny": {
+            "type": "boolean"
+          },
+          "commander": {
+            "type": "boolean"
+          },
+          "oathbreaker": {
+            "type": "boolean"
+          },
+          "brawl": {
+            "type": "boolean"
+          },
+          "historicbrawl": {
+            "type": "boolean"
+          },
+          "alchemy": {
+            "type": "boolean"
+          },
+          "paupercommander": {
+            "type": "boolean"
+          },
+          "duel": {
+            "type": "boolean"
+          },
+          "oldschool": {
+            "type": "boolean"
+          },
+          "premodern": {
+            "type": "boolean"
+          },
+          "predh": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ScryfallCardFace": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "flavor_name": {
+            "type": "string"
+          },
+          "mana_cost": {
+            "type": "string"
+          },
+          "type_line": {
+            "type": "string"
+          },
+          "oracle_text": {
+            "type": "string"
+          },
+          "colors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "color_indicator": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "flavor_text": {
+            "type": "string"
+          },
+          "artist": {
+            "type": "string"
+          },
+          "artist_id": {
+            "type": "string"
+          },
+          "illustration_id": {
+            "type": "string"
+          },
+          "image_uris": {
+            "$ref": "#/components/schemas/ScryfallImageUri"
+          },
+          "defense": {
+            "type": "string"
+          },
+          "printed_name": {
+            "type": "string"
+          },
+          "printed_text": {
+            "type": "string"
+          },
+          "printed_type_line": {
+            "type": "string"
+          },
+          "watermark": {
+            "type": "string"
+          },
+          "power": {
+            "type": "string"
+          },
+          "toughness": {
+            "type": "string"
+          },
+          "loyalty": {
+            "type": "string"
+          },
+          "oracle_id": {
+            "type": "string"
+          },
+          "layout": {
+            "type": "string"
+          },
+          "cmc": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "ScryfallImageUri": {
+        "type": "object",
+        "properties": {
+          "small": {
+            "type": "string"
+          },
+          "normal": {
+            "type": "string"
+          },
+          "large": {
+            "type": "string"
+          },
+          "png": {
+            "type": "string"
+          },
+          "art_crop": {
+            "type": "string"
+          },
+          "border_crop": {
+            "type": "string"
+          }
+        }
+      },
+      "P24PaymentEntity": {
+        "type": "object",
+        "properties": {
+          "createdBy": {
+            "type": "string"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "modifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sessionId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paidAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "COMPLETED",
+              "FAILED",
+              "CANCELLED",
+              "SETTLED",
+              "NO_MATCHED_BL"
+            ]
+          },
+          "orderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "JsonNode": {
+        "type": "object"
+      }
+    }
+  }
+}
