@@ -119,6 +119,7 @@ export interface ApiCartResponse {
   items: ApiCartResponseItem[];
   total: number;
   shippingFees: number;
+  promoDesc: string;
 }
 
 export interface AppCartResponseItem {
