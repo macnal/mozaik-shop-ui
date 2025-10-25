@@ -1,21 +1,17 @@
-const fs = require('fs');
-const path = require('path');
-
-const importConfigStatement = "import { config } from '@/config';\n";
-const importAdjustParamsStatement = "import { adjustParams } from '@/utils/urlParamAjduster';\n";
-const searchParamsStatement = /const normalizedParams = new URLSearchParams\(\);\s*Object\.entries\(params/sg
-const badRequestStatement = /\|.*Response400;/g
+import fs from 'fs';
+import path from 'path';
 
 function walkDir(dir, callback) {
-    fs.readdirSync(dir).forEach(f => {
+    const entries = fs.readdirSync(dir);
+    for (const f of entries) {
         const dirPath = path.join(dir, f);
-        const isDirectory = fs.statSync(dirPath).isDirectory();
-        if (isDirectory) {
+        const stat = fs.statSync(dirPath);
+        if (stat.isDirectory()) {
             walkDir(dirPath, callback);
         } else {
             callback(path.join(dir, f));
         }
-    });
+    }
 }
 
 walkDir('./src/api/gen/endpoints', file => {
@@ -23,30 +19,11 @@ walkDir('./src/api/gen/endpoints', file => {
         let content = fs.readFileSync(file, 'utf8');
         let changed = false;
 
-        if (!content.includes(importConfigStatement.trim())) {
-            const headerEndPos = content.indexOf('*/') + 2;
-            content = content.slice(0, headerEndPos) + '\n' + importConfigStatement + content.slice(headerEndPos);
+        // Replace literal `${config.api.url}` with process.env.API_BASE
+        const needle = '${config.api.url}';
+        if (content.includes(needle)) {
+            content = content.split(needle).join("${process.env.API_BASE}");
             changed = true;
-        }
-
-        if (!content.includes(importAdjustParamsStatement.trim())) {
-            const headerEndPos = content.indexOf('*/') + 2;
-            content = content.slice(0, headerEndPos) + '\n' + importAdjustParamsStatement + content.slice(headerEndPos);
-            changed = true;
-        }
-
-        const matching  = content.match(searchParamsStatement);
-
-        if (matching) {
-            matching.forEach(c => {
-                content = content.replace(c, c.replace('params', 'adjustParams(params)'))
-            })
-        }
-
-        if (content.match(badRequestStatement)) {
-            content.match(badRequestStatement).forEach(c => {
-                content = content.replace(c, ';')
-            });
         }
 
         if (changed) {
