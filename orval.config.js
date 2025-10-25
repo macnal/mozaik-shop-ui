@@ -1,7 +1,7 @@
 module.exports = {
     api: {
         input: {
-            target: './openapi/api.guildmage.eu.json',
+            target: './openapi/api.guildmage.eu.filtered.json',
             // override: {
             //     transformer: './transformer/transform-params.js',
             // },
@@ -9,8 +9,8 @@ module.exports = {
         output: {
             client: 'fetch',
             mode: 'tags-split',
-            target: './gen/endpoints',
-            schemas: './gen/model',
+            target: './src/api/gen/endpoints',
+            schemas: './src/api/gen/model',
             fileExtension: '.gen.ts',
 //            prettier: true,
             baseUrl: "${config.api.url}",

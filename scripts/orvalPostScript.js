@@ -6,7 +6,6 @@ const importAdjustParamsStatement = "import { adjustParams } from '@/utils/urlPa
 const searchParamsStatement = /const normalizedParams = new URLSearchParams\(\);\s*Object\.entries\(params/sg
 const badRequestStatement = /\|.*Response400;/g
 
-
 function walkDir(dir, callback) {
     fs.readdirSync(dir).forEach(f => {
         const dirPath = path.join(dir, f);
@@ -19,7 +18,7 @@ function walkDir(dir, callback) {
     });
 }
 
-walkDir('./gen/endpoints', file => {
+walkDir('./src/api/gen/endpoints', file => {
     if (path.extname(file) === '.ts') {
         let content = fs.readFileSync(file, 'utf8');
         let changed = false;
