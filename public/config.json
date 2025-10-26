@@ -1,6 +1,6 @@
 {
   "interface": {
-    "itemsPerPage": 48,
+    "itemsPerPage": 60,
     "availableProductsMin": 2
   },
   "mui": {
