@@ -130,7 +130,7 @@ export const WebLinkerService = async () => {
 
     async fetchCardId(token: string) {
       const responseData = await this.api.get<ApiCartResponse>(
-        `weblinker/cart2`,
+        `weblinker/cart`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -142,7 +142,7 @@ export const WebLinkerService = async () => {
     },
 
     async fetchCart(id: string | null = null, options: Options = {}): Promise<AppCartResponse> {
-      const url = id ? `weblinker/cart2/${id}` : `weblinker/cart2`;
+      const url = id ? `weblinker/cart/${id}` : `weblinker/cart`;
       const responseData = await this.api.get<ApiCartResponse>(
         url,
         options
