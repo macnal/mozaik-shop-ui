@@ -19,7 +19,7 @@ import KoszykPageSummaryShippingInpost from "@/app/koszyk/KoszykPageSummaryShipp
 import {useController, useFormContext} from "react-hook-form";
 import {TextFieldElement} from "react-hook-form-mui";
 
-export type ShippingType = "INPOST" | "HOME" | "PERSONAL_PICKUP"
+export type ShippingType = "INPOST" | "POCZTA_POLSKA" | "PERSONAL_PICKUP"
 
 
 const RadioBtn = ({label, Icon, sx, ...props}: Partial<FormControlLabelProps> & {
@@ -95,9 +95,9 @@ export const KoszykPageSummaryShipping = () => {
     <RadioBtn
       Icon={LocalShippingTwoToneIcon}
       label={'Dostawa na adres'}
-      value={'HOME'}
+      value={'POCZTA_POLSKA'}
     />
-    {value === "HOME" && (<Stack
+    {value === "POCZTA_POLSKA" && (<Stack
       direction={'row'}
       sx={{
         alignItems: 'center',

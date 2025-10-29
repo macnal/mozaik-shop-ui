@@ -99,6 +99,145 @@
         }
       }
     },
+    "/weblinker/cart2": {
+      "get": {
+        "tags": [
+          "weblinker-cart-2-controller"
+        ],
+        "operationId": "getCart_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerCart"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "weblinker-cart-2-controller"
+        ],
+        "operationId": "updateCart",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeblinkerCart"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerCart"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/weblinker/cart2/merge/{uuid}": {
+      "put": {
+        "tags": [
+          "weblinker-cart-2-controller"
+        ],
+        "operationId": "mergeCart",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerCart"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/weblinker/cart/{uuid}/promo/{code}": {
       "put": {
         "tags": [
@@ -163,7 +302,7 @@
         "tags": [
           "weblinker-cart-controller"
         ],
-        "operationId": "mergeCart",
+        "operationId": "mergeCart_1",
         "parameters": [
           {
             "name": "uuid",
@@ -1060,22 +1199,6 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "category",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1270,12 +1393,63 @@
         }
       }
     },
+    "/weblinker/cart2/{uuid}": {
+      "get": {
+        "tags": [
+          "weblinker-cart-2-controller"
+        ],
+        "operationId": "getCart_2",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeblinkerCart"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/weblinker/cart/{uuid}": {
       "get": {
         "tags": [
           "weblinker-cart-controller"
         ],
-        "operationId": "getCart_1",
+        "operationId": "getCart_3",
         "parameters": [
           {
             "name": "uuid",
@@ -2375,9 +2549,54 @@
           }
         }
       },
-      "CartItem": {
+      "WeblinkerCart": {
         "type": "object",
         "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WeblinkerCartItem"
+            }
+          },
+          "total": {
+            "type": "number"
+          },
+          "deliveryMethod": {
+            "type": "string",
+            "enum": [
+              "INPOST",
+              "POCZTA_POLSKA",
+              "PERSONAL_PICKUP"
+            ]
+          },
+          "shippingFees": {
+            "type": "number"
+          },
+          "promoCode": {
+            "type": "string"
+          },
+          "promoDesc": {
+            "type": "string"
+          },
+          "promoTotal": {
+            "type": "number"
+          },
+          "promoShippingFees": {
+            "type": "number"
+          }
+        }
+      },
+      "WeblinkerCartItem": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
           "productId": {
             "type": "integer",
             "format": "int32"
@@ -2401,30 +2620,9 @@
           },
           "image": {
             "type": "string"
-          }
-        }
-      },
-      "WeblinkerCart": {
-        "type": "object",
-        "properties": {
-          "uuid": {
-            "type": "string",
-            "format": "uuid"
           },
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CartItem"
-            }
-          },
-          "total": {
-            "type": "number"
-          },
-          "shippingFees": {
-            "type": "number"
-          },
-          "promoDesc": {
-            "type": "string"
+          "checked": {
+            "type": "boolean"
           }
         }
       },
@@ -2712,7 +2910,7 @@
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CartItem"
+              "$ref": "#/components/schemas/WeblinkerCartItem"
             }
           },
           "person": {
@@ -2753,41 +2951,8 @@
         }
       },
       "WeblinkerOrderResponse": {
-        "required": [
-          "traceId"
-        ],
         "type": "object",
         "properties": {
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ErrorMessage"
-            }
-          },
-          "warnings": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ErrorMessage"
-            }
-          },
-          "successMessage": {
-            "type": "string"
-          },
-          "traceId": {
-            "type": "string",
-            "description": "Unikalny identyfikator dołączany do żądań",
-            "default": "string"
-          },
-          "subject": {
-            "type": "string",
-            "description": "użytkownik który stworzył request",
-            "default": "n/a"
-          },
-          "time": {
-            "type": "string",
-            "description": "czas startu obsługi żądania",
-            "format": "date-time"
-          },
           "url": {
             "type": "string"
           },
@@ -2933,20 +3098,6 @@
           }
         }
       },
-      "ErrorMessage_Summary": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "errorCode": {
-            "type": "string"
-          },
-          "printable": {
-            "type": "boolean"
-          }
-        }
-      },
       "PageMetadata_Summary": {
         "type": "object",
         "properties": {
@@ -3007,41 +3158,8 @@
         }
       },
       "WeblinkerProductsResponse_Summary": {
-        "required": [
-          "traceId"
-        ],
         "type": "object",
         "properties": {
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ErrorMessage_Summary"
-            }
-          },
-          "warnings": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ErrorMessage_Summary"
-            }
-          },
-          "successMessage": {
-            "type": "string"
-          },
-          "traceId": {
-            "type": "string",
-            "description": "Unikalny identyfikator dołączany do żądań",
-            "default": "string"
-          },
-          "subject": {
-            "type": "string",
-            "description": "użytkownik który stworzył request",
-            "default": "n/a"
-          },
-          "time": {
-            "type": "string",
-            "description": "czas startu obsługi żądania",
-            "format": "date-time"
-          },
           "items": {
             "type": "array",
             "items": {
@@ -3053,56 +3171,9 @@
           }
         }
       },
-      "ErrorMessage_Detail": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "errorCode": {
-            "type": "string"
-          },
-          "printable": {
-            "type": "boolean"
-          }
-        }
-      },
       "WeblinkerProductResponse_Detail": {
-        "required": [
-          "traceId"
-        ],
         "type": "object",
         "properties": {
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ErrorMessage_Detail"
-            }
-          },
-          "warnings": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ErrorMessage_Detail"
-            }
-          },
-          "successMessage": {
-            "type": "string"
-          },
-          "traceId": {
-            "type": "string",
-            "description": "Unikalny identyfikator dołączany do żądań",
-            "default": "string"
-          },
-          "subject": {
-            "type": "string",
-            "description": "użytkownik który stworzył request",
-            "default": "n/a"
-          },
-          "time": {
-            "type": "string",
-            "description": "czas startu obsługi żądania",
-            "format": "date-time"
-          },
           "item": {
             "$ref": "#/components/schemas/WeblinkerProduct_Detail"
           }

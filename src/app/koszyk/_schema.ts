@@ -39,7 +39,7 @@ export const CustomerDataZodSchema = z.object({
   invoice: z.object().loose(),
     deliveryMethod: z.union([
     z.literal('INPOST'),
-    z.literal('HOME'),
+    z.literal('POCZTA_POLSKA'),
     z.literal('PERSONAL_PICKUP'),
   ]),
   deliveryPointId: z.string(),
@@ -59,7 +59,7 @@ export const CustomerDataZodSchema = z.object({
         })
       }
     }
-  } else if (val.deliveryMethod === 'HOME') {
+  } else if (val.deliveryMethod === 'POCZTA_POLSKA') {
     const addressResult = addressSchema.safeParse(val.address || {});
 
     if (!addressResult.success) {

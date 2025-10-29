@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "gen-api": "node scripts/deleteGenFiles.js --yes && orval &&  node scripts/orvalPostScript.js"
+    "gen-api": "node scripts/deleteGenFiles.js --yes &&  node scripts/orvalFilter.js && orval &&  node scripts/orvalPostScript.js"
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
