@@ -19,18 +19,7 @@ async function createOrder(formData: Record<string, unknown>) {
     if (cartId) {
         cart = await dataSource.fetchCart(cartId);
         if (cart) {
-            const RequestSchema = CustomerDataZodSchema
-                // .safeExtend({
-                //     items: z.array(z.object({
-                //         productId: z.number(),
-                //         quantity: z.number(),
-                //     })),
-                // })
-                .omit({
-                    wantInvoice: true
-                });
-
-            const {data, error, success} = RequestSchema.safeParse(formData);
+            const {data, error, success} = CustomerDataZodSchema.safeParse(formData);
 
             if (success && data) {
                 const paymentUrl = await dataSource.createOrder({
