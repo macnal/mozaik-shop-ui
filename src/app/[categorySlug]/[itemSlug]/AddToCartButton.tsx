@@ -1,17 +1,16 @@
 'use client'
 
-import {GameExtended} from "@/types/responses";
 import {ShoppingCartTwoTone} from "@mui/icons-material";
 import {Button} from "@mui/material";
 import {getAppConfig} from "@/app.config";
 import {useCart} from "@/context/cartProvider";
-import {WeblinkerCartItem} from "@/api/gen/model";
+import {WeblinkerCartItem, WeblinkerProductDetail} from "@/api/gen/model";
 
 const {interface: {availableProductsMin}} = await getAppConfig();
 
-export const AddToCartButton = ({item}: { item: GameExtended }) => {
+export const AddToCartButton = ({item}: { item: WeblinkerProductDetail }) => {
     const {updateBasetItem} = useCart();
-    const isAvailable = availableProductsMin < item.stock
+    const isAvailable = availableProductsMin < item.stock;
 
 
     return <Button

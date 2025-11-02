@@ -1,7 +1,6 @@
 'use client';
 import {
     Avatar,
-    Button,
     Card,
     CardContent,
     Divider,
@@ -17,144 +16,129 @@ import {
 import {KoszykPageCartItemAmountButtons} from "@/app/koszyk/KoszykPageCartItemAmountButtons";
 import {KoszykPageCartCheckbox} from "@/app/koszyk/KoszykPageCartCheckbox";
 import Link from "next/link";
-import {Close, ImageTwoTone} from "@mui/icons-material";
+import {ImageTwoTone} from "@mui/icons-material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {KoszykPageCartItemDelete} from "@/app/koszyk/KoszykPageCartItemDelete";
-import {CartTotalStr} from "./components/CartTotalStr";
-import {AppCartResponse} from "@/types/responses";
-import {JsonSchema, UISchemaElement} from "@jsonforms/core";
-import {useRef} from "react";
+import {useEffect, useRef, useState} from "react";
+import {WeblinkerCart} from "@/api/gen/model";
+import {CartTotalStr2} from "@/app/koszyk/components/CartTotalStr";
+import {useCart} from "@/context/cartProvider";
+import {KoszykSubmitButton} from "@/app/koszyk/KoszykSubmitButton";
 
-interface KoszykPageClientProps {
-    cart: AppCartResponse;
-    createOrder: (arg: Record<string, unknown>) => void,
-    initialData: Record<string, unknown>,
-    formSchema: JsonSchema,
-    layoutSchema: UISchemaElement,
+interface KoszykPageCartProps {
+    cart: WeblinkerCart;
+    [key: string]: unknown;
 }
 
 export const KoszykPageCart = ({
                                    cart,
-                                   goToSummary,
-                                   onDiscountCodeChange,
-                                   discountCodeState,
-                                   hasDiscountCode
-                               }: KoszykPageClientProps & {
-    goToSummary: () => void;
-    onDiscountCodeChange: (code: string) => void;
-    discountCodeState: "IDLE" | "LOADING" | "ERROR";
-    hasDiscountCode: boolean;
-}) => {
-    const inputRef = useRef<HTMLInputElement>(null as unknown as HTMLInputElement);
+                               }: KoszykPageCartProps) => {
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const sortedItems = cart?.items ? [...cart.items].sort((a, b) => a.productId - b.productId) : [];
+    const [discountCodeState, setDiscountCodeState] = useState<boolean>(false);
+    const {basket, addPromoCode} = useCart();
+
+    useEffect(() => {
+        setDiscountCodeState(false);
+    }, [basket])
 
     return <Grid container spacing={6}>
-        <Grid size={{xs: 12, lg: 8}}>
+
+        <Grid sx={{display: 'flex', flexDirection: 'column'}}>
             {cart && <Stack component={'ul'} sx={{pl: 0}}>
-                {cart.items
-                    .sort((a, b) => a.productId - b.productId)
-                    .map(({name, productId, quantity, price, image, url, categoryName}, index, {length}) => {
-                        return <Grid
-                            container
-                            key={productId}
-                            component={'li'}
-                            spacing={0}
-                        >
-                            <Grid size={{xs: 'auto'}}>
-                                <KoszykPageCartCheckbox id={productId}/>
-                            </Grid>
-
-                            <Grid container size={{xs: 'grow'}} spacing={{xs: 2}} sx={{alignItems: 'center'}}>
-                                <Grid container spacing={2} size={{xs: 'grow'}}
-                                      sx={{order: 0, display: 'flex', alignItems: 'center', flexWrap: 'nowrap'}}>
-                                    <Avatar component={Link} href={url} variant={"square"} src={image}>
-                                        <ImageTwoTone/>
-                                    </Avatar>
-
-                                    <Stack sx={{flexShrink: 0}}>
-                                        <Typography variant={'subtitle1'}>{name}</Typography>
-                                        <Typography variant={'body2'} color={'textSecondary'}
-                                                    whiteSpace={'nowrap'}>{categoryName}</Typography>
-                                    </Stack>
-                                </Grid>
-
-                                <Grid size={{xs: 6, sm: 2}} sx={{
-                                    order: {sm: 3},
-                                    display: 'flex', alignItems: 'center', justifyContent: 'flex-end'
-                                }}>
-                                    <Typography variant={'h6'} fontWeight={800}>
-                                        {(price * quantity).toFixed(2)} zł
-                                    </Typography>
-                                </Grid>
-
-                                <Grid size={{xs: 6, sm: 'auto'}} sx={{order: {sm: 2}}}>
-                                    <KoszykPageCartItemAmountButtons sx={{}} {...{productId, quantity, price}} />
-                                </Grid>
-
-                                <Grid size={{xs: 6, sm: 'auto'}}
-                                      sx={{order: {sm: 4}, display: 'flex', justifyContent: 'flex-end'}}>
-                                    <KoszykPageCartItemDelete sx={{}} {...{productId, quantity, price}} />
-                                </Grid>
-
-                                {index !== (length - 1) && <Grid size={{xs: 12}} sx={{order: 12}}>
-                                    <Divider sx={{mb: {xs: 2}}}/>
-                                </Grid>}
-                            </Grid>
+                {sortedItems.map(({
+                                      name,
+                                      slug,
+                                      productId,
+                                      quantity,
+                                      price,
+                                      image,
+                                      categoryName,
+                                      categorySlug
+                                  }, index, {length}) => {
+                    return <Grid
+                        container
+                        key={productId}
+                        component={'li'}
+                        spacing={0}
+                    >
+                        <Grid size={{xs: 'auto'}}>
+                            <KoszykPageCartCheckbox id={productId}/>
                         </Grid>
-                    })}
+
+                        <Grid container size={{xs: 'grow'}} spacing={{xs: 2}} sx={{alignItems: 'center'}}>
+                            <Grid container spacing={2} size={{xs: 'grow'}}
+                                  sx={{order: 0, display: 'flex', alignItems: 'center', flexWrap: 'nowrap'}}>
+                                <Avatar component={Link} href={`/${categorySlug}/${slug}`} variant={"square"}
+                                        src={image}>
+                                    <ImageTwoTone/>
+                                </Avatar>
+
+                                <Stack sx={{width: '100%'}}>
+                                    <Typography variant={'subtitle1'}>{name}</Typography>
+                                    <Grid container alignItems={'center'} sx={{width: '100%'}}>
+                                        <Grid sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
+                                            <Typography variant={'h6'} fontWeight={800}>
+                                                {(price * quantity).toFixed(2)} zł
+                                            </Typography>
+                                            <Typography variant={'body2'} color={'textSecondary'} whiteSpace={'nowrap'}>
+                                                {categoryName}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid sx={{ml: 'auto', display: 'flex', alignItems: 'center', gap: 1}}>
+                                            <Grid sx={{transform: 'scale(0.8)'}}>
+                                                <KoszykPageCartItemAmountButtons {...{productId, quantity, price}}
+                                                                                 sx={{mb: 0, ml: 0}}/>
+                                            </Grid>
+                                            <Grid sx={{transform: 'scale(0.7)'}}>
+                                                <KoszykPageCartItemDelete
+                                                    {...{productId, quantity}}/>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Stack>
+                            </Grid>
+
+                            {index !== (length - 1) && <Grid size={{xs: 12}} sx={{order: 12}}>
+                                <Divider sx={{mb: {xs: 2}}}/>
+                            </Grid>}
+                        </Grid>
+                    </Grid>
+                })}
             </Stack>
 
             }
-        </Grid>
-
-        <Grid size={{xs: 12, lg: 4}} sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
             <Card variant={'elevation'}>
                 <CardContent>
                     <Typography variant={'h2'} gutterBottom>
                         Kod rabatowy
                     </Typography>
 
-                    {!cart.promoDesc && <TextField
+                    <TextField
                         inputRef={inputRef}
                         label={'Wprowadź go tutaj'}
                         margin={'normal'}
                         size={'small'}
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter') {
-                                onDiscountCodeChange(inputRef.current!.value)
-                            }
+                        onKeyDown={() => {
+                            // intentionally empty; handler removed to avoid unused param warning
                         }}
-                        slotProps={{
-                            input: {
-                                endAdornment: hasDiscountCode ? <IconButton
-                                    loading={discountCodeState === 'LOADING'}
-                                    onClick={event => {
-                                        inputRef.current.value = '';
-                                        onDiscountCodeChange('')
-                                    }}
-                                >
-                                    <Close/>
-                                </IconButton> : <IconButton
-                                    loading={discountCodeState === 'LOADING'}
-                                    onClick={event => {
-                                        onDiscountCodeChange(inputRef.current!.value)
-                                    }}>
-                                    <ArrowForwardIcon/>
-                                </IconButton>
-                            },
-                        }}
+                         slotProps={{
+                             input: {
+                                 endAdornment:     <IconButton
+                                      loading={discountCodeState}
+                                      onClick={() => {
+                                          setDiscountCodeState(true)
+                                          void addPromoCode(inputRef.current!.value)
+                                      }}>
+                                      <ArrowForwardIcon/>
+                                  </IconButton>
+                             },
+                         }}
 
-                    />}
+                    />
 
-                    {hasDiscountCode && <Typography color={'success'}>
-                        Kod rabatowy zaakceptowany
-                    </Typography>}
-
-                    {discountCodeState === 'ERROR' && <Typography color={'error'}>
-                        Kod rabatowy jest niepoprawny
-                    </Typography>}
-
-                    {!!cart.promoDesc && <Typography color={'success'}>
-                        {cart.promoDesc}
+                    {!!cart.promoCode && <Typography color={'success'}>
+                        {cart.promoCode}  {cart.promoDesc}
                     </Typography>}
 
 
@@ -169,7 +153,7 @@ export const KoszykPageCart = ({
 
                     <List>
                         <ListItem secondaryAction={<Typography variant={'body1'}>
-                            <CartTotalStr cart={cart}/>
+                            <CartTotalStr2 cart={cart}/>
                         </Typography>}>
                             <ListItemText
                                 slotProps={{primary: {variant: 'subtitle1'}}}
@@ -179,7 +163,7 @@ export const KoszykPageCart = ({
                         </ListItem>
 
                         <ListItem secondaryAction={<Typography variant={'body1'}>
-                            {cart.shippingFees} zł
+                            {cart?.shippingFees ? cart.shippingFees.toFixed(2) : 0} zł
                         </Typography>}>
                             <ListItemText
                                 slotProps={{primary: {variant: 'subtitle1'}}}
@@ -190,8 +174,9 @@ export const KoszykPageCart = ({
 
                         <Divider/>
 
+
                         <ListItem secondaryAction={<Typography variant={'h6'} fontWeight={800}>
-                            <CartTotalStr cart={cart} withShippingFees/>
+                            {cart?.total ? cart.total.toFixed(2) : 0} zł
                         </Typography>}>
                             <ListItemText
                                 slotProps={{primary: {variant: 'h6'}}}
@@ -201,17 +186,7 @@ export const KoszykPageCart = ({
                         </ListItem>
                     </List>
 
-                    <Button
-                        variant={'contained'}
-                        size={'large'}
-                        fullWidth
-                        onClick={() => {
-                            goToSummary();
-                        }}
-                        endIcon={<ArrowForwardIcon/>}
-                    >
-                        Dostawa i płatność
-                    </Button>
+                    <KoszykSubmitButton/>
 
                 </CardContent>
             </Card>

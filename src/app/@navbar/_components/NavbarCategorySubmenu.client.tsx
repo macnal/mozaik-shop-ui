@@ -2,12 +2,12 @@
 import React, {useEffect} from 'react'
 import {Button, Grid, Link, Stack, Typography, useMediaQuery} from "@mui/material";
 import PopupState, {bindHover, bindPopover} from "material-ui-popup-state";
-import {Category} from "@/types/responses";
 import NextLink from "next/link";
 import HoverPopover from 'material-ui-popup-state/HoverPopover'
 import {getSlug} from '@/utils/slug';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {useNotification} from '@/context/notification';
+import {WeblinkerCategory} from "@/api/gen/model";
 
 const createChunks = <T = unknown>(arr: T[], chunkSize = 10) =>
   Array.from({length: Math.ceil(arr.length / chunkSize)}, (_, i) =>
@@ -15,8 +15,8 @@ const createChunks = <T = unknown>(arr: T[], chunkSize = 10) =>
   );
 
 export interface NavbarCategorySubmenuClientProps {
-  parent: Category;
-  categories: Category[];
+  parent: WeblinkerCategory;
+  categories: WeblinkerCategory[];
   fetchError?: boolean;
 }
 

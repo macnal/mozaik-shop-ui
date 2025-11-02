@@ -2,138 +2,150 @@
 import {Grid, Skeleton, Typography} from "@mui/material";
 import {ListSelectProvider} from "@/components/common/ListSelect/ListSelectProvider";
 import {useEffect, useState} from "react";
-import {JsonSchema, UISchemaElement} from "@jsonforms/core";
-import {AppCartResponse} from "@/types/responses";
-import {KoszykPageSummary} from "@/app/koszyk/KoszykPageSummary";
 import {KoszykPageCart} from "@/app/koszyk/KoszykPageCart";
 import ky from "ky";
+import {WeblinkerCart} from "@/api/gen/model";
+import {useCart} from "@/context/cartProvider";
+import {useNotification} from "@/context/notification";
+import {KoszykPageCustomerAndDelivery} from "@/app/koszyk/KoszykPageCustomerAndDelivery";
+import {FormContainer} from 'react-hook-form-mui'
+import {formArgs} from '@/app/koszyk/formArgs'
+import {JsonSchema, UISchemaElement} from "@jsonforms/core";
 
 interface KoszykPageClientProps {
-  createOrder: (arg: Record<string, unknown>) => void,
-  initialData: Record<string, unknown>,
-  formSchema: JsonSchema,
-  layoutSchema: UISchemaElement,
+    createOrder: (arg: Record<string, unknown>) => void,
+    initialData: Record<string, unknown>,
+    formSchema: JsonSchema,
+    layoutSchema: UISchemaElement,
+}
+
+const FormInner = ({
+                       basket,
+                       setSummary,
+                       props,
+                   }: {
+    basket: WeblinkerCart,
+    setSummary: (v: boolean) => void,
+    props: KoszykPageClientProps,
+}) => {
+
+    return (
+        <FormContainer
+            {...formArgs}
+            onSuccess={(data) => {
+                console.log('order: ', data)
+                // forward the filled form to parent createOrder handler
+                try {
+                    props.createOrder(data as Record<string, unknown>);
+                } catch (e) {
+                    console.error('createOrder handler failed', e);
+                }
+            }}
+        >
+            <Grid container spacing={6}>
+                {/* On mobile show cart first, then customer/delivery; on large screens keep side-by-side */}
+                <Grid size={{xs: 12, lg: 6}} sx={{order: { xs: 2, lg: 1 }}}>
+                    <KoszykPageCustomerAndDelivery
+                        {...props}
+                        discountCode={'aaa'}
+                        cart={basket}
+                        goBack={() => {
+                            setSummary(false);
+                        }}
+                    />
+                </Grid>
+
+                <Grid size={{xs: 12, lg: 6}} sx={{order: { xs: 1, lg: 2 }}}>
+                    <KoszykPageCart
+                        {...props}
+                        cart={basket}
+                        goToSummary={() => {
+                            setSummary(true);
+                        }}
+                    />
+                </Grid>
+            </Grid>
+        </FormContainer>
+    )
 }
 
 export const KoszykPageClient = (props: KoszykPageClientProps) => {
-  const {} = props;
-  const [summary, setSummary] = useState<boolean>(false);
-  const [discountCode, setDiscountCode] = useState<string>('');
-  const [cartLoading, setCartLoading] = useState<boolean>(true);
+     const {basket, setBasket} = useCart();
+     const notification = useNotification();
+     const [summary, setSummary] = useState<boolean>(false);
+     const [cartLoading, setCartLoading] = useState<boolean>(true);
 
-  const [discountCodeState, setDiscountCodeState] = useState<"IDLE" | "ERROR" | "LOADING">("IDLE");
-  const [hasDiscountCode, setHasDiscountCode] = useState<boolean>(false);
+    useEffect(() => {
+        let mounted = true;
+        setCartLoading(true);
 
-  const [cart, setCart] = useState<AppCartResponse | null>(null);
+        (async () => {
+            try {
+                const data = await ky<WeblinkerCart>(`/api/cart`, {}).json();
+                if (mounted) setBasket(data);
+            } catch (err) {
+                console.error('Failed to fetch cart', err);
+                try {
+                    notification.showNotification('Nie udało się pobrać koszyka', 'error');
+                } catch {
+                    // ignore
+                }
+                // leave basket as-is
+            } finally {
+                if (mounted) setCartLoading(false);
+            }
+        })();
 
-  const handleFetchCart = async () => {
+        return () => {
+            mounted = false
+        };
+    }, [setBasket, notification]);
 
-    try {
-      await ky<AppCartResponse>(`/api/cart`, {
-        searchParams: {
-          discountCode,
-        }
-      }).json().then(data => {
-        setCart(data);
-        return data
-      });
-    } finally {
+    if (!basket && cartLoading) {
+        return <>
+            <Typography variant={'h1'} gutterBottom>
+                Koszyk
+            </Typography>
+
+            <Grid container spacing={6}>
+                <Grid size={{xs: 12, lg: 8}}>
+
+
+                    <Skeleton variant={'rectangular'} width={"100%"} height={339}/>
+                </Grid>
+
+                <Grid size={{xs: 12, lg: 4}}>
+                    <Skeleton variant={'rectangular'} width={"100%"} height={200} sx={{mb: 2}}/>
+                    <Skeleton variant={'rectangular'} width={"100%"} height={500}/>
+                </Grid>
+
+            </Grid>
+
+
+        </>
     }
-  }
 
-  useEffect(() => {
+    if (!(basket?.items?.length)) {
+        return <>
+            <Typography variant={'h1'} gutterBottom>
+                Koszyk
+            </Typography>
 
-    setCartLoading(true);
-    void handleFetchCart().finally(() => {
-      setCartLoading(false);
-    });
-
-  }, []);
-
-  useEffect(() => {
-    if (!cart) {
-      return
+            <Typography>
+                Koszyk jest pusty
+            </Typography>
+        </>
     }
 
-    setDiscountCodeState("LOADING");
-    void handleFetchCart().then(() => {
-      setHasDiscountCode(!!discountCode);
-    }).then(() => {
-      setDiscountCodeState("IDLE");
-    }).catch(() => {
-      setDiscountCodeState("ERROR");
-    });
-  }, [discountCode]);
-
-
-  if (!cart && cartLoading) {
     return <>
-      <Typography variant={'h1'} gutterBottom>
-        Koszyk
-      </Typography>
+        <Typography variant={'h1'} gutterBottom>
+            Koszyk{summary ? ' – podsumowanie' : ''}: {basket.uuid}
+        </Typography>
 
-      <Grid container spacing={6}>
-        <Grid size={{xs: 12, lg: 8}}>
-
-
-          <Skeleton variant={'rectangular'} width={"100%"} height={339}/>
-        </Grid>
-
-        <Grid size={{xs:12,lg: 4}}>
-          <Skeleton variant={'rectangular'} width={"100%"} height={200} sx={{mb:2}}/>
-          <Skeleton variant={'rectangular'} width={"100%"} height={500}/>
-        </Grid>
-
-      </Grid>
-
-
-
+        <ListSelectProvider
+            initialValue={basket.items?.map(x => x.productId) ?? []}
+        >
+            <FormInner basket={basket} setSummary={setSummary} props={props}/>
+        </ListSelectProvider>
     </>
-  }
-
-  if (!cart) {
-    return <>
-      <Typography variant={'h1'} gutterBottom>
-        Koszyk
-      </Typography>
-
-      <Typography>
-        Koszyk jest pusty
-      </Typography>
-    </>
-  }
-
-  return <>
-    <Typography variant={'h1'} gutterBottom>
-      {summary ? 'Podsumowanie' : 'Koszyk'} {cart.uuid}
-    </Typography>
-
-    <ListSelectProvider
-      initialValue={(cart.items).map(x => x.productId)}
-    >
-      {summary
-        ? <KoszykPageSummary
-          {...props}
-          discountCode={discountCode}
-          cart={cart}
-          goBack={() => {
-            setSummary(false);
-          }}
-
-        />
-        : <KoszykPageCart
-          {...props}
-          cart={cart}
-          discountCodeState={discountCodeState}
-          hasDiscountCode={hasDiscountCode}
-          goToSummary={() => {
-            setSummary(true);
-          }}
-          onDiscountCodeChange={(nextValue) => {
-            setDiscountCode(() => nextValue)
-          }}
-        />
-      }
-    </ListSelectProvider>
-  </>
 }

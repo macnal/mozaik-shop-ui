@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { SxProps, Theme } from '@mui/system';
+import {SxProps, Theme} from '@mui/system';
 
 type Props = {
   sx?: SxProps<Theme>;

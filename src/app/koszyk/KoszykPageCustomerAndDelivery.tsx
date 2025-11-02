@@ -3,8 +3,8 @@ import {Box, Card, CardContent, CardHeader, Grid} from "@mui/material";
 import {useListSelect} from "@/components/common/ListSelect/ListSelectProvider";
 import {JSX} from "react";
 import {CheckboxElement, TextFieldElement, useFormContext} from 'react-hook-form-mui'
-import {KoszykPageSummaryShipping} from "@/app/koszyk/KoszykPageSummaryShipping";
 import {WeblinkerCart} from "@/api/gen/model";
+import {KoszykPageDelivery} from "@/app/koszyk/KoszykPageDelivery";
 
 interface KoszykPageClientProps {
     cart: WeblinkerCart;
@@ -56,7 +56,7 @@ export const KoszykPageCustomerAndDelivery = ({
             <Card sx={{width: '100%'}}>
                 <CardHeader title={'Dostawa'}/>
                 <CardContent>
-                    <KoszykPageSummaryShipping/>
+                    <KoszykPageDelivery/>
                 </CardContent>
             </Card>
 

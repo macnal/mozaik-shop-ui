@@ -1,5 +1,4 @@
 import RedirectToDefaultProviderPage from "./page.client";
-import {authConfig} from "@/auth.config";
 import {redirect} from "next/navigation";
 import {auth} from "@/auth";
 

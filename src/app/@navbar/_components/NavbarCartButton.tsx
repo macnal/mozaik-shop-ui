@@ -34,7 +34,7 @@ export const NavbarCartButton = ({}) => {
             <>
                 <IconButton
                     component={Link}
-                    href={'/koszyk2'}
+                    href={'/koszyk'}
                     color={'inherit'}
                     {...!isMobile && bindHover(popupState)}
                 >
@@ -93,7 +93,7 @@ export const NavbarCartButton = ({}) => {
                                 <Button
                                     {...bindToggle(popupState)}
                                     component={Link}
-                                    href={'/koszyk2'}
+                                    href={'/koszyk'}
 
                                     variant={'contained'}
                                     endIcon={<ArrowForwardIcon/>}

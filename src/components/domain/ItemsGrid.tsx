@@ -2,13 +2,14 @@ import {Grid, Skeleton} from "@mui/material";
 import {getSlug} from "@/utils/slug";
 import {ItemCard} from "@/components/domain/ItemCard";
 import {Suspense} from "react";
-import {ApiPageResponsePage, Game} from "@/types/responses";
+import {ApiPageResponsePage} from "@/types/responses";
 import {ItemGridPagination} from "@/components/domain/ItemGridPagination";
+import {WeblinkerProductSummary} from "@/api/gen/model";
 
 const size = {xs: 5, md: 3, lg: 2};
 
 interface ItemsGridProps {
-  items: Game[], //Promise<Game[]> |
+  items: WeblinkerProductSummary[], //Promise<Game[]> |
   pagination: ApiPageResponsePage | null, //Promise<ApiPageResponsePage> |
 }
 

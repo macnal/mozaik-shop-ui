@@ -68,7 +68,7 @@ export function CartProvider({children}: Readonly<{ children: ReactNode }>) {
                     newItems[idx] = {...newItems[idx], quantity: newQuantity(newItems[idx].quantity ?? 0, op)};
                 }
             }
-            const res = await fetch(`/api/cart2`, {
+            const res = await fetch(`/api/cart`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({...basket, items: newItems}),
@@ -95,7 +95,7 @@ export function CartProvider({children}: Readonly<{ children: ReactNode }>) {
                 return null
             }
 
-            const res = await fetch(`/api/cart2`, {
+            const res = await fetch(`/api/cart`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({...basket, promoCode: code}),
@@ -130,7 +130,7 @@ export function CartProvider({children}: Readonly<{ children: ReactNode }>) {
                 return null;
             }
 
-            const res = await fetch(`/api/cart2`, {
+            const res = await fetch(`/api/cart`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({...basket, deliveryMethod: method}),

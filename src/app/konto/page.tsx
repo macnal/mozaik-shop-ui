@@ -1,5 +1,5 @@
 'use client'
-import { PageContainer } from "@/components/PageContainer"
+import {PageContainer} from "@/components/PageContainer"
 import {Button, Divider, Stack, Typography} from "@mui/material";
 import {signIn} from "next-auth/react";
 

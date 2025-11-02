@@ -1,6 +1,6 @@
-import {WebLinkerService} from "@/services/weblinker";
 import {Category} from "@/types/responses";
 import {NavbarCategorySubmenuClient} from "@/app/@navbar/_components/NavbarCategorySubmenu.client";
+
 
 export const NavbarCategorySubmenu = async ({
                                               parent
@@ -8,11 +8,8 @@ export const NavbarCategorySubmenu = async ({
   parent: Category
 }) => {
   try {
-    const dataSource = await WebLinkerService();
-    const {items: categories} = await dataSource.fetchCategories({parentId: parent.id});
-
     return <NavbarCategorySubmenuClient
-      categories={categories}
+      categories={[]}
       parent={parent}
     />
   } catch (error_) {

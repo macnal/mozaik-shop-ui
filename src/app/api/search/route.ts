@@ -1,5 +1,6 @@
 import {WebLinkerService} from "@/services/weblinker";
 import {NextRequest} from "next/server";
+import {getCategoryById} from "@/data/categories";
 
 
 export const GET = async (
@@ -18,7 +19,7 @@ export const GET = async (
   return Response.json({
     items: await Promise.all(
       items.map(async (item) => {
-        const category = await dataSource.fetchCategoryById(item.categoryId);
+        const category = getCategoryById(item.categoryId);
 
         return ({
           id: item.id,

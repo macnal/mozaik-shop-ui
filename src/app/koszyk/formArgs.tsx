@@ -1,6 +1,6 @@
 import {zodResolver} from "@hookform/resolvers/zod";
 import {CustomerDataZodSchema} from "@/app/koszyk/_schema";
-import {ShippingType} from "@/app/koszyk2/KoszykPageDelivery";
+import {ShippingType} from "@/app/koszyk/KoszykPageDelivery";
 
 export const formArgs = {
     resolver: zodResolver(CustomerDataZodSchema),

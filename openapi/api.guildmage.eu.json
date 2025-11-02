@@ -54,94 +54,6 @@
         "tags": [
           "weblinker-cart-controller"
         ],
-        "operationId": "addToCart",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WeblinkerCart"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/WeblinkerCart"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/weblinker/cart2": {
-      "get": {
-        "tags": [
-          "weblinker-cart-2-controller"
-        ],
-        "operationId": "getCart_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/WeblinkerCart"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "weblinker-cart-2-controller"
-        ],
         "operationId": "updateCart",
         "requestBody": {
           "content": {
@@ -187,122 +99,12 @@
         }
       }
     },
-    "/weblinker/cart2/merge/{uuid}": {
-      "put": {
-        "tags": [
-          "weblinker-cart-2-controller"
-        ],
-        "operationId": "mergeCart",
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/WeblinkerCart"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/weblinker/cart/{uuid}/promo/{code}": {
-      "put": {
-        "tags": [
-          "weblinker-cart-controller"
-        ],
-        "operationId": "registerPromoCode",
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "code",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/WeblinkerCart"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/weblinker/cart/merge/{uuid}": {
       "put": {
         "tags": [
           "weblinker-cart-controller"
         ],
-        "operationId": "mergeCart_1",
+        "operationId": "mergeCart",
         "parameters": [
           {
             "name": "uuid",
@@ -1393,63 +1195,12 @@
         }
       }
     },
-    "/weblinker/cart2/{uuid}": {
-      "get": {
-        "tags": [
-          "weblinker-cart-2-controller"
-        ],
-        "operationId": "getCart_2",
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/WeblinkerCart"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/weblinker/cart/{uuid}": {
       "get": {
         "tags": [
           "weblinker-cart-controller"
         ],
-        "operationId": "getCart_3",
+        "operationId": "getCart_1",
         "parameters": [
           {
             "name": "uuid",
@@ -1458,73 +1209,6 @@
             "schema": {
               "type": "string",
               "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/WeblinkerCart"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "weblinker-cart-controller"
-        ],
-        "operationId": "deleteFromCart",
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "p",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
             }
           }
         ],
@@ -2634,6 +2318,9 @@
           },
           "categoryName": {
             "type": "string"
+          },
+          "url": {
+            "type": "string"
           }
         }
       },
@@ -2918,12 +2605,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/WeblinkerCartItem"
-            }
-          },
           "person": {
             "$ref": "#/components/schemas/WeblinkerPerson"
           },
@@ -2934,7 +2615,12 @@
             "$ref": "#/components/schemas/WeblinkerInvoice"
           },
           "deliveryMethod": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "INPOST",
+              "POCZTA_POLSKA",
+              "PERSONAL_PICKUP"
+            ]
           },
           "deliveryPointId": {
             "type": "string"

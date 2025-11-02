@@ -1,4 +1,3 @@
-import {Game} from "@/types/responses"
 import {Card, CardActionArea, CardContent, Chip, Stack, Typography} from "@mui/material";
 import {blue, orange, purple, red, yellow} from "@mui/material/colors";
 import Image from "next/image";
@@ -8,6 +7,8 @@ import {WebLinkerService} from "@/services/weblinker";
 import {ItemCardAddToCart} from "@/components/domain/ItemCardAddToCart";
 import {formatMoney} from "@/utils/money";
 import {getAppConfig} from "@/app.config";
+import {WeblinkerProductSummary} from "@/api/gen/model";
+import {getCategoryById} from "@/data/categories";
 
 const colors = {
     orange,
@@ -19,7 +20,7 @@ const colors = {
 
 export const ItemCard = async ({
                                    item
-                               }: { item: Game }) => {
+                               }: { item: WeblinkerProductSummary }) => {
     const {
         image,
         name,
@@ -35,7 +36,7 @@ export const ItemCard = async ({
     const mainImage = image;
     const {interface: {availableProductsMin}} = await getAppConfig();
     const dataSource = await WebLinkerService();
-    const category = await dataSource.fetchCategoryById(categoryId);
+    const category = getCategoryById(categoryId);
     const url = `/${category.slug}/${slug}`;
 
     const isAvailable = availableProductsMin < stock

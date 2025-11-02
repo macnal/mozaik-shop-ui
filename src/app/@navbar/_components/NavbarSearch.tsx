@@ -2,21 +2,22 @@
 
 import {Search} from "@mui/icons-material";
 import {
-  Autocomplete,
-  Avatar,
-  debounce,
-  IconButton,
-  InputAdornment, ListItemAvatar,
-  OutlinedInput,
-  Stack, SxProps,
-  Typography
+    Autocomplete,
+    Avatar,
+    debounce,
+    IconButton,
+    InputAdornment,
+    OutlinedInput,
+    Stack,
+    SxProps,
+    Typography
 } from "@mui/material";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {useEffect, useMemo, useRef, useState,} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
 import NextLink from 'next/link';
-import Link from "next/link";
 import ImageTwoToneIcon from '@mui/icons-material/ImageTwoTone';
+
 const handleFetch = async (searchParams: { query: string } | null = null) => {
 
   return await fetch(`/api/search${searchParams ? `?${

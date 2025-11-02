@@ -15,15 +15,17 @@ export const maybeMergeCart = async ({account}: { account?: Account | null }) =>
   }
 
   const nextCartId = await dataSource.fetchCardId(account.access_token);
-  cookieStore.set(CART_ID_COOKIE_NAME, nextCartId);
+  if (nextCartId) {
+      cookieStore.set(CART_ID_COOKIE_NAME, nextCartId);
+  }
 
   if (currentCartId && (currentCartId !== nextCartId)) {
     const cartItems = await dataSource.fetchCart(currentCartId);
 
-    await dataSource.addToCart(nextCartId, cartItems.items.map(x => ({
-      quantity: x.quantity,
-      productId: x.productId,
-    })));
+    // await dataSource.addToCart(nextCartId, cartItems.items.map(x => ({
+    //   quantity: x.quantity,
+    //   productId: x.productId,
+    // })));
   }
 }
 

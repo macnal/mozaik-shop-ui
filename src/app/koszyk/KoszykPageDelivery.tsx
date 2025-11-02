@@ -1,13 +1,13 @@
 'use client';
 import {
-  FormControlLabel,
-  FormControlLabelProps,
-  Grid,
-  Radio,
-  RadioGroup,
-  Stack,
-  SxProps,
-  Typography
+    FormControlLabel,
+    FormControlLabelProps,
+    Grid,
+    Radio,
+    RadioGroup,
+    Stack,
+    SxProps,
+    Typography
 } from "@mui/material"
 import {ReactNode} from "react";
 import LocalShippingTwoToneIcon from '@mui/icons-material/LocalShippingTwoTone';
@@ -16,11 +16,11 @@ import PersonTwoToneIcon from '@mui/icons-material/PersonTwoTone';
 import {ReactComponentLike} from "prop-types";
 import {mergeSx} from "@/utils/sx";
 import {useRadioGroup} from '@mui/material/RadioGroup';
-import KoszykPageSummaryShippingInpost from "@/app/koszyk/KoszykPageSummaryShippingInpost";
-import {useController, useFormContext} from "react-hook-form";
+import {useController} from "react-hook-form";
 import {TextFieldElement} from "react-hook-form-mui";
 import {useCart} from "@/context/cartProvider";
 import {WeblinkerCartDeliveryMethod} from "@/api/gen/model";
+import KoszykPageDeliveryInpost from "@/app/koszyk/KoszykPageDeliveryInpost";
 
 export type ShippingType = "INPOST" | "POCZTA_POLSKA" | "PERSONAL_PICKUP"
 
@@ -70,23 +70,22 @@ const RadioBtn = ({label, Icon, sx, ...props}: Partial<FormControlLabelProps> & 
 }
 
 
-export const KoszykPageSummaryShipping = () => {
+export const KoszykPageDelivery = () => {
   const {field: {value, onChange, onBlur}, fieldState: {error}} = useController({name: 'deliveryMethod'});
-  // formState.errors is unused here
-  useFormContext();
   const { changeDeliveryMetod } = useCart();
 
   return <RadioGroup
     aria-labelledby="demo-controlled-radio-buttons-group"
     name="controlled-radio-buttons-group"
-    value={value || null}
-    onChange={async (event, nextValue) => {
-      const val = nextValue as ShippingType;
-      console.log('KoszykPageSummaryShipping onChange ->', val);
+    value={value || ''}
+    onChange={async (event) => {
+      const val = (event.target as HTMLInputElement).value as ShippingType;
       onChange(val);
       onBlur();
+      console.log('Changing delivery method to:', val);
       try {
-        await changeDeliveryMetod(val as unknown as WeblinkerCartDeliveryMethod);
+        const res = await changeDeliveryMetod(val as unknown as WeblinkerCartDeliveryMethod);
+        console.log('changeDeliveryMetod result:', res);
       } catch (e) {
         console.error('changeDeliveryMetod threw', e);
       }
@@ -100,7 +99,7 @@ export const KoszykPageSummaryShipping = () => {
     />
 
     {value === "INPOST" && (
-      <KoszykPageSummaryShippingInpost/>
+      <KoszykPageDeliveryInpost/>
     )}
 
     <RadioBtn
@@ -188,4 +187,3 @@ export const KoszykPageSummaryShipping = () => {
     </Typography>}
   </RadioGroup>
 }
-// <KoszykPageSummaryInpost/>

@@ -1,4 +1,4 @@
-import {AppBar, Container, Grid, IconButton, Stack, Toolbar, Box} from "@mui/material"
+import {AppBar, Box, Container, Grid, IconButton, Stack, Toolbar} from "@mui/material"
 import NextLink from "next/link";
 import Image from 'next/image';
 import {NavbarClient} from "@/app/@navbar/_components/Navbar.client";
@@ -6,9 +6,9 @@ import {NavbarCartButton} from '@/app/@navbar/_components/NavbarCartButton';
 import {NavbarSearch} from "@/app/@navbar/_components/NavbarSearch";
 import {auth} from "@/auth";
 import {NavbarCategories} from "@/app/@navbar/_components/NavbarCategories";
-import {NavbarCategorySubmenu} from "@/app/@navbar/_components/NavbarCategorySubmenu";
 import TestBadge from './_components/TestBadge';
 import {categories} from "@/data/categories";
+import {NavbarCategorySubmenu} from "@/app/@navbar/_components/NavbarCategorySubmenu";
 
 const Navbar = async () => {
     let session: unknown;
@@ -23,11 +23,12 @@ const Navbar = async () => {
         authError = true;
     }
 
-    const userName = (session as { user?: { name?: string } } )?.user?.name;
+    const userName = (session as { user?: { name?: string } })?.user?.name;
 
-    return <AppBar position="static" elevation={0} sx={{overflow: 'hidden', bgcolor: 'white', color: 'text.primary', boxShadow: 'none'}}>
+    return <AppBar position="static" elevation={0}
+                   sx={{overflow: 'hidden', bgcolor: 'white', color: 'text.primary', boxShadow: 'none'}}>
         {/* Test badge */}
-        <TestBadge />
+        <TestBadge/>
 
         <Container component={Toolbar} maxWidth={false} disableGutters>
             <Grid container sx={{width: '100%'}}>
@@ -134,10 +135,7 @@ const Navbar = async () => {
                         <NavbarCategories categories={categories}/>
 
                         <Stack direction={'row'} spacing={2} sx={{display: {xs: 'none', md: 'flex'}}}>
-                            {categories.map(x => <NavbarCategorySubmenu
-                                key={x.id}
-                                parent={x}
-                            />)}
+                            {categories.map(x => <NavbarCategorySubmenu key={x.id} parent={x}/>)}
                         </Stack>
 
                     </Stack>
