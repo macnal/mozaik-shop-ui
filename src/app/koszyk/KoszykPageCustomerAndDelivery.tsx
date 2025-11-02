@@ -8,8 +8,6 @@ import {KoszykPageDelivery} from "@/app/koszyk/KoszykPageDelivery";
 
 interface KoszykPageClientProps {
     cart: WeblinkerCart;
-    goBack: () => void;
-    discountCode: string;
 }
 
 
@@ -26,8 +24,6 @@ function WatchField<FieldType>({watch: fieldsToWatch, render}: {
 
 export const KoszykPageCustomerAndDelivery = ({
                                       cart,
-                                      goBack,
-                                      discountCode
                                   }: KoszykPageClientProps) => {
     const [isChecked] = useListSelect();
     const selectedItems = (cart.items ?? [])

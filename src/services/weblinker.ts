@@ -2,8 +2,10 @@ import 'server-only'
 import {auth} from "@/auth";
 import ky, {Options} from "ky";
 import {
-    WeblinkerCart, WeblinkerOrder, WeblinkerProductDetail,
-    WeblinkerProductResponseDetail, WeblinkerProductsResponseSummary
+    WeblinkerCart,
+    WeblinkerOrder,
+    WeblinkerProductResponseDetail,
+    WeblinkerProductsResponseSummary
 } from "@/api/gen/model";
 
 
@@ -52,14 +54,11 @@ export const WebLinkerService = async () => {
         }),
 
         async createOrder(data: WeblinkerOrder): Promise<string> {
-            console.log('ORDER');
-            console.log(data);
+            console.log('ORDER', data);
 
             const responseData = await this.api.post<{ url: string }>(
                 `weblinker/order`,
-                {
-                    json: data
-                }
+                {json: data}
             ).json();
 
             return responseData.url;
@@ -116,7 +115,6 @@ export const WebLinkerService = async () => {
         },
 
         async fetchProducts(params: FetchProductsParams): Promise<WeblinkerProductsResponseSummary> {
-            // await new Promise(r => setTimeout(r, 5000));
             const nextSearchParams = new URLSearchParams({
                 page: `${params.page - 1}`,
                 size: `${params.size}`,

@@ -21,11 +21,9 @@ interface KoszykPageClientProps {
 
 const FormInner = ({
                        basket,
-                       setSummary,
                        props,
                    }: {
     basket: WeblinkerCart,
-    setSummary: (v: boolean) => void,
     props: KoszykPageClientProps,
 }) => {
 
@@ -34,7 +32,6 @@ const FormInner = ({
             {...formArgs}
             onSuccess={(data) => {
                 console.log('order: ', data)
-                // forward the filled form to parent createOrder handler
                 try {
                     props.createOrder(data as Record<string, unknown>);
                 } catch (e) {
@@ -47,11 +44,7 @@ const FormInner = ({
                 <Grid size={{xs: 12, lg: 6}} sx={{order: { xs: 2, lg: 1 }}}>
                     <KoszykPageCustomerAndDelivery
                         {...props}
-                        discountCode={'aaa'}
                         cart={basket}
-                        goBack={() => {
-                            setSummary(false);
-                        }}
                     />
                 </Grid>
 
@@ -59,9 +52,6 @@ const FormInner = ({
                     <KoszykPageCart
                         {...props}
                         cart={basket}
-                        goToSummary={() => {
-                            setSummary(true);
-                        }}
                     />
                 </Grid>
             </Grid>
@@ -72,7 +62,6 @@ const FormInner = ({
 export const KoszykPageClient = (props: KoszykPageClientProps) => {
      const {basket, setBasket} = useCart();
      const notification = useNotification();
-     const [summary, setSummary] = useState<boolean>(false);
      const [cartLoading, setCartLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -139,13 +128,13 @@ export const KoszykPageClient = (props: KoszykPageClientProps) => {
 
     return <>
         <Typography variant={'h1'} gutterBottom>
-            Koszyk{summary ? ' – podsumowanie' : ''}: {basket.uuid}
+            Koszyk: {basket.uuid}
         </Typography>
 
         <ListSelectProvider
             initialValue={basket.items?.map(x => x.productId) ?? []}
         >
-            <FormInner basket={basket} setSummary={setSummary} props={props}/>
+            <FormInner basket={basket} props={props}/>
         </ListSelectProvider>
     </>
 }

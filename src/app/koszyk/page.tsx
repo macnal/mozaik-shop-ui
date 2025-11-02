@@ -6,14 +6,12 @@ import {redirect} from "next/navigation";
 import {KoszykPageClient} from "@/app/koszyk/page.client";
 import layoutSchema from '../../../public/order/uischema.json';
 import formSchema from '../../../public/order/schema.json';
-import z from "zod";
 import {CustomerDataZodSchema} from "@/app/koszyk/_schema";
 import {WeblinkerOrder} from "@/api/gen/model";
 
 async function createOrder(formData: Record<string, unknown>) {
     'use server';
     const dataSource = await WebLinkerService();
-
     const cookieStore = await cookies();
     const cartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
 
@@ -21,22 +19,23 @@ async function createOrder(formData: Record<string, unknown>) {
     if (cartId) {
         cart = await dataSource.fetchCart(cartId);
         if (cart) {
-            const RequestSchema = CustomerDataZodSchema.safeExtend({
-                items: z.array(z.object({
-                    productId: z.number(),
-                    quantity: z.number(),
-                })),
-            }).omit({
-                wantInvoice: true
-            });
+            const RequestSchema = CustomerDataZodSchema
+                // .safeExtend({
+                //     items: z.array(z.object({
+                //         productId: z.number(),
+                //         quantity: z.number(),
+                //     })),
+                // })
+                .omit({
+                    wantInvoice: true
+                });
 
             const {data, error, success} = RequestSchema.safeParse(formData);
 
             if (success && data) {
                 const paymentUrl = await dataSource.createOrder({
-                    uuid: cartId,
-                    ...data,
-                } as unknown as WeblinkerOrder);
+                    uuid: cartId, ...data,
+                } as WeblinkerOrder);
                 redirect(paymentUrl);
             }
 

@@ -1,14 +1,9 @@
-import isEmail from 'validator/lib/isEmail';
 import isMobilePhone from 'validator/lib/isMobilePhone';
 import isPostalCode from 'validator/lib/isPostalCode';
-import isIBAN from "validator/lib/isIBAN";
 
 export const mobilePhoneValidator = (value: string) => isMobilePhone(value, 'pl-PL')
 
 export const zipCodeValidator = (value: string) => isPostalCode(value, 'PL')
-
-export const ibanValidator = (value: string) => isIBAN(value)
-
 
 export const nipValidator = (nip: string | number) => {
   if (typeof nip === "number") {
