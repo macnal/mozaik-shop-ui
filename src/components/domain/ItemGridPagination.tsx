@@ -2,10 +2,10 @@
 
 import {Pagination, PaginationItem} from "@mui/material";
 import NextLink from "next/link";
-import {ApiPageResponsePage} from "@/types/responses";
 import {usePathname, useSearchParams} from "next/navigation";
+import {PageMetadataSummary} from "@/api/gen/model";
 
-export const ItemGridPagination = ({pagination}: { pagination: ApiPageResponsePage }) => {
+export const ItemGridPagination = ({pagination}: { pagination: PageMetadataSummary }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams()
   const page = +(searchParams.get('page') || 1);

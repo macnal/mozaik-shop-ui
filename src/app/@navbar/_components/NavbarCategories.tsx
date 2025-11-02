@@ -3,10 +3,10 @@ import {Button, Menu, MenuItem, Stack} from "@mui/material"
 import NextLink from "next/link";
 import {getSlug} from "@/utils/slug";
 import PopupState, {bindMenu, bindTrigger} from "material-ui-popup-state";
-import {Category} from "@/types/responses";
 import MenuIcon from '@mui/icons-material/Menu';
+import {WeblinkerCategory} from "@/api/gen/model";
 
-export const NavbarCategories = ({categories}: { categories: Category[] }) => {
+export const NavbarCategories = ({categories}: { categories: WeblinkerCategory[] }) => {
 
     console.log('categories', categories);
 

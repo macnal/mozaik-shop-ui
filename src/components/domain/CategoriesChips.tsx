@@ -1,8 +1,8 @@
 'use client'
 import {Chip, Stack, SxProps} from "@mui/material"
-import {Category} from "@/types/responses";
+import {WeblinkerCategory} from "@/api/gen/model";
 
-export const CategoriesChips = ({items, sx}: { items: Category[], sx?: SxProps }) => {
+export const CategoriesChips = ({items, sx}: { items: WeblinkerCategory[], sx?: SxProps }) => {
 
 
   return <Stack spacing={1.5} direction={'row'} sx={sx}>
