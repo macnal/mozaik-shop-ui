@@ -2,7 +2,8 @@
 import AddShoppingCartTwoToneIcon from '@mui/icons-material/AddShoppingCartTwoTone';
 
 import {Fab} from "@mui/material";
-import {AddItemToCartEvent, CartEvents} from "@/app/@navbar/_components/Navbar.types";
+import {useCart} from "@/context/cartProvider";
+import {WeblinkerCartItem} from "@/api/gen/model";
 
 interface ItemCardAddToCartProps {
   itemId: number;
@@ -10,6 +11,7 @@ interface ItemCardAddToCartProps {
 }
 
 export const ItemCardAddToCart = ({itemId, disabled}: ItemCardAddToCartProps) => {
+    const {updateBasetItem} = useCart();
 
 
   return <Fab
@@ -19,19 +21,8 @@ export const ItemCardAddToCart = ({itemId, disabled}: ItemCardAddToCartProps) =>
     disabled={disabled}
     sx={{right: 12, bottom: 12, position: 'absolute'}}
     onClick={(outerEvent) => {
-      const event = new CustomEvent<AddItemToCartEvent>(CartEvents.addItem, {
-        detail: {
-          items: [
-            {
-              productId: itemId,
-              quantity: 1
-            },
-          ]
-        } as never,
-      });
-
-      document.dispatchEvent(event);
-      outerEvent.preventDefault();
+        updateBasetItem({productId: itemId, quantity: 1} as WeblinkerCartItem,"ADD");
+        outerEvent.preventDefault();
     }}
   >
     <AddShoppingCartTwoToneIcon/>

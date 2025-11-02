@@ -1,4 +1,5 @@
 'use client'
+import React, {useEffect} from 'react'
 import {Button, Grid, Link, Stack, Typography, useMediaQuery} from "@mui/material";
 import PopupState, {bindHover, bindPopover} from "material-ui-popup-state";
 import {Category} from "@/types/responses";
@@ -6,14 +7,28 @@ import NextLink from "next/link";
 import HoverPopover from 'material-ui-popup-state/HoverPopover'
 import {getSlug} from '@/utils/slug';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import {useNotification} from '@/context/notification';
 
 const createChunks = <T = unknown>(arr: T[], chunkSize = 10) =>
   Array.from({length: Math.ceil(arr.length / chunkSize)}, (_, i) =>
     arr.slice(i * chunkSize, i * chunkSize + chunkSize)
   );
 
-export const NavbarCategorySubmenuClient = ({parent, categories}: { parent: Category, categories: Category[] }) => {
+export interface NavbarCategorySubmenuClientProps {
+  parent: Category;
+  categories: Category[];
+  fetchError?: boolean;
+}
+
+export const NavbarCategorySubmenuClient: React.FC<NavbarCategorySubmenuClientProps> = ({parent, categories, fetchError}) => {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const notification = useNotification();
+
+  useEffect(() => {
+    if (fetchError) {
+      notification.showNotification('Nie udało się pobrać podkategorii', 'error');
+    }
+  }, [fetchError, notification]);
 
   const chunks = createChunks(categories, 6);
 

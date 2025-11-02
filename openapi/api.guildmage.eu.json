@@ -2591,6 +2591,11 @@
         }
       },
       "WeblinkerCartItem": {
+        "required": [
+          "price",
+          "productId",
+          "quantity"
+        ],
         "type": "object",
         "properties": {
           "uuid": {
@@ -2604,17 +2609,13 @@
           "name": {
             "type": "string"
           },
+          "slug": {
+            "type": "string"
+          },
           "price": {
             "type": "number"
           },
           "quantity": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "categoryId": {
             "type": "integer",
             "format": "int32"
           },
@@ -2623,6 +2624,16 @@
           },
           "checked": {
             "type": "boolean"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "categorySlug": {
+            "type": "string"
+          },
+          "categoryName": {
+            "type": "string"
           }
         }
       },
@@ -3154,6 +3165,12 @@
           },
           "minPrice30Days": {
             "type": "number"
+          },
+          "categorySlug": {
+            "type": "string"
+          },
+          "categoryName": {
+            "type": "string"
           }
         }
       },
@@ -3214,6 +3231,12 @@
           },
           "minPrice30Days": {
             "type": "number"
+          },
+          "categorySlug": {
+            "type": "string"
+          },
+          "categoryName": {
+            "type": "string"
           },
           "description": {
             "type": "string"

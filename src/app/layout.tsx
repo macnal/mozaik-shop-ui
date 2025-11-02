@@ -11,6 +11,8 @@ import {SessionProvider} from "@/context/auth";
 import {auth} from "@/auth";
 import {AppConfigContextProvider} from "@/context/config";
 import ClientGoogleAnalytics from "@/components/global/ClientGoogleAnalytics";
+import {CartProvider} from "@/context/cartProvider";
+import {NotificationProvider} from "@/context/notification";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-6SZZHD30W4';
 
@@ -44,8 +46,6 @@ export default async function RootLayout({
     children: React.ReactNode;
     navbar: React.ReactNode;
 }>) {
-    // const res = await fetch(`${process.env.PUBLIC_URL}/config.json`);
-    // const config = await res.json();
     const session = await auth();
 
     return (
@@ -55,15 +55,16 @@ export default async function RootLayout({
             <AppConfigContextProvider>
                 <ThemeContext>
                     <SessionProvider session={session}>
-                        <CssBaseline/>
-
-                        {navbar}
-
-                        <Stack sx={{flexGrow: 1}}>
-                            {children}
-                        </Stack>
-
-                        <Footer/>
+                        <NotificationProvider>
+                            <CartProvider>
+                                <CssBaseline/>
+                                {navbar}
+                                <Stack sx={{flexGrow: 1}}>
+                                    {children}
+                                </Stack>
+                                <Footer/>
+                            </CartProvider>
+                        </NotificationProvider>
                     </SessionProvider>
                 </ThemeContext>
             </AppConfigContextProvider>

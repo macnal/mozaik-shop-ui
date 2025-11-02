@@ -7,13 +7,21 @@ export const NavbarCategorySubmenu = async ({
                                             }: {
   parent: Category
 }) => {
-  const dataSource = await WebLinkerService();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const {items: categories} = await dataSource.fetchCategories({parentId: 5052434 || parent.id});
+  try {
+    const dataSource = await WebLinkerService();
+    const {items: categories} = await dataSource.fetchCategories({parentId: parent.id});
 
-  return <NavbarCategorySubmenuClient
-    categories={categories}
-    parent={parent}
-  />
+    return <NavbarCategorySubmenuClient
+      categories={categories}
+      parent={parent}
+    />
+  } catch (error_) {
+    console.error('Failed to fetch categories for submenu', parent?.id, error_);
+    // fallback: render client submenu with empty categories and pass fetchError for client notification
+    return <NavbarCategorySubmenuClient
+      categories={[]}
+      parent={parent}
+      fetchError={true}
+    />
+  }
 }

@@ -6,17 +6,28 @@ import {signIn, signOut} from "next-auth/react"
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import HoverPopover from 'material-ui-popup-state/HoverPopover';
 import Link from "next/link";
+import {useEffect} from 'react';
+import {useNotification} from '@/context/notification';
 
 
 export const NavbarClient = ({
                                isAuthenticated,
                                name,
+                               authError,
                              }: {
   isAuthenticated: boolean,
-  name?: string | null | undefined,
+  name?: string | null,
+  authError?: boolean,
 
 }) => {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const notification = useNotification();
+
+  useEffect(() => {
+    if (authError) {
+      notification.showNotification('Problem z połączeniem do serwera autoryzacji', 'error');
+    }
+  }, [authError, notification]);
 
   if (isAuthenticated) {
     return <PopupState variant="popover" popupId="account-popup">
