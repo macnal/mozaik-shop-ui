@@ -88,7 +88,7 @@ export default function PaymentStatusClient({orderId, pollIntervalMs = 3000, max
         return (
             <Stack sx={{alignItems: 'center'}}>
                 <CircularProgress sx={{mb: 2}}/>
-                <Typography sx={{fontSize: '1.25rem', fontWeight: 600}}>Oczekiwanie na płatność</Typography>
+                <Typography sx={{fontSize: '1.25rem', fontWeight: 600}}>Oczekiwanie na płatność.</Typography>
                 <Typography color={'textSecondary'}>Próba: {attemptsState}</Typography>
             </Stack>
         )

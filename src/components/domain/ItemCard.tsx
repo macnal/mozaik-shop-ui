@@ -3,7 +3,6 @@ import {blue, orange, purple, red, yellow} from "@mui/material/colors";
 import Image from "next/image";
 import Link from "next/link";
 import {AspectRatio} from "@/components/common/AspectRatio";
-import {WebLinkerService} from "@/services/weblinker";
 import {ItemCardAddToCart} from "@/components/domain/ItemCardAddToCart";
 import {formatMoney} from "@/utils/money";
 import {getAppConfig} from "@/app.config";
@@ -35,7 +34,6 @@ export const ItemCard = async ({
     } = item;
     const mainImage = image;
     const {interface: {availableProductsMin}} = await getAppConfig();
-    const dataSource = await WebLinkerService();
     const category = getCategoryById(categoryId);
     const url = `/${category.slug}/${slug}`;
 
@@ -50,17 +48,17 @@ export const ItemCard = async ({
                 position: 'relative',
                 height: '100%',
 
-                '.MuiFab-root': {
-                    opacity: 0,
-                    transition: 'opacity .3s'
-                },
+                // '.MuiFab-root': {
+                //     opacity: 0,
+                //     transition: 'opacity .3s'
+                // },
 
-                '&:hover, &:focus, &:active': {
-                    '.MuiFab-root': {
-                        opacity: 1,
-                        transition: 'opacity .3s'
-                    }
-                }
+                // '&:hover, &:focus, &:active': {
+                //     '.MuiFab-root': {
+                //         opacity: 1,
+                //         transition: 'opacity .3s'
+                //     }
+                // }
 
 
             }}>
@@ -74,7 +72,7 @@ export const ItemCard = async ({
                 }}
                 spacing={1}
             >
-                {!isAvailable && <Chip
+                {!isAvailable ? <Chip
                     label={"Brak w magazynie"}
                     variant={"filled"}
                     color={"default"}
@@ -82,6 +80,16 @@ export const ItemCard = async ({
                         boxShadow: 1,
                         fontWeight: 600,
                         bgcolor: 'grey.300',
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
+                    }}
+                /> : <Chip
+                    label={`Dostępne ${stock} szt.`}
+                    variant={"filled"}
+                    color={"primary"}
+                    sx={{
+                        boxShadow: 1,
+                        fontWeight: 600,
                         borderTopRightRadius: 0,
                         borderBottomRightRadius: 0,
                     }}
