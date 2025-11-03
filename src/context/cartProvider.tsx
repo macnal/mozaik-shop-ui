@@ -50,6 +50,7 @@ export function CartProvider({children}: Readonly<{ children: ReactNode }>) {
     }, [basket, router]);
 
     const updateBasetItem = useCallback(async (item: WeblinkerCartItem, op: ItemOperation) => {
+        console.log('updateBasetItem called with', item, op);
         try {
             if (!basket) {
                 return null
@@ -58,7 +59,6 @@ export function CartProvider({children}: Readonly<{ children: ReactNode }>) {
             const prevItems = basket.items ?? [];
             const idx = prevItems.findIndex(i => i.productId === item.productId);
             const newItems = [...prevItems];
-
             if (idx === -1) {
                 newItems.push(item);
             } else {
@@ -81,7 +81,9 @@ export function CartProvider({children}: Readonly<{ children: ReactNode }>) {
                 return null;
             }
 
+            console.log('updateBasetItem called 2');
             const updated = await res.json();
+            console.log('updateBasetItem called 3');
             setBasket(updated);
         } catch (error_) {
             console.error('Failed to update basket item', error_);

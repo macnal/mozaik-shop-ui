@@ -10,10 +10,34 @@ import {notFound} from "next/navigation";
 import {AddToCartButton} from "./AddToCartButton";
 import {Metadata, ResolvingMetadata} from "next";
 import {getCategoryById} from "@/data/categories";
+import {WeblinkerProductDetail} from "@/api/gen/model";
+import {globalKeywords} from "@/data/meta";
 
 interface ItemPageProps {
     params: Promise<{ itemSlug: string, categorySlug: string }>
 }
+
+function buildKeywords(item: WeblinkerProductDetail): string[] {
+    const candidates: string[] = Array.from(globalKeywords);
+
+    if (Array.isArray(item.tags)) {
+        candidates.push(...item.tags);
+    }
+    if (item.name) candidates.push(item.name);
+    if (item.categoryName) candidates.push(item.categoryName);
+
+    const normalized = Array.from(
+        new Set(
+            candidates
+                .map(k => String(k || "").trim())
+                .filter(Boolean)
+                .map(k => k.toLowerCase())
+        )
+    );
+
+    return normalized;
+}
+
 
 export async function generateMetadata(
     {params}: ItemPageProps,
@@ -29,6 +53,7 @@ export async function generateMetadata(
     return {
         title: {default: `${item.name} | ${category.name}`, template: `%s | ${item.name} | ${category.name}`},
         description: item.shortDescription,
+        keywords: buildKeywords(item),
         openGraph: {
             url: `${process.env.PUBLIC_URL}//${getSlug(category)}/${getSlug(item)}`,
             images: [item.image],
