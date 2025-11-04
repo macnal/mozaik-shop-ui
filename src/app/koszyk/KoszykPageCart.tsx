@@ -27,6 +27,7 @@ import {KoszykSubmitButton} from "@/app/koszyk/KoszykSubmitButton";
 
 interface KoszykPageCartProps {
     cart: WeblinkerCart;
+
     [key: string]: unknown;
 }
 
@@ -122,23 +123,23 @@ export const KoszykPageCart = ({
                         onKeyDown={() => {
                             // intentionally empty; handler removed to avoid unused param warning
                         }}
-                         slotProps={{
-                             input: {
-                                 endAdornment:     <IconButton
-                                      loading={discountCodeState}
-                                      onClick={() => {
-                                          setDiscountCodeState(true)
-                                          void addPromoCode(inputRef.current!.value)
-                                      }}>
-                                      <ArrowForwardIcon/>
-                                  </IconButton>
-                             },
-                         }}
+                        slotProps={{
+                            input: {
+                                endAdornment: <IconButton
+                                    loading={discountCodeState}
+                                    onClick={() => {
+                                        setDiscountCodeState(true)
+                                        void addPromoCode(inputRef.current!.value)
+                                    }}>
+                                    <ArrowForwardIcon/>
+                                </IconButton>
+                            },
+                        }}
 
                     />
 
                     {!!cart.promoCode && <Typography color={'success'}>
-                        {cart.promoCode}  {cart.promoDesc}
+                        Kod: {cart.promoCode} -  {cart.promoDesc}
                     </Typography>}
 
 
@@ -175,9 +176,20 @@ export const KoszykPageCart = ({
                         <Divider/>
 
 
-                        <ListItem secondaryAction={<Typography variant={'h6'} fontWeight={800}>
-                            {cart?.total ? cart.total.toFixed(2) : 0} zł
-                        </Typography>}>
+                        <ListItem secondaryAction={
+                            cart?.promoCode
+                                ? <Stack alignItems={'flex-end'}>
+                                    <Typography variant={'body2'} color={'error'} sx={{textDecoration: 'line-through'}}>
+                                        {(cart?.total ?? 0).toFixed(2)} zł
+                                    </Typography>
+                                    <Typography variant={'h6'} fontWeight={800}>
+                                        {((cart?.promoTotal ?? cart?.total ?? 0)).toFixed(2)} zł
+                                    </Typography>
+                                </Stack>
+                                : <Typography variant={'h6'} fontWeight={800}>
+                                    {(cart?.total ?? 0).toFixed(2)} zł
+                                </Typography>
+                        }>
                             <ListItemText
                                 slotProps={{primary: {variant: 'h6'}}}
                                 primary={<>
