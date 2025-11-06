@@ -16,7 +16,7 @@ import {
 import {KoszykPageCartItemAmountButtons} from "@/app/koszyk/KoszykPageCartItemAmountButtons";
 import {KoszykPageCartCheckbox} from "@/app/koszyk/KoszykPageCartCheckbox";
 import Link from "next/link";
-import {ImageTwoTone} from "@mui/icons-material";
+import {Delete, ImageTwoTone} from "@mui/icons-material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {KoszykPageCartItemDelete} from "@/app/koszyk/KoszykPageCartItemDelete";
 import {useEffect, useRef, useState} from "react";
@@ -55,7 +55,8 @@ export const KoszykPageCart = ({
                                       price,
                                       image,
                                       categoryName,
-                                      categorySlug
+                                      categorySlug,
+                                      checked
                                   }, index, {length}) => {
                     return <Grid
                         container
@@ -64,7 +65,7 @@ export const KoszykPageCart = ({
                         spacing={0}
                     >
                         <Grid size={{xs: 'auto'}}>
-                            <KoszykPageCartCheckbox id={productId}/>
+                            <KoszykPageCartCheckbox {...{productId, checked}}/>
                         </Grid>
 
                         <Grid container size={{xs: 'grow'}} spacing={{xs: 2}} sx={{alignItems: 'center'}}>
@@ -125,7 +126,7 @@ export const KoszykPageCart = ({
                         }}
                         slotProps={{
                             input: {
-                                endAdornment: <IconButton
+                                endAdornment: <><IconButton
                                     loading={discountCodeState}
                                     onClick={() => {
                                         setDiscountCodeState(true)
@@ -133,6 +134,16 @@ export const KoszykPageCart = ({
                                     }}>
                                     <ArrowForwardIcon/>
                                 </IconButton>
+                                    <IconButton edge="end" aria-label="Usuń"
+                                                loading={discountCodeState}
+                                                onClick={() => {
+                                                    setDiscountCodeState(true)
+                                                    void addPromoCode("")
+                                                }}
+                                    >
+                                        <Delete/>
+                                    </IconButton>
+                                </>
                             },
                         }}
 
@@ -153,9 +164,20 @@ export const KoszykPageCart = ({
                     </Typography>
 
                     <List>
-                        <ListItem secondaryAction={<Typography variant={'body1'}>
-                            <CartTotalStr2 cart={cart}/>
-                        </Typography>}>
+                        <ListItem secondaryAction={
+                            cart?.promoCode
+                            ? <Stack alignItems={'flex-end'}>
+                                <Typography variant={'body2'} color={'error'} sx={{textDecoration: 'line-through'}}>
+                                    {(cart?.basketPrice ?? 0).toFixed(2)} zł
+                                </Typography>
+                                <Typography variant={'h6'} fontWeight={800}>
+                                    {((cart?.basketPromoPrice ?? cart?.basketPromoPrice ?? 0)).toFixed(2)} zł
+                                </Typography>
+                            </Stack>
+                            : <Typography variant={'h6'} fontWeight={800}>
+                                {(cart?.basketPromoPrice ?? 0).toFixed(2)} zł
+                            </Typography>
+                        }>
                             <ListItemText
                                 slotProps={{primary: {variant: 'subtitle1'}}}
                                 primary={<>
@@ -164,7 +186,7 @@ export const KoszykPageCart = ({
                         </ListItem>
 
                         <ListItem secondaryAction={<Typography variant={'body1'}>
-                            {cart?.shippingFees ? cart.shippingFees.toFixed(2) : 0} zł
+                            {cart?.promoShippingFees ? cart.promoShippingFees.toFixed(2) : 0} zł
                         </Typography>}>
                             <ListItemText
                                 slotProps={{primary: {variant: 'subtitle1'}}}

@@ -5,6 +5,7 @@ import {useEffect, useRef} from "react";
 import {Box, Button, Link, Stack, Typography} from "@mui/material";
 import NextLink from "next/link";
 import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
+import {useCart} from "@/context/cartProvider";
 
 
 export const KoszykSubmitButton = () => {
@@ -12,6 +13,7 @@ export const KoszykSubmitButton = () => {
     const wantInvoice = watch('wantInvoice');
     const acceptedTerms = watch('acceptedTerms');
     const init = useRef(true);
+    const {basket} = useCart();
 
     useEffect(() => {
         // trigger validation on subsequent changes of dependent toggles
@@ -24,7 +26,7 @@ export const KoszykSubmitButton = () => {
 
     }, [wantInvoice, acceptedTerms, trigger]);
 
-    const disabled = isSubmitting || (isSubmitted && !isValid) || !acceptedTerms;
+    const disabled = isSubmitting || (isSubmitted && !isValid) || !acceptedTerms || (basket?.total === 0);
 
     return <>
         <Button
@@ -42,12 +44,14 @@ export const KoszykSubmitButton = () => {
 
         {disabled && (
             <Typography variant="body2" color="error" sx={{mt: 1}}>
-                Wypełnij wymagane informacje dotyczące sposobu dostawy i danych klienta.
+                {basket?.total === 0
+                    ? 'Brak aktywnych towarów w koszyku.'
+                    : 'Wypełnij wymagane informacje dotyczące sposobu dostawy i danych klienta.'}
             </Typography>
         )}
 
         <Box sx={{mt: 1}}>
-            <CheckboxElement name={'acceptedTerms'} label={'Akceptuję regulamin (obowiązkowe)'} />
+            <CheckboxElement name={'acceptedTerms'} label={'Akceptuję regulamin (obowiązkowe)'}/>
             <Stack direction={'row'} spacing={2}>
                 <Link component={NextLink} href={'/strony/regulamin'}>Regulamin</Link>
                 <Link component={NextLink} href={'/strony/polityka-prywatnosci'}>Polityka

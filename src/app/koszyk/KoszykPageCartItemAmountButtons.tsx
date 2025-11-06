@@ -29,7 +29,7 @@ export function KoszykPageCartItemAmountButtons({sx, productId, quantity, price}
 
     return <ButtonGroup variant="outlined" aria-label="Loading button group">
         <Button loading={loading.productId === productId && loading.direction === 'sub'}
-                disabled={loading.productId === productId}
+                disabled={loading.productId === productId || quantity <= 1}
                 loadingPosition="center"
 
                 onClick={() => {
@@ -46,7 +46,7 @@ export function KoszykPageCartItemAmountButtons({sx, productId, quantity, price}
 
         <Button
             loading={loading.productId === productId && loading.direction === 'add'}
-            disabled={loading.productId != null}
+            disabled={loading.productId != null || quantity > 4}
 
             onClick={() => {
                 setLoading(() => ({productId, direction: 'add'}));

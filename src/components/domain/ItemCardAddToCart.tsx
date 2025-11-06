@@ -18,7 +18,7 @@ export const ItemCardAddToCart = ({itemId, disabled}: ItemCardAddToCartProps) =>
 
   return <Fab
     size="small"
-    color="secondary"
+    color="primary"
     aria-label="Dodaj do koszyka"
     disabled={disabled || submitting}
     sx={{right: 12, bottom: 12, position: 'absolute'}}

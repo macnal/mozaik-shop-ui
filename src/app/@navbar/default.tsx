@@ -73,11 +73,11 @@ const Navbar = async () => {
 
                 <Grid size={{xs: 'auto',}} sx={{order: 6, display: 'flex', alignItems: 'center', gap: 1,}}>
                     <NavbarCartButton/>
-                    <NavbarClient
-                        isAuthenticated={!!session}
-                        name={userName}
-                        authError={authError}
-                    />
+                    {/*<NavbarClient*/}
+                    {/*    isAuthenticated={!!session}*/}
+                    {/*    name={userName}*/}
+                    {/*    authError={authError}*/}
+                    {/*/>*/}
                 </Grid>
 
                 <Grid sx={{

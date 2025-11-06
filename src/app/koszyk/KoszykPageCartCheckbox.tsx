@@ -1,27 +1,26 @@
 'use client';
-import {useListSelect} from "@/components/common/ListSelect/ListSelectProvider";
 import {Checkbox} from "@mui/material";
 import {useCart} from "@/context/cartProvider";
+import {WeblinkerCartItem} from "@/api/gen/model";
 
-export const KoszykPageCartCheckbox = ({id}: { id: number }) => {
-  const [isSelected, toggle] = useListSelect();
-  const {basket, updateBasetItem} = useCart();
+interface ItemCardActionsProps {
+    productId: number;
+    checked: boolean | undefined;
+}
 
-  const handleClick = () => {
-    const item = basket?.items?.find((i) => i.productId === id);
-    if (item) {
-      console.log(isSelected(id), item.checked);
-      void updateBasetItem(item, 'TOGGLE');
+export function KoszykPageCartCheckbox({productId, checked}: Readonly<ItemCardActionsProps>) {
+    const {basket, updateBasetItem} = useCart();
+
+    const handleClick = () => {
+        void updateBasetItem({productId: productId, checked: checked} as WeblinkerCartItem, 'TOGGLE');
     }
-     toggle(id);
-  }
 
-  return <Checkbox
-    checked={isSelected(id)}
-    onClick={handleClick}
-    edge={'start'}
-    sx={{mr: 2}}
-    name={'selected'}
-    value={id}
-  />
+    return <Checkbox
+        checked={checked}
+        onClick={handleClick}
+        edge={'start'}
+        sx={{mr: 2}}
+        name={'selected'}
+        value={productId}
+    />
 }
