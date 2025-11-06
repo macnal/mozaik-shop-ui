@@ -7,11 +7,13 @@ Disallow: /order
 Disallow: /konto
 Disallow: /auth
 Disallow: /admin
+# Generalnie blokujemy katalog .next, ale zezwalamy na zasoby statyczne potrzebne do renderowania
 Disallow: /_next/
+Allow: /_next/static/
+Allow: /_next/image/
 
 # Pozwól na resztę
 Allow: /
 
 # Lokalizacja sitemap
 Sitemap: https://shop.guildmage.pl/sitemap.xml
-
