@@ -1,0 +1,8 @@
+# Ignore tooling scripts
+scripts/
+
+# Ignore local generated files
+public/sitemap.xml
+
+# You can add more ignores for tooling or temp files here
+

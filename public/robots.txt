@@ -1,0 +1,17 @@
+# robots.txt wygenerowany automatycznie
+# Blokuj API, koszyk, strony logowania/profilu i wewnętrzne katalogi Next.js
+User-agent: *
+Disallow: /api/
+Disallow: /koszyk
+Disallow: /order
+Disallow: /konto
+Disallow: /auth
+Disallow: /admin
+Disallow: /_next/
+
+# Pozwól na resztę
+Allow: /
+
+# Lokalizacja sitemap
+Sitemap: https://shop.guildmage.pl/sitemap.xml
+
