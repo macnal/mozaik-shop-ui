@@ -1,4 +1,5 @@
 import {WeblinkerCategory} from "@/api/gen/model";
+import {notFound} from "next/navigation";
 
 export const categories: WeblinkerCategory[] = [
     {id: 5052434, name: 'Magic: the Gathering', parent: 0, slug: 'magic-the-gathering'},
@@ -19,7 +20,7 @@ export function getCategoryById(id: number | string): WeblinkerCategory {
         return categories[0];
     }
     const found = categories.find((c) => c.id === parsedId);
-    if (!found) return categories[0];
+    if (!found) return notFound();
     return found;
 }
 
@@ -27,6 +28,6 @@ export function getCategoryBySlug(slug: string): WeblinkerCategory {
     if (!slug) throw new Error('slug is required');
     const normalized = slug.trim().toLowerCase();
     const found = categories.find((c) => (c.slug ?? '').toLowerCase() === normalized);
-    if (!found) return categories[0];
+    if (!found) return notFound();
     return found;
 }

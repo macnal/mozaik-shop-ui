@@ -15,7 +15,6 @@ export async function generateMetadata(
   {params}: CategoryPageProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const dataSource = await WebLinkerService();
   const {categorySlug} = await params;
   const category = getCategoryBySlug(categorySlug);
 

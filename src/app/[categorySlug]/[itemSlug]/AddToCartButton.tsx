@@ -3,11 +3,11 @@
 import React, {useState} from 'react';
 import {ShoppingCartTwoTone} from "@mui/icons-material";
 import {Button, CircularProgress} from "@mui/material";
-import {getAppConfig} from "@/app.config";
+import config from '@/../public/config.json';
 import {useCart} from "@/context/cartProvider";
 import {WeblinkerCartItem, WeblinkerProductDetail} from "@/api/gen/model";
 
-const {interface: {availableProductsMin}} = await getAppConfig();
+const availableProductsMin = config.interface?.availableProductsMin ?? 0;
 
 export const AddToCartButton = ({item}: { item: WeblinkerProductDetail }) => {
     const {updateBasetItem} = useCart();

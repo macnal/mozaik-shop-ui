@@ -8,52 +8,43 @@ import {getSlug, splitSlug} from "@/utils/slug";
 import ReactMarkdown from "react-markdown";
 import {notFound} from "next/navigation";
 import {AddToCartButton} from "./AddToCartButton";
-import {Metadata, ResolvingMetadata} from "next";
+import {Metadata} from "next";
 import {getCategoryById} from "@/data/categories";
 import {WeblinkerProductDetail} from "@/api/gen/model";
-import {globalKeywords} from "@/data/meta";
 
 interface ItemPageProps {
     params: Promise<{ itemSlug: string, categorySlug: string }>
 }
 
-function buildKeywords(item: WeblinkerProductDetail): string[] {
-    const candidates: string[] = Array.from(globalKeywords);
-
-    if (Array.isArray(item.tags)) {
-        candidates.push(...item.tags);
-    }
-    if (item.name) candidates.push(item.name);
-    if (item.categoryName) candidates.push(item.categoryName);
-
-    const normalized = Array.from(
-        new Set(
-            candidates
-                .map(k => String(k || "").trim())
-                .filter(Boolean)
-                .map(k => k.toLowerCase())
-        )
-    );
-
-    return normalized;
-}
-
-
 export async function generateMetadata(
-    {params}: ItemPageProps,
-    parent: ResolvingMetadata
+    {params}: ItemPageProps
 ): Promise<Metadata> {
     const {itemSlug} = await params;
     const [id] = splitSlug(itemSlug);
+    let item: WeblinkerProductDetail | undefined;
 
-    const dataSource = await WebLinkerService();
-    const {item} = await dataSource.fetchProduct(id);
+    try {
+        const dataSource = await WebLinkerService();
+        const result = await dataSource.fetchProduct(id);
+        item = result?.item;
+    } catch (error) {
+        console.error("generateMetadata: failed to fetch product", error);
+        notFound();
+    }
+
+    if (!item) {
+        notFound();
+    }
+
     const category = getCategoryById(item.categoryId);
+
+    if (!category) {
+        notFound();
+    }
 
     return {
         title: {default: `${item.name} | ${category.name}`, template: `%s | ${item.name} | ${category.name}`},
         description: item.shortDescription,
-        keywords: buildKeywords(item),
         openGraph: {
             url: `${process.env.PUBLIC_URL}//${getSlug(category)}/${getSlug(item)}`,
             images: [item.image],
@@ -70,17 +61,25 @@ export default async function ItemPage({params}: ItemPageProps) {
     const {itemSlug} = await params;
     const [id] = splitSlug(itemSlug);
 
-    const dataSource = await WebLinkerService();
-    const {item} = await dataSource.fetchProduct(id);
+    let item: WeblinkerProductDetail | undefined;
+
+    try {
+        const dataSource = await WebLinkerService();
+        const result = await dataSource.fetchProduct(id);
+        item = result?.item;
+    } catch (error) {
+        console.error("ItemPage: failed to fetch product", error);
+        notFound();
+    }
 
     if (!item) {
-        throw notFound();
+        notFound();
     }
 
     const category = getCategoryById(item.categoryId);
 
     if (!category) {
-        throw notFound();
+        notFound();
     }
 
     const breadcrumbs: Breadcrumb[] = [
