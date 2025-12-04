@@ -2253,6 +2253,7 @@
             "type": "string",
             "enum": [
               "INPOST",
+              "INPOST_TO_HOME",
               "POCZTA_POLSKA",
               "PERSONAL_PICKUP"
             ]
@@ -2618,7 +2619,7 @@
             "type": "string",
             "enum": [
               "INPOST",
-              "POCZTA_POLSKA",
+              "INPOST_TO_HOME",
               "PERSONAL_PICKUP"
             ]
           },

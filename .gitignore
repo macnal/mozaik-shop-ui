@@ -45,3 +45,4 @@ next-env.d.ts
 /gen/
 /src/api/gen/
 /openapi/api.guildmage.eu.filtered.json
+/tools/

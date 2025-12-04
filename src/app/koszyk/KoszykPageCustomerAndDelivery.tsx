@@ -32,8 +32,14 @@ export const KoszykPageCustomerAndDelivery = ({
     return (
         <Grid container spacing={6}>
             <Card sx={{}}>
-                <CardHeader title={'Twoje dane'}/>
+                <Card sx={{width: '100%'}}>
+                    <CardHeader title={'Dostawa'}/>
+                    <CardContent>
+                        <KoszykPageDelivery/>
+                    </CardContent>
+                </Card>
 
+                <CardHeader title={'Twoje dane'}/>
                 <CardContent>
                     <Grid container spacing={2}>
                         <Grid size={{xs: 12, md: 12}}>
@@ -49,19 +55,13 @@ export const KoszykPageCustomerAndDelivery = ({
                 </CardContent>
             </Card>
 
-            <Card sx={{width: '100%'}}>
-                <CardHeader title={'Dostawa'}/>
-                <CardContent>
-                    <KoszykPageDelivery/>
-                </CardContent>
-            </Card>
-
-            <Box sx={{mb: 3}}>
-                <CheckboxElement
-                    name={'wantInvoice'}
-                    label={"Chcę otrzymać fakturę"}
-                />
-            </Box>
+            {/*<Box sx={{mb: 3}}>*/}
+            {/*    <CheckboxElement*/}
+            {/*        disabled={true}*/}
+            {/*        name={'wantInvoice'}*/}
+            {/*        label={"Chcę otrzymać fakturę"}*/}
+            {/*    />*/}
+            {/*</Box>*/}
 
             <WatchField<boolean>
                 watch={'wantInvoice'}

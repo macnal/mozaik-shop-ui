@@ -22,7 +22,7 @@ import {useCart} from "@/context/cartProvider";
 import {WeblinkerCartDeliveryMethod} from "@/api/gen/model";
 import KoszykPageDeliveryInpost from "@/app/koszyk/KoszykPageDeliveryInpost";
 
-export type ShippingType = "INPOST" | "POCZTA_POLSKA" | "PERSONAL_PICKUP"
+export type ShippingType = "INPOST" | "INPOST_TO_HOME" | "PERSONAL_PICKUP"
 
 
 const RadioBtn = ({label, Icon, sx, ...props}: Partial<FormControlLabelProps> & {
@@ -105,9 +105,9 @@ export const KoszykPageDelivery = () => {
     <RadioBtn
       Icon={LocalShippingTwoToneIcon}
       label={'Dostawa na adres'}
-      value={'POCZTA_POLSKA'}
+      value={'INPOST_TO_HOME'}
     />
-    {value === "POCZTA_POLSKA" && (<Stack
+    {value === "INPOST_TO_HOME" && (<Stack
       direction={'row'}
       sx={{
         alignItems: 'center',
