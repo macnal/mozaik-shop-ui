@@ -1,6 +1,6 @@
 {
-  "name": "sklep-planszowki",
-  "version": "0.1.16",
+  "name": "Guildmage-Shop",
+  "version": "0.1.17",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
