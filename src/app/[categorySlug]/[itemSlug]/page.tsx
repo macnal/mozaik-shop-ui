@@ -20,39 +20,15 @@ export async function generateMetadata(
     {params}: ItemPageProps
 ): Promise<Metadata> {
     const {itemSlug} = await params;
-    const [id] = splitSlug(itemSlug);
-    let item: WeblinkerProductDetail | undefined;
-
-    try {
-        const dataSource = await WebLinkerService();
-        const result = await dataSource.fetchProduct(id);
-        item = result?.item;
-    } catch (error) {
-        console.error("generateMetadata: failed to fetch product", error);
-        notFound();
-    }
-
-    if (!item) {
-        notFound();
-    }
-
-    const category = getCategoryById(item.categoryId);
-
-    if (!category) {
-        notFound();
-    }
+    const {categorySlug} = await params;
+    const itemSlugName = itemSlug.replace('-', ' ')
+    const categorySlugName = categorySlug.replace('-', ' ')
 
     return {
-        title: {default: `${item.name} | ${category.name}`, template: `%s | ${item.name} | ${category.name}`},
-        description: item.shortDescription,
+        title: {default: `${itemSlugName} | ${categorySlugName}`, template: `%s | ${itemSlugName} | ${categorySlugName}`},
         openGraph: {
-            url: `${process.env.PUBLIC_URL}//${getSlug(category)}/${getSlug(item)}`,
-            images: [item.image],
-            title: item.name,
-            description: item.shortDescription,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            ...item?.openGraph,
+            url: `${process.env.PUBLIC_URL}/${categorySlug}/${itemSlug}`,
+            title: itemSlugName,
         },
     }
 }

@@ -26,7 +26,6 @@ export function KoszykPageCartItemDelete({productId}: Readonly<ItemCardActionsPr
                        loading={loading.productId === productId}
                        disabled={loading.productId != null}
                        onClick={() => {
-                           console.log('delete cart clicked', productId);
                            // pass operation as second argument
                            setLoading(() => ({productId}));
                            updateBasetItem({productId: productId, quantity: 0} as WeblinkerCartItem, "DEL")

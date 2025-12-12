@@ -54,8 +54,6 @@ export const WebLinkerService = async () => {
         }),
 
         async createOrder(data: WeblinkerOrder): Promise<string> {
-            console.log('ORDER', data);
-
             const responseData = await this.api.post<{ url: string }>(
                 `weblinker/order`,
                 {json: data}
@@ -97,7 +95,6 @@ export const WebLinkerService = async () => {
         },
 
         async updateCart(cart: WeblinkerCart): Promise<WeblinkerCart> {
-            console.log('UPDATE CART', cart);
             const responseData = await this.api.put<WeblinkerCart>(
                 `weblinker/cart`, {
                     json: cart,
@@ -109,7 +106,6 @@ export const WebLinkerService = async () => {
 
 
         async fetchProduct(id: number): Promise<WeblinkerProductResponseDetail> {
-            console.log('FETCH PRODUCT', id);
             const res = await this.api.get(`weblinker/products/${id}`);
             return await res.json()
         },

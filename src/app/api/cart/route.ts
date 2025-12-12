@@ -9,8 +9,6 @@ export async function GET(request: NextRequest) {
     const cookieStore = await cookies();
     const cartId = cookieStore.get(CART_ID_COOKIE_NAME)?.value || null;
 
-    console.log('FETCH CART ID', cartId);
-
     if (!cartId) {
         return Response.json({uuid: null, items: []}, {status: 404});
     }

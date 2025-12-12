@@ -8,8 +8,6 @@ import {WeblinkerCategory} from "@/api/gen/model";
 
 export const NavbarCategories = ({categories}: { categories: WeblinkerCategory[] }) => {
 
-    console.log('categories', categories);
-
     return <Stack direction={'row'} sx={{justifyContent: 'flex-end'}}>
         <PopupState variant="popover" popupId="categories-popup-menu">
             {(popupState) => (

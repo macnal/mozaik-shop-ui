@@ -82,10 +82,8 @@ export const KoszykPageDelivery = () => {
       const val = (event.target as HTMLInputElement).value as ShippingType;
       onChange(val);
       onBlur();
-      console.log('Changing delivery method to:', val);
       try {
         const res = await changeDeliveryMetod(val as unknown as WeblinkerCartDeliveryMethod);
-        console.log('changeDeliveryMetod result:', res);
       } catch (e) {
         console.error('changeDeliveryMetod threw', e);
       }

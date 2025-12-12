@@ -42,7 +42,6 @@ export default function KoszykPageDeliveryInpost() {
 
 
     const handlePointSelect: InpostGeowidgetProps['onPointSelect'] = (point: InpostPoint) => {
-        console.log("Parcel locker selected:", point);
         setSelectedPoint(point);
         setOpen(false);
     };

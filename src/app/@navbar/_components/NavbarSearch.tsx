@@ -93,7 +93,6 @@ export const NavbarSearch = ({defaultValue, sx}: {
           query: inputValue,
         });
 
-        // console.log('nextOptions effect', nextOptions);
         //
         // if (timestamp === lastSearchTimestampRef.current) {
         //     setOptions(() => nextOptions);
@@ -126,14 +125,6 @@ export const NavbarSearch = ({defaultValue, sx}: {
             query: inputValue,
           });
         }
-
-
-        // console.log('nextOptions fetchStrategyFn', nextOptions);
-        // if (timestamp === lastSearchTimestampRef.current) {
-        //     setOptions(() => nextOptions);
-        //     setLoading(false);
-        // }
-
       }
     })();
 
@@ -165,10 +156,7 @@ export const NavbarSearch = ({defaultValue, sx}: {
 
     id={'search-box'}
     isOptionEqualToValue={(option, value) => {
-      console.log({
-        option,
-        value,
-      });
+
       if (typeof value === 'string' || (typeof option === 'string')) {
         return false;
       } else {

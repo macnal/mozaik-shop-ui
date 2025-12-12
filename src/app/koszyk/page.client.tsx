@@ -31,7 +31,6 @@ const FormInner = ({
         <FormContainer
             {...formArgs}
             onSuccess={(data) => {
-                console.log('order: ', data)
                 try {
                     props.createOrder(data as Record<string, unknown>);
                 } catch (e) {
