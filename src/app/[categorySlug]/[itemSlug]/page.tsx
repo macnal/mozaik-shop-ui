@@ -21,8 +21,8 @@ export async function generateMetadata(
 ): Promise<Metadata> {
     const {itemSlug} = await params;
     const {categorySlug} = await params;
-    const itemSlugName = itemSlug.replace('-', ' ')
-    const categorySlugName = categorySlug.replace('-', ' ')
+    const itemSlugName = itemSlug.replaceAll('-', ' ').replace(/\s*\d+$/, '')
+    const categorySlugName = categorySlug.replaceAll('-', ' ')
 
     return {
         title: {default: `${itemSlugName} | ${categorySlugName}`, template: `%s | ${itemSlugName} | ${categorySlugName}`},
